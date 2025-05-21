@@ -9,5 +9,5 @@ public class JankenApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JankenApplication.class, args);
 	}
-
+	// hennkou
 }
