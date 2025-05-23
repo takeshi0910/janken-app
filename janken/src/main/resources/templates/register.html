@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>アカウント作成画面</title>
 </head>
 <body>
-
+    <h2>アカウント作成画面</h2>
+	
+    <form th:action="@{/register}" method="post" th:object="${registerForm}">
+        <div>
+            <label for="loginId">ログインID</label>
+            <input type="text" id="loginId" th:field="*{loginId}" />
+        </div>
+        <div>
+            <label for="password">パスワード</label>
+            <input type="password" id="password" th:field="*{password}" />
+        </div>
+        <div>
+            <input type="submit" value="アカウント作成" />
+        </div>
+		<span th:text="${message}"></span>
+	    </form>
+		<a th:href="@{/login}">ログイン画面</a>
 </body>
 </html>
