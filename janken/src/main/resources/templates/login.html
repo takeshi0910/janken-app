@@ -1,12 +1,26 @@
-<!-- src/main/resources/static/login.html -->
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>ホーム</title>
+    <title>ログイン画面</title>
 </head>
 <body>
-    <h1>ようこそ！Spring Bootアプリへ</h1>
-	<h2>1こんにちは</h2>
+    <h2>ログイン画面</h2>
+	
+    <form th:action="@{/login}" method="post" th:object="${loginForm}">
+        <div>
+            <label for="loginId">ログインID</label>
+            <input type="text" id="loginId" th:field="*{loginId}" />
+        </div>
+        <div>
+            <label for="password">パスワード</label>
+            <input type="password" id="password" th:field="*{password}" />
+        </div>
+        <div>
+            <input type="submit" value="ログイン" />
+        </div>
+		<span th:text="${errorMsg}"></span>
+    </form>
+	<a th:href="@{/register}">ユーザー登録</a>
 </body>
 </html>
