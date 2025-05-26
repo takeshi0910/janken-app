@@ -25,10 +25,16 @@ public class RegisterService {
 			return Optional.empty();
 		 }
 		 
+		 Optional<UserInfo> existingUserName = repository.findById(form.getUserName());
+		 if(existingUserName.isPresent()){
+			return Optional.empty();
+		 }
+		 
 		 var userInfo = new UserInfo();
 		 var encodedPassword = passwordEncoder.encode(form.getPassword());
 		 userInfo.setLoginId(form.getLoginId());
 		 userInfo.setPassword(encodedPassword);
+		 userInfo.setUserName(form.getUserName());
 		 return Optional.of(repository.save(userInfo));
 	 }
 }
