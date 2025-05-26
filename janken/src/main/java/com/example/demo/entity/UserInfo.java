@@ -18,5 +18,8 @@ public class UserInfo {
 	private String loginId;
 	
 	private String password;
+	
+	@Column(name = "user_name")
+	private String userName;
 
 }

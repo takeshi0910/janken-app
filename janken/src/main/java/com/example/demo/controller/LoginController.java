@@ -33,7 +33,6 @@ public class LoginController {
 	@PostMapping("/login")
 	public String login(Model model, LoginForm form) {
 	    var userInfo = userService.searchUserById(form.getLoginId());
-	   // var encodedPassword = passwordEncoder.encode(form.getPassword());
 	    var isCorrectUserAuth = userInfo.isPresent()
 	    		&& passwordEncoder.matches(form.getPassword(), userInfo.get().getPassword());
 	    if(isCorrectUserAuth) {

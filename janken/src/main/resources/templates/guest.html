@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ゲスト画面</title>
+</head>
+<body>
+ゲスト画面
+
+<form action="/play" method="post">
+  <input type="hidden" name="role" value="guest" />
+  
+  <label for="roomId">ルームID:</label>
+  <input type="text" id="roomId" name="roomId" required />
+  
+  <button type="submit">Play</button>
+</form>
+
+</body>
+</html>
