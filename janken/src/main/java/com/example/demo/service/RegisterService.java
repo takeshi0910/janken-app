@@ -20,7 +20,7 @@ public class RegisterService {
 	 private final PasswordEncoder passwordEncoder;
 	 
 	 public Optional<UserInfo> registerUserInfo(RegisterForm form){
-		 Optional<UserInfo> existingUser = repository.findById(form.getLoginId());
+		 Optional<UserInfo> existingUser = repository.findById(form.getUserId());
 		 if(existingUser.isPresent()){
 			return Optional.empty();
 		 }
@@ -32,7 +32,7 @@ public class RegisterService {
 		 
 		 var userInfo = new UserInfo();
 		 var encodedPassword = passwordEncoder.encode(form.getPassword());
-		 userInfo.setLoginId(form.getLoginId());
+		 userInfo.setUserId(form.getUserId());
 		 userInfo.setLoginPassword(encodedPassword);
 		 userInfo.setUserName(form.getUserName());
 		 return Optional.of(repository.save(userInfo));

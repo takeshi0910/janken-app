@@ -12,7 +12,7 @@ import com.example.demo.entity.Room;
 import com.example.demo.entity.UserInfo;
 import com.example.demo.model.MypageDTO;
 import com.example.demo.repository.ChoiceRepository;
-import com.example.demo.repository.GestRepository;
+import com.example.demo.repository.GuestRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,11 +20,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MypageService {
 
-    private final GestRepository gestRepository;
+    private final GuestRepository gestRepository;
     private final ChoiceRepository choiceRepository;
 
     public List<MypageDTO> getMypageUser(UserInfo userInfo) {
-        List<Guest> guestList = gestRepository.findByUser(userInfo);
+        List<Guest> guestList = gestRepository.findByUserInfo(userInfo);
         List<MypageDTO> result = new ArrayList<>();
 
         for (Guest guest : guestList) {
@@ -57,7 +57,7 @@ public class MypageService {
             }
 
             // 複数の手を取得（Game と User で検索）
-            List<Choice> choices = choiceRepository.findByGameAndUser(game, userInfo);
+            List<Choice> choices = choiceRepository.findByGameAndUserInfo(game, userInfo);
             List<Long> choiceIds = new ArrayList<>();
             List<String> choiceNames = new ArrayList<>();
 

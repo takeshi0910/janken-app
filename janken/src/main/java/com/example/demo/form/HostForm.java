@@ -4,26 +4,9 @@ import lombok.Data;
 
 @Data
 public class HostForm {
-	
-	private String loginId;
-	
-	private String password;
-	
-    public String getLoginId() {
-        return loginId;
-    }
 
-    public void setLoginId(String loginId) {
-        this.loginId = loginId;
-    }
+  private String loginId;
 
-    public String getPassword() {
-        return password;
-    }
+  private String password;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
-
-

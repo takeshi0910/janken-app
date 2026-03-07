@@ -14,8 +14,8 @@ import lombok.Data;
 @Table(name = "users")
 public class UserInfo {
 	@Id
-	@Column(name = "login_id")
-	private String loginId;
+	@Column(name = "user_id")
+	private String userId;
 	
 	@Column(name = "user_name")
 	private String userName;

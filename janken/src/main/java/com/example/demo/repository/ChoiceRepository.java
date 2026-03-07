@@ -11,5 +11,5 @@ import com.example.demo.entity.UserInfo;
 
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice, Long> {
-    List<Choice> findByGameAndUser(Game game, UserInfo userInfo);
+    List<Choice> findByGameAndUserInfo(Game game, UserInfo userInfo);
 }
