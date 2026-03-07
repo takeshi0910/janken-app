@@ -9,6 +9,9 @@ import com.example.demo.entity.Choice;
 import com.example.demo.entity.Game;
 import com.example.demo.entity.UserInfo;
 
+/**
+ * @author masatoki.toyama
+ */
 @Repository
 public interface ChoiceRepository extends JpaRepository<Choice, Long> {
     List<Choice> findByGameAndUserInfo(Game game, UserInfo userInfo);

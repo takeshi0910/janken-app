@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.GameStatusMaster;
 
+/**
+ * @author masatoki.toyama
+ */
 @Repository
 public interface GameStatusMasterRepository extends JpaRepository<GameStatusMaster, Long> {
 

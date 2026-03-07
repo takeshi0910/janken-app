@@ -12,22 +12,26 @@ import com.example.demo.model.MypageDTO;
 import com.example.demo.security.MyUserDetails;
 import com.example.demo.service.MypageService;
 
+
+/**
+ * @author masatoki.toyama
+ */
 @Controller
 public class MypageController {
-	
-	private final MypageService mypageService;
-	
-	public MypageController(MypageService mypageService) {
-		this.mypageService = mypageService; 
-	}
-	
-	@GetMapping("/mypage")
-	public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
-		UserInfo userInfo = userDetails.getUser();
-		
-	    List<MypageDTO> myPages = mypageService.getMypageUser(userInfo);
-	    model.addAttribute("myPages", myPages);
-	    return "mypage";
-	}
+
+    private final MypageService mypageService;
+
+    public MypageController(MypageService mypageService) {
+        this.mypageService = mypageService;
+    }
+
+    @GetMapping("/mypage")
+    public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
+        UserInfo userInfo = userDetails.getUser();
+
+        List<MypageDTO> myPages = mypageService.getMypageUser(userInfo);
+        model.addAttribute("myPages", myPages);
+        return "mypage";
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,21 +9,28 @@ import jakarta.persistence.Table;
 
 import lombok.Data;
 
+/** ユーザーテーブル users に対応するEntity */
 @Data
 @Entity
 @Table(name = "users")
 public class UserInfo {
-	@Id
-	@Column(name = "user_id")
-	private String userId;
-	
-	@Column(name = "user_name")
-	private String userName;
-	
-	@Column(name = "login_password")
-	private String loginPassword;
-	
-	@Column(name = "created_date")
-	private LocalDate createDate;
-	
+    @Id
+    @Column(name = "user_id")
+    private int userId;
+    
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "user_name")
+    private String userName;
+
+    @Column(name = "password_hashed")
+    private String passwordHashed;
+
+    @Column(name = "created_at")
+    private LocalDateTime createAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
 }

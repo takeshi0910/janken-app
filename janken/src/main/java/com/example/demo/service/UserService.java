@@ -15,7 +15,7 @@ public class UserService {
 
 	 private final UserInfoRepository repository;
 	 
-	 public Optional<UserInfo> searchUserById(String loginId){
-		 return repository.findById(loginId);
+	 public Optional<UserInfo> searchUserByEmail(String email){
+		 return repository.findByEmail(email);
 	 }
 }

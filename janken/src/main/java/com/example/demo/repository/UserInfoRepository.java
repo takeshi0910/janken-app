@@ -7,8 +7,15 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.entity.UserInfo;
 
+/**
+ * @author masatoki.toyama
+ */
 @Repository
-public interface UserInfoRepository extends JpaRepository<UserInfo,String> {
-	Optional<UserInfo> findByUserId(String userId);
+public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
+    Optional<UserInfo> findByUserId(Integer userId);
+
+    Optional<UserInfo> findByEmail(String email);
+
+    Optional<UserInfo> findByUserName(String userName);
 
 }

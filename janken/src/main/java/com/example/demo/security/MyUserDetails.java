@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.demo.entity.UserInfo;
 
+/**
+ * @author masatoki.toyama
+ */
 public class MyUserDetails implements UserDetails {
 
     private final UserInfo userInfo;
@@ -18,12 +21,12 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userInfo.getUserId();
+        return userInfo.getUserName();
     }
 
     @Override
     public String getPassword() {
-        return userInfo.getLoginPassword();
+        return userInfo.getPasswordHashed();
     }
 
     @Override

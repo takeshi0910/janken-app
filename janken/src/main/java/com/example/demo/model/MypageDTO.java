@@ -3,7 +3,9 @@ package com.example.demo.model;
 import java.util.List;
 
 import lombok.Data;
-
+/**
+ * @author masatoki.toyama
+ */
 @Data
 public class MypageDTO {
     private Long gameId;

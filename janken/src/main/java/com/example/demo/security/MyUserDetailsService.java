@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.UserInfo;
 import com.example.demo.repository.UserInfoRepository;
 
+/**
+ * @author masatoki.toyama
+ */
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
@@ -17,7 +20,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    	UserInfo userInfo = userRepository.findByUserId(username)
+    	UserInfo userInfo = userRepository.findByUserName(username)
             .orElseThrow(() -> new UsernameNotFoundException("ユーザーが見つかりません"));
         return new MyUserDetails(userInfo);
     }

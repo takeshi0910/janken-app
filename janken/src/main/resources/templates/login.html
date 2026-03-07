@@ -60,8 +60,8 @@
                 <span th:text="${errorMsg}" class="error-msg"></span>
                 <form th:action="@{/login}" method="post" th:object="${loginForm}">
                     <div class="mb-3">
-                        <label for="loginId" class="form-label">ログインID</label>
-                        <input type="text" id="loginId" th:field="*{loginId}" class="form-control" required>
+                        <label for="loginId" class="form-label">メールアドレス</label>
+                        <input type="text" th:field="*{email}" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">パスワード</label>

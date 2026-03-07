@@ -16,6 +16,9 @@ import com.example.demo.repository.GuestRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author masatoki.toyama
+ */
 @Service
 @RequiredArgsConstructor
 public class MypageService {
@@ -61,10 +64,10 @@ public class MypageService {
             List<Long> choiceIds = new ArrayList<>();
             List<String> choiceNames = new ArrayList<>();
 
-            if (!choices.isEmpty()) {
+            /*if (!choices.isEmpty()) {
                 for (Choice choice : choices) {
                     choiceIds.add(choice.getId());
-
+            
                     if (choice.getChoiceMaster() != null) {
                         choiceNames.add(choice.getChoiceMaster().getChoiceName());
                     } else {
@@ -73,7 +76,7 @@ public class MypageService {
                 }
             } else {
                 choiceNames.add("未提出");
-            }
+            }*/
 
             dto.setChoiceIds(choiceIds);
             dto.setChoiceNames(choiceNames);
