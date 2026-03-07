@@ -34,7 +34,7 @@ public class LoginController {
 	public String login(Model model, LoginForm form) {
 	    var userInfo = userService.searchUserById(form.getLoginId());
 	    var isCorrectUserAuth = userInfo.isPresent()
-	    		&& passwordEncoder.matches(form.getPassword(), userInfo.get().getPassword());
+	    		&& passwordEncoder.matches(form.getPassword(), userInfo.get().getLoginPassword());
 	    if(isCorrectUserAuth) {
 	        return "redirect:/mypage";
 	    } else {

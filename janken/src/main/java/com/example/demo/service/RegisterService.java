@@ -33,7 +33,7 @@ public class RegisterService {
 		 var userInfo = new UserInfo();
 		 var encodedPassword = passwordEncoder.encode(form.getPassword());
 		 userInfo.setLoginId(form.getLoginId());
-		 userInfo.setPassword(encodedPassword);
+		 userInfo.setLoginPassword(encodedPassword);
 		 userInfo.setUserName(form.getUserName());
 		 return Optional.of(repository.save(userInfo));
 	 }
