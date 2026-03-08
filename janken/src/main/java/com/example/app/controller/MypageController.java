@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.app.entity.UserInfo;
 import com.example.app.model.MypageDTO;
 import com.example.app.security.MyUserDetails;
 import com.example.app.service.MypageService;
+import com.example.app.user.domain.UserInfo;
 
 
 /**

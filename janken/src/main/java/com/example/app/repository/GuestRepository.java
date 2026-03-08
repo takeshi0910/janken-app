@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.app.entity.Guest;
-import com.example.app.entity.UserInfo;
+import com.example.app.user.domain.UserInfo;
 
 /**
  * @author masatoki.toyama

@@ -9,10 +9,10 @@ import com.example.app.entity.Choice;
 import com.example.app.entity.Game;
 import com.example.app.entity.Guest;
 import com.example.app.entity.Room;
-import com.example.app.entity.UserInfo;
 import com.example.app.model.MypageDTO;
 import com.example.app.repository.ChoiceRepository;
 import com.example.app.repository.GuestRepository;
+import com.example.app.user.domain.UserInfo;
 
 import lombok.RequiredArgsConstructor;
 

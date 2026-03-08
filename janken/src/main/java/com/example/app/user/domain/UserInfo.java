@@ -1,4 +1,4 @@
-package com.example.app.entity;
+package com.example.app.user.domain;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 import lombok.Data;
 
-/** ユーザーテーブル users に対応するEntity */
+/** テーブル users に対応するEntity */
 @Data
 @Entity
 @Table(name = "users")

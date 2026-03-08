@@ -9,6 +9,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import com.example.app.user.domain.UserInfo;
+
 import lombok.Data;
 
 @Data

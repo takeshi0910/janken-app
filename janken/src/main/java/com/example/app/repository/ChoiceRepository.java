@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.app.entity.Choice;
 import com.example.app.entity.Game;
-import com.example.app.entity.UserInfo;
+import com.example.app.user.domain.UserInfo;
 
 /**
  * @author masatoki.toyama
