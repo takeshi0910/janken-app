@@ -1,35 +1,20 @@
 package com.example.app.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-
-import com.example.app.entity.Choice;
-import com.example.app.entity.Game;
-import com.example.app.entity.Guest;
-import com.example.app.entity.Room;
-import com.example.app.model.MypageDTO;
-import com.example.app.repository.ChoiceRepository;
-import com.example.app.repository.GuestRepository;
-import com.example.app.user.domain.UserInfo;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author masatoki.toyama
  */
 @Service
-@RequiredArgsConstructor
 public class MypageService {
 
-    private final GuestRepository gestRepository;
-    private final ChoiceRepository choiceRepository;
-
+    // ここで必要になるのは、ユーザーに関連のあるルーム情報のみ。
+    // ルーム情報には、対象のゲーム情報、参加者、ゲームの進行状況があげられる。
+    /* 
     public List<MypageDTO> getMypageUser(UserInfo userInfo) {
-        List<Guest> guestList = gestRepository.findByUserInfo(userInfo);
         List<MypageDTO> result = new ArrayList<>();
-
+        return result;
+        
         for (Guest guest : guestList) {
             Game game = guest.getGame();
             if (game == null) continue;
@@ -64,7 +49,7 @@ public class MypageService {
             List<Long> choiceIds = new ArrayList<>();
             List<String> choiceNames = new ArrayList<>();
 
-            /*if (!choices.isEmpty()) {
+            if (!choices.isEmpty()) {
                 for (Choice choice : choices) {
                     choiceIds.add(choice.getId());
             
@@ -76,7 +61,7 @@ public class MypageService {
                 }
             } else {
                 choiceNames.add("未提出");
-            }*/
+            }
 
             dto.setChoiceIds(choiceIds);
             dto.setChoiceNames(choiceNames);
@@ -85,5 +70,6 @@ public class MypageService {
         }
 
         return result;
-    }
+    */
+    
 }

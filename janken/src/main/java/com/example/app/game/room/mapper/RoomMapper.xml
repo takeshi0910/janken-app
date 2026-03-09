@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.app.game.room.mapper.RoomMapper">
+
+    <select id="findRoomsByUserId" resultType="com.example.app.game.room.domain.Room">
+        SELECT
+            r.room_id,
+            r.room_name,
+            r.game_type,
+            r.game_status,
+            r.started_date,
+            r.end_date,
+            r.created_at,
+            r.created_id,
+            r.updated_at,
+            r.updated_id
+        FROM room r
+        INNER JOIN room_users ru
+            ON r.room_id = ru.room_id
+        WHERE ru.user_id = #{userId}
+        ORDER BY r.room_id
+    </select>
+
+</mapper>
