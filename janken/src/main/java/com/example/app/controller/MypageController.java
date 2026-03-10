@@ -1,16 +1,12 @@
 package com.example.app.controller;
 
-import java.util.List;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.app.model.MypageDTO;
 import com.example.app.security.MyUserDetails;
 import com.example.app.service.MypageService;
-import com.example.app.user.domain.UserInfo;
 
 
 /**
@@ -27,10 +23,10 @@ public class MypageController {
 
     @GetMapping("/mypage")
     public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
-        UserInfo userInfo = userDetails.getUser();
-
+        /*UserInfo userInfo = userDetails.getUserId();
+        
         List<MypageDTO> myPages = mypageService.getMypageUser(userInfo);
-        model.addAttribute("myPages", myPages);
+        model.addAttribute("myPages", myPages);*/
         return "mypage";
     }
 

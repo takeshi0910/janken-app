@@ -6,6 +6,8 @@ import lombok.Getter;
 
 /**
  * ユーザー登録結果を保持する
+ * 
+ * @author takeshi.kashiwagi
  */
 @Getter
 public class RegisterResult {

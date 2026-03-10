@@ -22,14 +22,14 @@
                 <!-- サインアップ登録用メッセージ -->
                 <span th:text="${successMsg}" class="error-msg"></span>
                 
-                <form th:action="@{/login}" method="post" th:object="${loginForm}">
+                <form th:action="@{/login}" method="post">
                     <div class="mb-3">
                         <label for="loginId" class="form-label">メールアドレス</label>
-                        <input type="text" th:field="*{email}" class="form-control" required>
+                        <input type="text" name="username" class="form-control" th:value="${email}" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">パスワード</label>
-                        <input type="password" id="password" th:field="*{password}" class="form-control" required>
+                        <input type="password" name="password" class="form-control" required>
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto">
                     	<button type="submit" class="btn btn-primary">ログイン</button>
