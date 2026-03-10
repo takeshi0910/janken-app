@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.app.game.room.infrastructure.mapper.RoomMapper">
+
+    <!-- マイページでの表示するルーム情報を取得 -->
+    <select id="selectRoomsByUserId" resultType="com.example.app.game.room.domain.RoomListItemDto">
+        SELECT
+            r.room_id      AS roomId,
+            r.room_name    AS roomName,
+            r.game_type    AS gameType,
+            r.game_status  AS gameStatus,
+            r.started_date AS startedDate,
+            r.end_date     AS endDate,
+            r.created_at   AS createdAt,
+            r.created_id   AS createdId,
+            r.updated_at   AS updatedAt,
+            r.updated_id   AS updatedId
+        FROM room r
+        INNER JOIN room_users ru
+            ON r.room_id = ru.room_id
+        WHERE ru.user_id = #{userId}
+        ORDER BY r.room_id
+    </select>
+
+</mapper>

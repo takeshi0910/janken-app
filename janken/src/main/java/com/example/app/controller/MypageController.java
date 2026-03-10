@@ -1,33 +1,44 @@
 package com.example.app.controller;
 
+import java.util.List;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.app.game.room.application.RoomService;
+import com.example.app.game.room.domain.RoomListItemDto;
 import com.example.app.security.MyUserDetails;
-import com.example.app.service.MypageService;
+
+import lombok.RequiredArgsConstructor;
 
 
 /**
  * @author masatoki.toyama
  */
 @Controller
+@RequiredArgsConstructor
 public class MypageController {
 
-    private final MypageService mypageService;
-
-    public MypageController(MypageService mypageService) {
-        this.mypageService = mypageService;
-    }
+    private final RoomService roomService;
 
     @GetMapping("/mypage")
     public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
-        /*UserInfo userInfo = userDetails.getUserId();
+        // ログイン中ユーザーのIDを取得
+        int userId = userDetails.getUserId();
+
+        // 対象ユーザーのルーム情報を取得
+        List<RoomListItemDto> rooms = roomService.selectRoomsByUserId(userId);
+
+        // Thymeleaf に渡す
+        model.addAttribute("rooms", rooms);
         
-        List<MypageDTO> myPages = mypageService.getMypageUser(userInfo);
-        model.addAttribute("myPages", myPages);*/
         return "mypage";
     }
+    
+
+
+
 
 }
