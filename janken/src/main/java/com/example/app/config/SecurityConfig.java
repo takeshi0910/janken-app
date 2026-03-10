@@ -25,12 +25,12 @@ public class SecurityConfig {
 
         http
                         .authorizeHttpRequests(auth -> auth
-                                        .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                                        .requestMatchers("/login", "/signUp", "/css/**", "/js/**").permitAll()
                                         .anyRequest().authenticated())
                         .formLogin(login -> login
                                         .loginPage("/login")
                                         .defaultSuccessUrl("/mypage", true)
-                                        .failureUrl("/login?error")   // ← 追加
+                                        .failureUrl("/login?error") 
                                         .permitAll())
                         .logout(logout -> logout
                                         .logoutUrl("/logout")

@@ -9,6 +9,10 @@
 </head>
 <body>
   <h1>マイページ</h1>
+  <form th:action="@{/logout}" method="post">
+    <button type="submit" class="btn btn-secondary">ログアウト</button>
+</form>
+  
   <div class="my-3">
     <button type="button" class="btn btn-primary" th:onclick="'location.href=\'' + @{/host} + '\''">ゲームを作成</button>
   </div>
