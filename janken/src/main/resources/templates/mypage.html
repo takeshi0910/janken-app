@@ -10,46 +10,52 @@
 <body>
   <h1>マイページ</h1>
   <div class="my-3">
-    <button type="button" class="btn btn-primary" th:onclick="'location.href=\'' + @{/host}'">ルームを作成</button>
+    <button type="button" class="btn btn-primary" th:onclick="'location.href=\'' + @{/host} + '\''">ゲームを作成</button>
+  </div>
+  <div class="mb-3">
+    <button type="button" class="btn btn-primary" th:onclick="'location.href=\'' + @{/guest} + '\''">ルームに参加</button>
   </div>
   <h3>あなたの参加中のゲーム</h3>
-
-  <!-- ルームが存在しない場合 -->
-  <div th:if="${#lists.isEmpty(rooms)}" class="alert alert-info mt-3">
-    参加中のルームはありません。
+    <!-- ゲーム名のボタン一覧 -->
+    <div class="mb-3" th:each="game,iterStat : ${myPages}">
+      <button 
+        type="button" 
+        class="game-button" 
+        th:text="${game.gameName}" 
+        th:attr="data-gameid=${iterStat.index}"
+        onclick="showGameDetail(this)">
+      </button>
+    </div>
+  <div>
+    <!-- 詳細表示エリア -->
+    <div th:each="game,iterStat : ${myPages}" 
+         th:id="'game-detail-' + ${iterStat.index}" 
+         class="game-detail">
+      <p><strong>ルームあいことば:</strong> <span th:text="${game.roomPassword}"></span></p>
+	  <p><strong>状態:</strong> <span th:text="${game.gameStatus}"></span></p>
+      <p><strong>出した手:</strong></p>
+      <ul>
+        <li th:each="name : ${game.choiceNames}" th:text="${name}"></li>
+      </ul>
+    </div>
   </div>
+  <script>
+    function showGameDetail(button) {
+      const gameId = button.getAttribute('data-gameid');
+      const targetDetail = document.getElementById('game-detail-' + gameId);
 
-  <!-- ルーム一覧 -->
-  <table th:if="${!#lists.isEmpty(rooms)}" class="table table-striped mt-3">
-    <thead>
-      <tr>
-        <th>ルーム名</th>
-        <th>ゲームタイプ</th>
-        <th>ステータス</th>
-        <th>開始日時</th>
-        <th>終了日時</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="room : ${rooms}">
-        <td th:text="${room.roomName}"></td>
-        <td th:text="${room.gameType}"></td>
-        <td th:text="${room.gameStatus}"></td>
-        <td th:text="${#temporals.format(room.startedDate, 'yyyy/MM/dd HH:mm')}"></td>
-        <td th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
-
-        <!-- 詳細ページへ遷移する例 -->
-        <td>
-          <a class="btn btn-sm btn-outline-primary"
-             th:href="@{/room/{id}(id=${room.roomId})}">
-            詳細
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-    
-  
+      // すでに表示中なら閉じる
+      if (targetDetail.style.display === 'block') {
+        targetDetail.style.display = 'none';
+      } else {
+        // 他の詳細は非表示にする
+        document.querySelectorAll('.game-detail').forEach(div => {
+          div.style.display = 'none';
+        });
+        // この詳細だけ表示する
+        targetDetail.style.display = 'block';
+      }
+    }
+  </script>
 </body>
 </html>

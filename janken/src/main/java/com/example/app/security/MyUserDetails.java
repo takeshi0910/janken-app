@@ -13,28 +13,20 @@ import com.example.app.user.domain.UserInfo;
  */
 public class MyUserDetails implements UserDetails {
 
-    private final int userId;
-    private final String username;
-    private final String password;
+    private final UserInfo userInfo;
 
     public MyUserDetails(UserInfo userInfo) {
-        this.userId = userInfo.getUserId();
-        this.username = userInfo.getEmail(); // SpringSecurityのusernameに、Eメールをセット
-        this.password = userInfo.getPasswordHashed();
-    }
-
-    public int getUserId() {
-        return userId;
+        this.userInfo = userInfo;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return userInfo.getUserName();
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return userInfo.getPasswordHashed();
     }
 
     @Override
@@ -45,26 +37,25 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        // 常に有効として扱う
-        return true;
+        return true; // 常に有効として扱う
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // 常にロックされていない
-        return true;
+        return true; // 常にロックされていない
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // パスワードが期限切れでない
-        return true;
+        return true; // パスワードが期限切れでない
     }
 
     @Override
     public boolean isEnabled() {
-        // アカウントが有効
-        return true;
+        return true; // アカウントが有効
     }
 
+    public UserInfo getUser() {
+        return this.userInfo;
+    }
 }

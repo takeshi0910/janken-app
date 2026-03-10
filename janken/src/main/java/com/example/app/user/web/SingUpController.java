@@ -53,8 +53,10 @@ public class SingUpController {
         String message = messages.get(MessageKey.REGISTER_SUCCESS);
         model.addAttribute("successMsg", message);
 
-        // 登録成功 → メールアドレスをセットした状態のログイン画面に遷移させる。
-        model.addAttribute("email", signUpForm.getEmail());
+        // 登録成功 → LoginForm にメールアドレスをセットしてログイン画面に遷移させる。
+        LoginForm loginForm = new LoginForm();
+        loginForm.setEmail(signUpForm.getEmail());
+        model.addAttribute("loginForm", loginForm);
 
         return "auth/login";
 

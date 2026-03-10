@@ -7,30 +7,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.app.game.room.application.RoomService;
-import com.example.app.game.room.domain.Room;
+import com.example.app.model.MypageDTO;
 import com.example.app.security.MyUserDetails;
+import com.example.app.service.MypageService;
+import com.example.app.user.domain.UserInfo;
 
-import lombok.RequiredArgsConstructor;
 
 /**
- * マイページトップ画面コントローラー
- * 
  * @author masatoki.toyama
  */
 @Controller
-@RequiredArgsConstructor
 public class MypageController {
 
-    private final RoomService roomService;
+    private final MypageService mypageService;
+
+    public MypageController(MypageService mypageService) {
+        this.mypageService = mypageService;
+    }
 
     @GetMapping("/mypage")
     public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
-        int userId = userDetails.getUserId();
+        UserInfo userInfo = userDetails.getUser();
 
-        List<Room> rooms = roomService.findRoomsByUserId(userId);
-        model.addAttribute("rooms", rooms);
-
+        List<MypageDTO> myPages = mypageService.getMypageUser(userInfo);
+        model.addAttribute("myPages", myPages);
         return "mypage";
     }
 
