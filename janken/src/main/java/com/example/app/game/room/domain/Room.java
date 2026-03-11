@@ -24,10 +24,10 @@ public class Room {
     @Column(name = "room_name", nullable = false, length = 100)
     private String roomName;
 
-    @Column(name = "game_type", nullable = false, length = 45)
+    @Column(name = "game_kind", nullable = false, length = 45)
     private String gameType;
 
-    @Column(name = "game_status", nullable = false, length = 45)
+    @Column(name = "room_status", nullable = false, length = 45)
     private String gameStatus;
 
     @Column(name = "started_date", nullable = false)

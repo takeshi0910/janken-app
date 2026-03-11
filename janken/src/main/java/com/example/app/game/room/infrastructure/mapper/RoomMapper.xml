@@ -10,8 +10,8 @@
         SELECT
             r.room_id      AS roomId,
             r.room_name    AS roomName,
-            r.game_type    AS gameType,
-            r.game_status  AS gameStatus,
+            r.game_kind    AS gameKind,
+            r.room_status  AS roomStatus,
             r.started_date AS startedDate,
             r.end_date     AS endDate,
             r.created_at   AS createdAt,

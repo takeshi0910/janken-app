@@ -13,8 +13,8 @@ import lombok.Data;
 public class RoomListItemDto {
     private Integer roomId;
     private String roomName;
-    private String gameType;
-    private String gameStatus;
+    private String gameKind;
+    private RoomStatus roomStatus;
     private LocalDateTime startedDate;
     private LocalDateTime endDate;
     private LocalDateTime createdAt;
