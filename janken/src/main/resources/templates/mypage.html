@@ -12,15 +12,15 @@
 
 		<h1>マイページ</h1>
 		<p>
-			ようこそ、 <strong sec:authentication="name">ユーザー名</strong>
+			ようこそ、 <strong sec:authentication="principal.userName">ユーザー名</strong>
 			さん
 		</p>
 
 		<div class="my-3">
 			<button type="button" class="btn btn-primary"
-				th:onclick="'location.href=\'' + @{/host} + '\''">ゲームを作成</button>
+				th:onclick="'location.href=\'' + @{/host} + '\''">ルームを作成</button>
 		</div>
-		<h3>あなたの参加中のゲーム</h3>
+		<h3>ルーム一覧</h3>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -36,13 +36,18 @@
 				<tr th:each="room : ${rooms}">
 					<td th:text="${room.roomName}"></td>
 					<td th:text="${room.gameKind}"></td>
-					<td th:text="${room.roomStatus.displayName}"></td>
+					<td th:text="${room.roomStatus.getStatusLabel}"></td>
 					<td
 						th:text="${#temporals.format(room.startedDate, 'yyyy/MM/dd HH:mm')}"></td>
 					<td
 						th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
-					<td><a th:href="@{/rooms/{id}(id=${room.roomId})}"
-						class="btn btn-primary btn-sm"> 参加 </a></td>
+					<td>
+					    <a th:href="${room.roomStatus.clickable} ? ${room.roomStatus.buildUrl(room.roomId)} : ''"
+						   class="btn btn-sm smallBtn"
+						   th:classappend="${room.roomStatus.buttonClass} + (!${room.roomStatus.clickable} ? ' disabled' : '')"
+						   th:text="${room.roomStatus.buttonLabel}">
+						</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>

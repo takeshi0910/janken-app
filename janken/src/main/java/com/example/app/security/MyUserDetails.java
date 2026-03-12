@@ -16,13 +16,15 @@ import com.example.app.user.domain.UserInfo;
 public class MyUserDetails implements UserDetails {
 
     private final int userId;
-    private final String username;
+    private final String username; // email
     private final String password;
+    private final String userName;
 
     public MyUserDetails(UserInfo userInfo) {
         this.userId = userInfo.getUserId();
         this.username = userInfo.getEmail(); // SpringSecurityのusernameに、Eメールをセット
         this.password = userInfo.getPasswordHashed();
+        this.userName  = userInfo.getUserName();
     }
 
     public int getUserId() {
@@ -68,5 +70,10 @@ public class MyUserDetails implements UserDetails {
         // アカウントが有効
         return true;
     }
+    
+    public String userName() {
+        return userName;
+    }
+
 
 }

@@ -33,3 +33,7 @@ body {
 .form-label {
 	font-weight: bold;
 }
+
+.smallBtn{
+	width: 60px;
+}
