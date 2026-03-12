@@ -5,7 +5,7 @@
 	layout:decorate="~{layout/layout}">
 
 <head>
-<title>マイページ</title>
+	<title>マイページ</title>
 </head>
 
 	<section layout:fragment="content">
@@ -17,8 +17,10 @@
 		</p>
 
 		<div class="my-3">
-			<button type="button" class="btn btn-primary"
-				th:onclick="'location.href=\'' + @{/host} + '\''">ルームを作成</button>
+			<a class="btn btn-primary" th:href="@{/room/registerform}">
+			    ルームを作成
+			</a>
+
 		</div>
 		<h3>ルーム一覧</h3>
 		<table class="table table-striped">

@@ -3,7 +3,6 @@ package com.example.app.game.room.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.game.room.application.RoomService;
@@ -17,13 +16,17 @@ import lombok.RequiredArgsConstructor;
  * @author takeshi.kashiwagi
  */
 @Controller
-@RequestMapping("/rooms")
 @RequiredArgsConstructor
 public class RoomController {
 
     private final RoomService roomService;
 
-    @GetMapping("/rooms/form")
+    /** 
+     * ルームの登録・編集画面を表示する。
+     * 
+     * @param roomId
+     */
+    @GetMapping("/room/registerform")
     public String showRoomForm(
                     @RequestParam(value = "roomId", required = false) Integer roomId,
                     Model model) {
@@ -36,11 +39,12 @@ public class RoomController {
         } else {
             // 編集
             Room room = roomService.findById(roomId);
+            // entity -> form
             form = room.toForm();
         }
 
         model.addAttribute("roomForm", form);
-        return "rooms/form";
+        return "room/registerform";
     }
 
 }

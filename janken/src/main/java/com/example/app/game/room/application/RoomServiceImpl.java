@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
  * ROOMに関連するサービス実装クラス
  * 
  * @author takeshi.kashiwagi
- * */
+ */
 @Service
 @RequiredArgsConstructor
 public class RoomServiceImpl implements RoomService {
