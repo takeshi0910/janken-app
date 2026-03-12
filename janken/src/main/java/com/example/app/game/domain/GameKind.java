@@ -6,5 +6,8 @@ package com.example.app.game.domain;
  * @author takeshi.kashiwagi
  */
 public enum GameKind {
-    じゃんけん;
+    じゃんけん,
+    ポーカー,
+    麻雀,
+    あみだくじ
 }

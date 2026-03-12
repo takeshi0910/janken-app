@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.web.RoomForm;
 
 import lombok.Data;
@@ -27,7 +30,8 @@ public class Room {
     private String roomName;
 
     @Column(name = "game_kind", nullable = false, length = 45)
-    private String gameKind;
+    @Enumerated(EnumType.STRING)
+    private GameKind gameKind;
 
     @Column(name = "room_status", nullable = false, length = 45)
     private String gameStatus;

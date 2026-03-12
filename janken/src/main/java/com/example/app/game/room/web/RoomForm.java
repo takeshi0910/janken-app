@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.domain.Room;
 
 import lombok.Data;
@@ -28,7 +29,7 @@ public class RoomForm {
 
     @NotBlank
     @Size(max = 45)
-    private String gameKind;
+    private GameKind gameKind;
 
     @NotBlank
     @Size(max = 45)

@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.application.RoomService;
 import com.example.app.game.room.domain.Room;
 
@@ -43,6 +44,7 @@ public class RoomController {
             form = room.toForm();
         }
 
+        model.addAttribute("gameKinds",  GameKind.values());
         model.addAttribute("roomForm", form);
         return "room/registerform";
     }
