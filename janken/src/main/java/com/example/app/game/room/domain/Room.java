@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import com.example.app.game.room.web.RoomForm;
+
 import lombok.Data;
 
 @Entity
@@ -25,7 +27,7 @@ public class Room {
     private String roomName;
 
     @Column(name = "game_kind", nullable = false, length = 45)
-    private String gameType;
+    private String gameKind;
 
     @Column(name = "room_status", nullable = false, length = 45)
     private String gameStatus;
@@ -47,4 +49,15 @@ public class Room {
 
     @Column(name = "updated_id")
     private Integer updatedId;
+
+    public RoomForm toForm() {
+        RoomForm form = new RoomForm();
+        form.setRoomId(this.roomId);
+        form.setRoomName(this.roomName);
+        form.setGameKind(this.gameKind);
+        form.setRoomStatus(this.gameStatus);
+        form.setStartedDate(this.startedDate);
+        form.setEndDate(this.endDate);
+        return form;
+    }
 }

@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.app.game.room.domain.Room;
+
 import lombok.Data;
 
 /** 
@@ -17,7 +19,7 @@ import lombok.Data;
  */
 @Data
 public class RoomForm {
-    
+
     private Integer roomId;
 
     @NotBlank
@@ -40,5 +42,15 @@ public class RoomForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDate;
 
+    public Room toEntity() {
+        Room room = new Room();
+        room.setRoomId(roomId);
+        room.setRoomName(roomName);
+        room.setGameKind(gameKind);
+        room.setGameStatus(roomStatus);
+        room.setStartedDate(startedDate);
+        room.setEndDate(endDate);
+        return room;
+    }
 
 }

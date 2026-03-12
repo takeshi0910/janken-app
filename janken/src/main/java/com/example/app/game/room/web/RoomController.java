@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.game.room.application.RoomService;
+import com.example.app.game.room.domain.Room;
+
+import lombok.RequiredArgsConstructor;
+
 /** 
  * ルームに関連するController
  * 
@@ -13,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 @RequestMapping("/rooms")
+@RequiredArgsConstructor
 public class RoomController {
+
+    private final RoomService roomService;
 
     @GetMapping("/rooms/form")
     public String showRoomForm(
-                    @RequestParam(value = "roomId", required = false) Long roomId,
+                    @RequestParam(value = "roomId", required = false) Integer roomId,
                     Model model) {
 
         RoomForm form;
@@ -27,14 +35,12 @@ public class RoomController {
             form = new RoomForm();
         } else {
             // 編集
-       //     Room room = roomService.findById(roomId);
-       //    form = RoomForm.from(room);
+            Room room = roomService.findById(roomId);
+            form = room.toForm();
         }
 
-   //     model.addAttribute("roomForm", form);
+        model.addAttribute("roomForm", form);
         return "rooms/form";
-
-        
     }
 
 }

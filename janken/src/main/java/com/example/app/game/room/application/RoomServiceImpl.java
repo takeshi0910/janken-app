@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.app.game.room.domain.Room;
 import com.example.app.game.room.domain.RoomListItemDto;
-import com.example.app.game.room.domain.repository.RoomRepository;
 import com.example.app.game.room.infrastructure.mapper.RoomMapper;
+import com.example.app.game.room.infrastructure.repository.RoomRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,25 +28,31 @@ public class RoomServiceImpl implements RoomService {
     public List<RoomListItemDto> selectRoomsByUserId(int userId) {
         return roomMapper.selectRoomsByUserId(userId);
     }
-    
+
+    @Override
+    public Room findById(int roomId) {
+        return roomRepository.findById(roomId)
+                        .orElseThrow(() -> new IllegalArgumentException("Room not found: " + roomId));
+    }
+
     @Override
     public Room createRoom(Room room, int userId) {
-    
+
         room.setCreatedAt(LocalDateTime.now());
         room.setCreatedId(userId);
-    
+
         room.setUpdatedAt(LocalDateTime.now());
         room.setUpdatedId(userId);
-    
+
         return roomRepository.save(room);
     }
-    
+
     @Override
     public Room updateRoom(Room room, int userId) {
-    
+
         room.setUpdatedAt(LocalDateTime.now());
         room.setUpdatedId(userId);
-    
+
         return roomRepository.save(room);
     }
 
