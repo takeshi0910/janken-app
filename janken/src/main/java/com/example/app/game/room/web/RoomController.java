@@ -3,8 +3,8 @@ package com.example.app.game.room.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /** 
  * ルームに関連するController
@@ -14,15 +14,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/rooms")
 public class RoomController {
-    
-    @GetMapping("/{roomId}")
-    public String enterRoom(@PathVariable Integer roomId, Model model) {
 
-      //  RoomDetailDto roomDetail = roomService.getRoomDetail(roomId);
+    @GetMapping("/rooms/form")
+    public String showRoomForm(
+                    @RequestParam(value = "roomId", required = false) Long roomId,
+                    Model model) {
 
-      //  model.addAttribute("room", roomDetail);
+        RoomForm form;
 
-        return "room/detail"; // じゃんけん画面
+        if (roomId == null) {
+            // 新規作成
+            form = new RoomForm();
+        } else {
+            // 編集
+       //     Room room = roomService.findById(roomId);
+       //    form = RoomForm.from(room);
+        }
+
+   //     model.addAttribute("roomForm", form);
+        return "rooms/form";
+
+        
     }
 
 }
