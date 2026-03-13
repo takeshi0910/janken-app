@@ -19,17 +19,9 @@
             <!-- hidden: roomId -->
             <input type="hidden" th:field="*{roomId}"/>
 
-            <!-- roomName -->
-            <div class="mb-3">
-                <label class="form-label">ルーム名</label>
-                <input type="text" th:field="*{roomName}" class="form-control" placeholder="ルーム名を入力"/>
-                <div class="text-danger" th:errors="*{roomName}"></div>
-            </div>
-
-            <!-- gameKind -->
+			<!-- gameKind -->
             <div class="mb-3">
 			    <label class="form-label">ゲーム種別</label>
-			
 			    <select th:field="*{gameKind}" class="form-control">
 			        <option value="">-- 選択してください --</option>
 			        <option th:each="kind : ${gameKinds}"
@@ -37,9 +29,15 @@
 			                th:text="${kind}">
 			        </option>
 			    </select>
-			
 			    <div class="text-danger" th:errors="*{gameKind}"></div>
 			</div>
+			
+            <!-- roomName -->
+            <div class="mb-3">
+                <label class="form-label">ルーム名</label>
+                <input type="text" th:field="*{roomName}" class="form-control" placeholder="ルーム名を入力"/>
+                <div class="text-danger" th:errors="*{roomName}"></div>
+            </div>
 
             <!-- roomStatus -->
             <div class="mb-3">
@@ -47,7 +45,7 @@
                 <select th:field="*{roomStatus}" class="form-select">
                     <option value="">選択してください</option>
                     <option th:each="s : ${T(com.example.app.game.room.domain.RoomStatus).values()}"
-                            th:value="${s.statusLabel}"
+                            th:value="${s}"
                             th:text="${s.statusLabel}">
                     </option>
                 </select>
