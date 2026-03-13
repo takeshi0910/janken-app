@@ -14,7 +14,7 @@
 
         <h2 class="mb-4">ルーム登録・編集</h2>
 
-        <form th:action="@{/rooms/save}" th:object="${roomForm}" method="post">
+        <form th:action="@{/room/save}" th:object="${roomForm}" method="post">
 
             <!-- hidden: roomId -->
             <input type="hidden" th:field="*{roomId}"/>

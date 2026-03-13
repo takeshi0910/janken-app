@@ -36,15 +36,8 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public void createRoom(RoomForm form) {
+    public void save(RoomForm form) {
         Room entity = form.toEntity();
-        roomRepository.insert(entity);
+        roomRepository.save(entity);
     }
-
-    @Override
-    public void updateRoom(RoomForm form) {
-        Room entity = form.toEntity();
-        roomRepository.update(entity);
-    }
-
 }

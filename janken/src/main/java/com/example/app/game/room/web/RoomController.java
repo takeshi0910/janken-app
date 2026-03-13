@@ -58,7 +58,7 @@ public class RoomController {
      * 
      * @param roomId
      */
-    @PostMapping("/rooms/save")
+    @PostMapping("/room/save")
     public String saveRoom(
                     @Validated @ModelAttribute("roomForm") RoomForm form,
                     BindingResult bindingResult,
@@ -67,18 +67,12 @@ public class RoomController {
         if (bindingResult.hasErrors()) {
             // セレクトボックス再描画用
             model.addAttribute("gameKinds", GameKind.values());
-            return "rooms/form";
+            return "room/registerform";
         }
 
-        if (form.getRoomId() == null) {
-            // INSERT
-            roomService.createRoom(form);
-        } else {
-            // UPDATE
-            roomService.updateRoom(form);
-        }
+        roomService.save(form);
 
-        return "redirect:/rooms";
+        return "redirect:/mypage";
     }
 
 }

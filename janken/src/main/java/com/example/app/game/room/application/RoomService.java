@@ -30,19 +30,10 @@ public interface RoomService {
     public Room findById(int roomId);
 
     /**
-     * ルーム情報の登録
+     * ルーム情報の登録・更新
      * 
      * @param room ルーム情報
-     * @return 登録したルームオブジェクト
      */
-    public void createRoom(RoomForm form);
-
-    /**
-       * ルーム情報の更新
-       * 
-       * @param room 更新するルーム情報
-       * @return 更新したルームオブジェクト
-       */
-    public void updateRoom(RoomForm form);
+    public void save(RoomForm form);
 
 }

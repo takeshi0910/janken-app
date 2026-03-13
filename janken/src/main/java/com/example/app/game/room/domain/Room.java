@@ -4,12 +4,19 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.web.RoomForm;
@@ -19,6 +26,7 @@ import lombok.Data;
 @Entity
 @Table(name = "room")
 @Data
+@EntityListeners(AuditingEntityListener.class)
 public class Room {
 
     @Id
@@ -34,23 +42,28 @@ public class Room {
     private GameKind gameKind;
 
     @Column(name = "room_status", nullable = false, length = 45)
-    private String gameStatus;
+    @Enumerated(EnumType.STRING)
+    private RoomStatus roomStatus;
 
-    @Column(name = "started_date", nullable = false)
+    @Column(name = "started_date")
     private LocalDateTime startedDate;
 
-    @Column(name = "end_date", nullable = false)
+    @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    @CreatedDate // 登録日時の自動反映
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @CreatedBy
     @Column(name = "created_id")
     private Integer createdId;
 
+    @LastModifiedDate // 更新日時の自動反映
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @LastModifiedBy
     @Column(name = "updated_id")
     private Integer updatedId;
 
@@ -59,7 +72,7 @@ public class Room {
         form.setRoomId(this.roomId);
         form.setRoomName(this.roomName);
         form.setGameKind(this.gameKind);
-        form.setRoomStatus(this.gameStatus);
+        form.setRoomStatus(this.roomStatus);
         form.setStartedDate(this.startedDate);
         form.setEndDate(this.endDate);
         return form;

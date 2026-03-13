@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.domain.Room;
+import com.example.app.game.room.domain.RoomStatus;
 
 import lombok.Data;
 
@@ -27,19 +28,15 @@ public class RoomForm {
     @Size(max = 100)
     private String roomName;
 
-    @NotBlank
-    @Size(max = 45)
+    @NotNull(message = "ゲーム種別を選択してください")
     private GameKind gameKind;
 
-    @NotBlank
-    @Size(max = 45)
-    private String roomStatus;
+    @NotNull(message = "進行ステータスを選択してください")
+    private RoomStatus roomStatus;
 
-    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startedDate;
 
-    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDate;
 
@@ -48,7 +45,7 @@ public class RoomForm {
         room.setRoomId(roomId);
         room.setRoomName(roomName);
         room.setGameKind(gameKind);
-        room.setGameStatus(roomStatus);
+        room.setRoomStatus(roomStatus);
         room.setStartedDate(startedDate);
         room.setEndDate(endDate);
         return room;
