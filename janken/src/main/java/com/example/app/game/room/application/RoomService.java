@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.app.game.room.domain.Room;
 import com.example.app.game.room.domain.RoomListItemDto;
+import com.example.app.game.room.web.RoomForm;
 
 /**
  * ROOMに関連するサービスインターフェース
@@ -31,19 +32,17 @@ public interface RoomService {
     /**
      * ルーム情報の登録
      * 
-     * @param room 登録するルーム情報
-     * @param userId セッションID
+     * @param room ルーム情報
      * @return 登録したルームオブジェクト
      */
-    public Room createRoom(Room room, int userId);
+    public void createRoom(RoomForm form);
 
     /**
        * ルーム情報の更新
        * 
        * @param room 更新するルーム情報
-       * @param userId セッションID
        * @return 更新したルームオブジェクト
        */
-    public Room updateRoom(Room room, int userId);
+    public void updateRoom(RoomForm form);
 
 }

@@ -1,6 +1,5 @@
 package com.example.app.game.room.application;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +8,7 @@ import com.example.app.game.room.domain.Room;
 import com.example.app.game.room.domain.RoomListItemDto;
 import com.example.app.game.room.infrastructure.mapper.RoomMapper;
 import com.example.app.game.room.infrastructure.repository.RoomRepository;
+import com.example.app.game.room.web.RoomForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,24 +36,15 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Room createRoom(Room room, int userId) {
-
-        room.setCreatedAt(LocalDateTime.now());
-        room.setCreatedId(userId);
-
-        room.setUpdatedAt(LocalDateTime.now());
-        room.setUpdatedId(userId);
-
-        return roomRepository.save(room);
+    public void createRoom(RoomForm form) {
+        Room entity = form.toEntity();
+        roomRepository.insert(entity);
     }
 
     @Override
-    public Room updateRoom(Room room, int userId) {
-
-        room.setUpdatedAt(LocalDateTime.now());
-        room.setUpdatedId(userId);
-
-        return roomRepository.save(room);
+    public void updateRoom(RoomForm form) {
+        Room entity = form.toEntity();
+        roomRepository.update(entity);
     }
 
 }

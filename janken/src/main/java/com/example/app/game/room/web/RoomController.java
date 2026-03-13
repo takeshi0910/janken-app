@@ -2,7 +2,11 @@ package com.example.app.game.room.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.game.domain.GameKind;
@@ -44,9 +48,37 @@ public class RoomController {
             form = room.toForm();
         }
 
-        model.addAttribute("gameKinds",  GameKind.values());
+        model.addAttribute("gameKinds", GameKind.values());
         model.addAttribute("roomForm", form);
         return "room/registerform";
+    }
+
+    /** 
+     * ルームのを登録・編集する。
+     * 
+     * @param roomId
+     */
+    @PostMapping("/rooms/save")
+    public String saveRoom(
+                    @Validated @ModelAttribute("roomForm") RoomForm form,
+                    BindingResult bindingResult,
+                    Model model) {
+
+        if (bindingResult.hasErrors()) {
+            // セレクトボックス再描画用
+            model.addAttribute("gameKinds", GameKind.values());
+            return "rooms/form";
+        }
+
+        if (form.getRoomId() == null) {
+            // INSERT
+            roomService.createRoom(form);
+        } else {
+            // UPDATE
+            roomService.updateRoom(form);
+        }
+
+        return "redirect:/rooms";
     }
 
 }
