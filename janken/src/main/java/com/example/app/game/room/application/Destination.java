@@ -1,19 +1,27 @@
 package com.example.app.game.room.application;
 
 /** 
- * マイページ一覧上のルームのURLの矛先
- * <p>
- * RoomStatus と組み合わせて使用し、実際の URL 生成は UrlBuilder が担当する。
- * </p>
+ * マイページのルーム一覧の参加カラムの遷移先種別を表す列挙型。
+ * RoomStatus に紐づき、UrlBuilder によって実際のURLへ変換される。
  * 
+ * PLAY : 参加画面へ遷移
+ * RESULT : 結果画面へ遷移
  * NONE : 遷移なし（クリック不可）
- * PLAY : 参加
- * RESULT : 結果画面
  * 
  * @author takeshi.kashiwagi
  */
 public enum Destination {
-    NONE,
-    PLAY,
-    RESULT
+    PLAY("play"),
+    RESULT("result"),
+    NONE(""); // 遷移なし
+
+    private final String action;
+
+    Destination(String action) {
+        this.action = action;
+    }
+
+    public String action() {
+        return action;
+    }
 }

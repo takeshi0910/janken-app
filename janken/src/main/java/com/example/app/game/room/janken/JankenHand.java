@@ -1,4 +1,4 @@
-package com.example.app.janken;
+package com.example.app.game.room.janken;
 
 /** 
  * じゃんけんの手を表す列挙型。

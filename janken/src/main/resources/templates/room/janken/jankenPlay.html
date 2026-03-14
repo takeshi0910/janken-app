@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/layout}">
+
+<head>
+<title>じゃんけん</title>
+</head>
+
+<section layout:fragment="content">
+
+	<div class="container mt-4">
+
+		<h2 class="text-center">じゃんけん（[[${roundCount}]] 回勝負）</h2>
+		<form method="post" action="/play/multi">
+
+			<div class="mt-4">
+
+				<div th:each="i, stat : ${#numbers.sequence(1, roundCount)}">
+
+					<h4>[[${i}]] 回目</h4>
+
+					<label class="me-3">
+						<input type="radio" th:name="|hands[${stat.index}]|" value="GU" required> ✊ グー
+					</label>
+					
+					<label class="me-3">
+						 <input type="radio" th:name="|hands[${stat.index}]|" value="CHOKI"> ✌ チョキ
+					</label>
+					
+					<label>
+						<input type="radio" th:name="|hands[${stat.index}]|" value="PA"> ✋ パー
+					</label>
+				</div>
+
+			</div>
+
+			<div class="text-center mt-4">
+				<button class="btn btn-primary btn-lg">送信</button>
+			</div>
+
+		</form>
+
+	</div>
+
+</section>
+
+
+<div layout:fragment="scripts">
+	<script>
+	</script>
+</div>
+
+</html>

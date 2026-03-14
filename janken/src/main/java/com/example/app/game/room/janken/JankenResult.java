@@ -1,4 +1,4 @@
-package com.example.app.janken;
+package com.example.app.game.room.janken;
 
 /** 
  * 対戦結果を表す列挙型

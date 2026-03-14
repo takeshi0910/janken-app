@@ -52,7 +52,7 @@ public class RoomForm {
     /** 参加者のユーザーIDリスト */
     private List<Integer> userIds = new ArrayList<>();
 
-    public Room toEntity() {
+    public Room toNewEntity() {
         Room room = new Room();
         room.setRoomId(roomId);
         room.setRoomName(roomName);

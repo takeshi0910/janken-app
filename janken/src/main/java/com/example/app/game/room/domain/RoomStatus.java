@@ -1,5 +1,6 @@
 package com.example.app.game.room.domain;
 
+import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.application.Destination;
 import com.example.app.game.room.application.UrlBuilder;
 
@@ -12,7 +13,7 @@ public enum RoomStatus {
     PREPARING("準備中", "準備中", "btn-secondary", false, Destination.NONE),
     OPEN("開催中", "参加", "btn-primary", true, Destination.PLAY),
     CLOSED("完了", "結果", "btn-danger", true, Destination.RESULT);
-
+    
     private final String statusLabel; // 状態の日本語（開催中など）
     private final String buttonLabel; // ボタンに表示する文字（参加など）
     private final String buttonClass; // ボタンの色
@@ -47,9 +48,11 @@ public enum RoomStatus {
     public Destination getDestination() {
         return destination;
     }
-
-    public String buildUrl(Integer roomId) {
-        return UrlBuilder.build(this.destination, roomId);
+    
+    /** 参加カラムのボタン制御 */
+    public String buildUrlOrEmpty(GameKind gameKind, Integer roomId) {
+        if (!clickable) return "";
+        return UrlBuilder.build(gameKind, destination, roomId);
     }
 
 }

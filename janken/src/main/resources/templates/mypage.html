@@ -46,7 +46,7 @@
 						th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
 					<td>
 					    <a th:if="${room.isPlayer}"
-					       th:href="${room.roomStatus.clickable} ? ${room.roomStatus.buildUrl(room.roomId)} : ''"
+					       th:href="${room.roomStatus.buildUrlOrEmpty(room.gameKind, room.roomId)}"
 						   class="btn btn-sm smallBtn"
 						   th:classappend="${room.roomStatus.buttonClass} + (!${room.roomStatus.clickable} ? ' disabled' : '')"
 						   th:text="${room.roomStatus.buttonLabel}">

@@ -59,12 +59,29 @@ public class RoomServiceImpl implements RoomService {
     @Transactional
     public void save(RoomForm form) {
 
+        Room entity;
+        
+        if (form.getRoomId() == null) {
+            // 新規
+            entity = form.toNewEntity();
+        } else {
+            // 編集
+            entity = roomRepository.findById(form.getRoomId())
+                    .orElseThrow();
+
+            entity.setRoomName(form.getRoomName());
+            entity.setGameKind(form.getGameKind());
+            entity.setRoundCount(form.getRoundCount());
+            entity.setRoomStatus(form.getRoomStatus());
+            entity.setStartedDate(form.getStartedDate());
+            entity.setEndDate(form.getEndDate());
+        }
+
         // Room を保存して ID を確定
-        Room entity = form.toEntity();
         Room saved = roomRepository.save(entity);
         Integer roomId = saved.getRoomId();
 
-        // room_users を一旦削除（Roomのユーザーを洗い替えする）
+        // room_users を洗い替え
         roomUsersRepository.deleteByRoomId(roomId);
 
         // room_users を再挿入

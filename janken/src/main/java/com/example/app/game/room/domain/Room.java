@@ -21,6 +21,11 @@ import com.example.app.game.domain.GameKind;
 
 import lombok.Data;
 
+/**
+ * roomテーブルに対応したエンティティ
+ * 
+ * <p>作成者しかルームを編集できないため、updated_idは不要
+ */
 @Entity
 @Table(name = "room")
 @Data
@@ -59,9 +64,8 @@ public class Room {
     @LastModifiedDate // 更新日時の自動反映
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    // 作成者しか更新できないため、updated_idは不要
-    @CreatedBy
+    
+    @CreatedBy // INSERTの時だけ動く
     @Column(name = "created_id")
     private Integer createdId;
 
