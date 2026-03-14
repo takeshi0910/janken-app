@@ -32,6 +32,7 @@
 					<th>開始日時</th>
 					<th>終了日時</th>
 					<th>参加</th>
+					<th>編集</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -49,6 +50,13 @@
 						   th:classappend="${room.roomStatus.buttonClass} + (!${room.roomStatus.clickable} ? ' disabled' : '')"
 						   th:text="${room.roomStatus.buttonLabel}">
 						</a>
+					</td>
+					<td>
+					    <a th:if="${room.createdId == loginUserId}"
+					       th:href="@{/room/registerform?roomId={id}(id=${room.roomId})}"
+					       class="btn btn-sm btn-warning smallBtn">
+					        編集
+					    </a>
 					</td>
 				</tr>
 			</tbody>

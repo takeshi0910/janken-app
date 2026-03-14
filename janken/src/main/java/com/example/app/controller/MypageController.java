@@ -26,12 +26,12 @@ public class MypageController {
     @GetMapping("/mypage")
     public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
         // ログイン中ユーザーのIDを取得
-        int userId = userDetails.getUserId();
+        int loginUserId = userDetails.getUserId();
 
         // 対象ユーザーのルーム情報を取得
-        List<RoomListItemDto> rooms = roomService.selectRoomsByUserId(userId);
+        List<RoomListItemDto> rooms = roomService.selectRoomsByUserId(loginUserId);
 
-        // Thymeleaf に渡す
+        model.addAttribute("loginUserId", loginUserId);
         model.addAttribute("rooms", rooms);
         
         return "mypage";

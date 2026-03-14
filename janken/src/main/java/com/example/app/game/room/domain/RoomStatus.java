@@ -10,8 +10,8 @@ import com.example.app.game.room.application.UrlBuilder;
  */
 public enum RoomStatus {
     PREPARING("準備中", "準備中", "btn-secondary", false, Destination.NONE),
-    OPEN("開催中", "参加", "btn-primary", true, Destination.ROOM_DETAIL),
-    CLOSED("完了", "結果", "btn-danger", true, Destination.ROOM_RESULT);
+    OPEN("開催中", "参加", "btn-primary", true, Destination.PLAY),
+    CLOSED("完了", "結果", "btn-danger", true, Destination.RESULT);
 
     private final String statusLabel; // 状態の日本語（開催中など）
     private final String buttonLabel; // ボタンに表示する文字（参加など）

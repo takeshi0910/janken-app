@@ -1,7 +1,7 @@
 package com.example.app.game.room.application;
 
 /** 
- * マイページ一覧上のルームのURLを生成する。
+ * マイページ一覧上のルームの参加カラムのURLを生成する。
  *  
  * <p>
  * Destinationに対応してURLを生成する。
@@ -12,8 +12,8 @@ package com.example.app.game.room.application;
 public class UrlBuilder {
     public static String build(Destination dest, Integer roomId) {
         return switch (dest) {
-            case ROOM_DETAIL -> "/room/registerform?roomId=" + roomId;
-            case ROOM_RESULT -> "/room/result?roomId=" + roomId;
+            case PLAY -> "/room/play?roomId=" + roomId;
+            case RESULT -> "/room/result?roomId=" + roomId;
             case NONE -> "";
         };
     }

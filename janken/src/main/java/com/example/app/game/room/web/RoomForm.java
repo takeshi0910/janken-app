@@ -24,7 +24,7 @@ public class RoomForm {
 
     private Integer roomId;
 
-    @NotBlank
+    @NotBlank(message = "ルーム名を入力してください")
     @Size(max = 100)
     private String roomName;
 
