@@ -8,21 +8,26 @@
     <!-- マイページでの表示するルーム情報を取得 -->
     <select id="selectRoomsByUserId" resultType="com.example.app.game.room.application.dto.RoomListItemDto">
         SELECT
-            r.room_id      AS roomId,
-            r.room_name    AS roomName,
-            r.game_kind    AS gameKind,
-            r.room_status  AS roomStatus,
+            r.room_id AS roomId,
+            r.room_name AS roomName,
+            r.game_kind AS gameKind,
+            r.round_count AS roundCount,
+            r.room_status AS roomStatus,
             r.started_date AS startedDate,
-            r.end_date     AS endDate,
-            r.created_at   AS createdAt,
-            r.created_id   AS createdId,
-            r.updated_at   AS updatedAt,
-            r.updated_id   AS updatedId
+            r.end_date AS endDate,
+            CASE WHEN r.created_id = 1 THEN TRUE ELSE FALSE END AS isRoomMaster,
+			CASE WHEN ru.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS isPlayer
         FROM room r
-        INNER JOIN room_users ru
+        <!--  「自分が参加している部屋」または「自分が主催している部屋」を取得 -->
+        LEFT JOIN room_users ru
             ON r.room_id = ru.room_id
-        WHERE ru.user_id = #{userId}
-        ORDER BY r.room_id
+            AND ru.user_id = #{userId}
+            
+        WHERE
+            ru.user_id IS NOT NULL
+            OR r.created_id = #{userId}
+
+        ORDER BY r.started_date, r.end_date
     </select>
 
 </mapper>

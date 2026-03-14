@@ -45,14 +45,15 @@
 					<td
 						th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
 					<td>
-					    <a th:href="${room.roomStatus.clickable} ? ${room.roomStatus.buildUrl(room.roomId)} : ''"
+					    <a th:if="${room.isPlayer}"
+					       th:href="${room.roomStatus.clickable} ? ${room.roomStatus.buildUrl(room.roomId)} : ''"
 						   class="btn btn-sm smallBtn"
 						   th:classappend="${room.roomStatus.buttonClass} + (!${room.roomStatus.clickable} ? ' disabled' : '')"
 						   th:text="${room.roomStatus.buttonLabel}">
 						</a>
 					</td>
 					<td>
-					    <a th:if="${room.createdId == loginUserId}"
+					    <a th:if="${room.isRoomMaster}"
 					       th:href="@{/room/registerform?roomId={id}(id=${room.roomId})}"
 					       class="btn btn-sm btn-warning smallBtn">
 					        編集

@@ -19,8 +19,6 @@ public class RoomListItemDto {
     private RoomStatus roomStatus;
     private LocalDateTime startedDate;
     private LocalDateTime endDate;
-    private LocalDateTime createdAt;
-    private Integer createdId;
-    private LocalDateTime updatedAt;
-    private Integer updatedId;
+    private boolean isRoomMaster;
+    private boolean isPlayer;
 }

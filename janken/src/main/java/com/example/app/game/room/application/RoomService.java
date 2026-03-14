@@ -22,10 +22,10 @@ public interface RoomService {
     List<RoomListItemDto> selectRoomsByUserId(int userId);
     
     /**
-     * ルームの登録・編集画面用の情報を取得
+     * 登録済みのルーム情報を取得。
      * 
      * @param roomId
-     * @return ルームの登録・編集画面用で表示するルーム情報
+     * @return 登録済みのルーム情報
      */
     public RoomRegisterDto findById(Integer roomId);
 

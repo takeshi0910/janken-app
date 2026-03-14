@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -39,6 +38,9 @@ public class Room {
     @Column(name = "game_kind", nullable = false, length = 45)
     @Enumerated(EnumType.STRING)
     private GameKind gameKind;
+    
+    @Column(name = "round_count", nullable = false)
+    private Integer roundCount;
 
     @Column(name = "room_status", nullable = false, length = 45)
     @Enumerated(EnumType.STRING)
@@ -54,16 +56,13 @@ public class Room {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @CreatedBy
-    @Column(name = "created_id")
-    private Integer createdId;
-
     @LastModifiedDate // 更新日時の自動反映
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @LastModifiedBy
-    @Column(name = "updated_id")
-    private Integer updatedId;
+    // 作成者しか更新できないため、updated_idは不要
+    @CreatedBy
+    @Column(name = "created_id")
+    private Integer createdId;
 
 }

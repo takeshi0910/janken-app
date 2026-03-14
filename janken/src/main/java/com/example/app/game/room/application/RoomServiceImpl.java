@@ -46,6 +46,7 @@ public class RoomServiceImpl implements RoomService {
         dto.setRoomId(room.getRoomId());
         dto.setRoomName(room.getRoomName());
         dto.setGameKind(room.getGameKind());
+        dto.setRoundCount(room.getRoundCount());
         dto.setRoomStatus(room.getRoomStatus());
         dto.setStartedDate(room.getStartedDate());
         dto.setEndDate(room.getEndDate());

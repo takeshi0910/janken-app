@@ -10,15 +10,16 @@ import com.example.app.game.room.web.RoomForm;
 import lombok.Data;
 
 /**
- * ルームの登録・編集画面用に反映させるデータを保持するDTO
+ * ルームの編集画面用に反映させるデータを保持するDTO
  * 
  * @author takeshi.kashiwagi
  */
 @Data
 public class RoomRegisterDto {
-    private Integer roomId;
+    private int roomId;
     private String roomName;
     private GameKind gameKind;
+    private int roundCount;
     private RoomStatus roomStatus;
     private List<Integer> userIds;
     private LocalDateTime startedDate;
@@ -30,6 +31,7 @@ public class RoomRegisterDto {
         form.setRoomId(this.roomId);
         form.setRoomName(this.roomName);
         form.setGameKind(this.gameKind);
+        form.setRoundCount(this.roundCount);
         form.setRoomStatus(this.roomStatus);
         form.setUserIds(this.userIds);
         form.setStartedDate(this.startedDate);
