@@ -19,7 +19,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.app.game.domain.GameKind;
-import com.example.app.game.room.web.RoomForm;
 
 import lombok.Data;
 
@@ -67,14 +66,4 @@ public class Room {
     @Column(name = "updated_id")
     private Integer updatedId;
 
-    public RoomForm toForm() {
-        RoomForm form = new RoomForm();
-        form.setRoomId(this.roomId);
-        form.setRoomName(this.roomName);
-        form.setGameKind(this.gameKind);
-        form.setRoomStatus(this.roomStatus);
-        form.setStartedDate(this.startedDate);
-        form.setEndDate(this.endDate);
-        return form;
-    }
 }

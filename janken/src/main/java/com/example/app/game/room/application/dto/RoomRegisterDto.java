@@ -1,0 +1,39 @@
+package com.example.app.game.room.application.dto;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.example.app.game.domain.GameKind;
+import com.example.app.game.room.domain.RoomStatus;
+import com.example.app.game.room.web.RoomForm;
+
+import lombok.Data;
+
+/**
+ * ルームの登録・編集画面用に反映させるデータを保持するDTO
+ * 
+ * @author takeshi.kashiwagi
+ */
+@Data
+public class RoomRegisterDto {
+    private Integer roomId;
+    private String roomName;
+    private GameKind gameKind;
+    private RoomStatus roomStatus;
+    private List<Integer> userIds;
+    private LocalDateTime startedDate;
+    private LocalDateTime endDate;
+    
+    /**フォーム変換 */
+    public RoomForm toForm() {
+        RoomForm form = new RoomForm();
+        form.setRoomId(this.roomId);
+        form.setRoomName(this.roomName);
+        form.setGameKind(this.gameKind);
+        form.setRoomStatus(this.roomStatus);
+        form.setUserIds(this.userIds);
+        form.setStartedDate(this.startedDate);
+        form.setEndDate(this.endDate);
+        return form;
+    }
+}

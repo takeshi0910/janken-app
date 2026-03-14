@@ -2,8 +2,8 @@ package com.example.app.game.room.application;
 
 import java.util.List;
 
-import com.example.app.game.room.domain.Room;
-import com.example.app.game.room.domain.RoomListItemDto;
+import com.example.app.game.room.application.dto.RoomListItemDto;
+import com.example.app.game.room.application.dto.RoomRegisterDto;
 import com.example.app.game.room.web.RoomForm;
 
 /**
@@ -27,7 +27,7 @@ public interface RoomService {
      * @param roomId
      * @return ルームの登録・編集画面用で表示するルーム情報
      */
-    public Room findById(int roomId);
+    public RoomRegisterDto findById(Integer roomId);
 
     /**
      * ルーム情報の登録・更新

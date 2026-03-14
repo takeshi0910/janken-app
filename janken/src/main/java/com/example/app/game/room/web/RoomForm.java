@@ -1,6 +1,7 @@
 package com.example.app.game.room.web;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -41,8 +42,8 @@ public class RoomForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endDate;
 
-    // ★ 追加
-    private List<Integer> userIds;
+    /** 参加者のユーザーIDリスト */
+    private List<Integer> userIds = new ArrayList<>();
 
     public Room toEntity() {
         Room room = new Room();

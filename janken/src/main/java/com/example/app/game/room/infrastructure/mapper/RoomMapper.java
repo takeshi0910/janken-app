@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 
-import com.example.app.game.room.domain.RoomListItemDto;
+import com.example.app.game.room.application.dto.RoomListItemDto;
 
 /**
  * ルームに関連するマッパーインターフェース

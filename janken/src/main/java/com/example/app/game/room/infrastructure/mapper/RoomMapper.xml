@@ -6,7 +6,7 @@
 <mapper namespace="com.example.app.game.room.infrastructure.mapper.RoomMapper">
 
     <!-- マイページでの表示するルーム情報を取得 -->
-    <select id="selectRoomsByUserId" resultType="com.example.app.game.room.domain.RoomListItemDto">
+    <select id="selectRoomsByUserId" resultType="com.example.app.game.room.application.dto.RoomListItemDto">
         SELECT
             r.room_id      AS roomId,
             r.room_name    AS roomName,

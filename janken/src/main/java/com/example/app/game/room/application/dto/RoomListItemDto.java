@@ -1,6 +1,8 @@
-package com.example.app.game.room.domain;
+package com.example.app.game.room.application.dto;
 
 import java.time.LocalDateTime;
+
+import com.example.app.game.room.domain.RoomStatus;
 
 import lombok.Data;
 

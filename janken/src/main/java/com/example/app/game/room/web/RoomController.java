@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.application.RoomService;
-import com.example.app.game.room.domain.Room;
+import com.example.app.game.room.application.dto.RoomRegisterDto;
 import com.example.app.user.application.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -49,8 +49,8 @@ public class RoomController {
         if (roomId == null) {       // 新規
             form = new RoomForm();
         } else {        // 編集
-            Room room = roomService.findById(roomId);
-            form = room.toForm();
+            RoomRegisterDto dto = roomService.findById(roomId);
+            form = dto.toForm();
         }
 
         model.addAttribute("roomForm", form);
