@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.app.message.MessageKey;
 import com.example.app.message.Messages;
 import com.example.app.user.application.RegisterResult;
-import com.example.app.user.application.UserService;
+import com.example.app.user.application.UserServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SingUpController {
 
-    private final UserService service;
+    private final UserServiceImpl service;
     private final Messages messages;
 
     /** 画面表示 */

@@ -3,6 +3,7 @@ package com.example.app.game.room.application;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.game.room.domain.Room;
 import com.example.app.game.room.domain.RoomListItemDto;
@@ -36,8 +37,16 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    @Transactional
     public void save(RoomForm form) {
         Room entity = form.toEntity();
         roomRepository.save(entity);
+        
+        roomUserRepository.deleteByRoomId(form.getRoomId());
+
+        for (Integer userId : form.getUserIds()) {
+            roomUserRepository.insert(form.getRoomId(), userId);
+        }
+        
     }
 }

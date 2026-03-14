@@ -23,15 +23,15 @@ public class MypageController {
 
     private final RoomService roomService;
 
+
     @GetMapping("/mypage")
     public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
-        // ログイン中ユーザーのIDを取得
+        // ログイン中ユーザーのIDを渡す
         int loginUserId = userDetails.getUserId();
-
-        // 対象ユーザーのルーム情報を取得
-        List<RoomListItemDto> rooms = roomService.selectRoomsByUserId(loginUserId);
-
         model.addAttribute("loginUserId", loginUserId);
+
+        // 対象ユーザーのルーム情報を渡す
+        List<RoomListItemDto> rooms = roomService.selectRoomsByUserId(loginUserId);
         model.addAttribute("rooms", rooms);
         
         return "mypage";
