@@ -6,7 +6,7 @@ import java.util.Objects;
 import jakarta.persistence.Embeddable;
 
 /** 
- * room_usersの複合キーに対応したIDクラス
+ * room_usersの複合キークラス
  * 
  * @author takeshi.kashiwagi
  */

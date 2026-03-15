@@ -57,15 +57,15 @@ public class Room {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @CreatedDate // 登録日時の自動反映
+    @CreatedDate // 登録日時の自動反映 INSERTの時だけ動く
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @LastModifiedDate // 更新日時の自動反映
+    @LastModifiedDate // 更新日時の自動反映 UPDATEの時だけ動く
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
-    @CreatedBy // INSERTの時だけ動く
+    @CreatedBy // 登録ユーザーの自動反映 INSERTの時だけ動く
     @Column(name = "created_id")
     private Integer createdId;
 
