@@ -47,7 +47,7 @@
 				<label class="form-check-label ms-5" for="toggleAll">
 					<input class="form-check-input" type="checkbox" id="toggleAll">全員参加
 				</label>
-				<select th:field="*{userIds}" class="form-select" multiple th:attr="size=${users.size()}">
+				<select th:field="*{userIds}" class="form-select" multiple required th:attr="size=${users.size()}">
 					<option
 						th:each="u : ${users}" th:value="${u.userId}"	th:text="${u.userName}"></option>
 				</select>

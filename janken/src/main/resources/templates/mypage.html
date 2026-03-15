@@ -9,20 +9,27 @@
 </head>
 
 	<section layout:fragment="content">
-
+		
 		<h1>マイページ</h1>
 		<p>
 			ようこそ、 <strong sec:authentication="principal.userName">ユーザー名</strong>
 			さん
 		</p>
+		
+		<!-- ルームの登録・更新後のメッセージ -->
+		<div th:if="${roomRegisterdMessage}" class="alert alert-success">
+		    <span th:text="${roomRegisterdMessage}"></span>
+		</div>
 
 		<div class="my-3">
 			<a class="btn btn-primary" th:href="@{/room/registerform}">
 			    ルームを作成
 			</a>
-
 		</div>
 		<h3>ルーム一覧</h3>
+		
+
+		
 		<table class="table table-striped">
 			<thead>
 				<tr>

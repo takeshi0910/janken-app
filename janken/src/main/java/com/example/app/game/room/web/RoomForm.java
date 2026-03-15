@@ -7,6 +7,7 @@ import java.util.List;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -50,6 +51,7 @@ public class RoomForm {
     private LocalDateTime endDate;
 
     /** 参加者のユーザーIDリスト */
+    @NotEmpty(message = "ユーザーを1人以上選択してください")
     private List<Integer> userIds = new ArrayList<>();
 
     public Room toNewEntity() {

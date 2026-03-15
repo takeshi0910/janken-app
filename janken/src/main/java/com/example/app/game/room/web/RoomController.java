@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.game.domain.GameKind;
 import com.example.app.game.room.application.RoomService;
@@ -58,7 +59,7 @@ public class RoomController {
     }
 
     /** 
-     * ルームのを登録・編集する。
+     * ルームを登録・編集する。
      * 
      * @param roomId
      */
@@ -66,7 +67,8 @@ public class RoomController {
     public String saveRoom(
                     @Validated @ModelAttribute("roomForm") RoomForm form,
                     BindingResult bindingResult,
-                    Model model) {
+                    Model model,
+                    RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             // セレクトボックス再描画用
@@ -75,6 +77,12 @@ public class RoomController {
         }
 
         roomService.save(form);
+        
+        if(form.getRoomId() == null) {
+            redirectAttributes.addFlashAttribute("roomRegisterdMessage",  "ルーム：" + form.getRoomName() + " を登録しました。");
+        } else {
+            redirectAttributes.addFlashAttribute("roomRegisterdMessage", "ルーム：" + form.getRoomName() + " を更新しました。");
+        }
 
         return "redirect:/mypage";
     }
