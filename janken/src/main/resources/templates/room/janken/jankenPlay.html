@@ -6,31 +6,73 @@
 
 <head>
 <title>じゃんけん</title>
+<style>
+/* 	.hand-icon {
+	    width: 40px;
+	    height: 40px;
+	    object-fit: contain;
+	    margin-left: 4px;
+	    cursor: pointer;
+	} */
+	
+	.hand-option {
+        display: inline-block;
+        margin-right: 12px;
+        cursor: pointer;
+    }
+
+    .hand-option input[type="radio"] {
+        display: none;
+    }
+
+    .hand-option img {
+        width: 60px;
+        height: 80px;
+        object-fit: contain;
+        border: 3px solid transparent;
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    .hand-option input[type="radio"]:checked + img {
+        border-color: #0d6efd; /* Bootstrap primary color */
+        background-color: #e7f1ff;
+    }
+
+    .hand-option img:hover {
+        transform: scale(1.05);
+    }
+	
+</style>
 </head>
 
 <section layout:fragment="content">
 
-	<div class="container mt-4">
+	<div class="container mt-4 text-center">
 
 		<h2 class="text-center">じゃんけん（[[${roundCount}]] 回勝負）</h2>
 		<form method="post" action="/play/multi">
 
 			<div class="mt-4">
 
-				<div th:each="i, stat : ${#numbers.sequence(1, roundCount)}">
+				<div th:each="i, stat : ${#numbers.sequence(1, roundCount)}"
+					class="py-4 border-bottom">
 
 					<h4>[[${i}]] 回目</h4>
 
-					<label class="me-3">
-						<input type="radio" th:name="|hands[${stat.index}]|" value="GU" required> ✊ グー
+					<label class="hand-option">
+					    <input type="radio" th:name="|hands[${stat.index}]|" value="GU" required>
+					    <img th:src="@{/janken/img/gu.png}" alt="グー">
 					</label>
 					
-					<label class="me-3">
-						 <input type="radio" th:name="|hands[${stat.index}]|" value="CHOKI"> ✌ チョキ
+					<label class="hand-option">
+					    <input type="radio" th:name="|hands[${stat.index}]|" value="CHOKI">
+					    <img th:src="@{/janken/img/choki.png}" alt="チョキ">
 					</label>
 					
-					<label>
-						<input type="radio" th:name="|hands[${stat.index}]|" value="PA"> ✋ パー
+					<label class="hand-option">
+					    <input type="radio" th:name="|hands[${stat.index}]|" value="PA">
+					    <img th:src="@{/janken/img/pa.png}" alt="パー">
 					</label>
 				</div>
 
