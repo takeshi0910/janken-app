@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.example.app.game.domain.GameKind;
+import com.example.app.room.domain.GameKind;
 import com.example.app.room.domain.Room;
 import com.example.app.room.domain.RoomStatus;
 

@@ -3,7 +3,7 @@ package com.example.app.room.application.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.app.game.domain.GameKind;
+import com.example.app.room.domain.GameKind;
 import com.example.app.room.domain.RoomStatus;
 import com.example.app.room.web.RoomForm;
 

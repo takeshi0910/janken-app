@@ -1,6 +1,6 @@
 package com.example.app.room.application;
 
-import com.example.app.game.domain.GameKind;
+import com.example.app.room.domain.GameKind;
 
 /** 
  * マイページ一覧上のルームの参加カラムのURLを生成する。

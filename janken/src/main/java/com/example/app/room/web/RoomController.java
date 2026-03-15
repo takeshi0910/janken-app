@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.app.game.domain.GameKind;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
+import com.example.app.room.domain.GameKind;
 import com.example.app.user.application.UserService;
 
 import lombok.RequiredArgsConstructor;

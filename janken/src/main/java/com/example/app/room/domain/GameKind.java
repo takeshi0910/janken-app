@@ -1,4 +1,4 @@
-package com.example.app.game.domain;
+package com.example.app.room.domain;
 
 /**
  * ゲーム種別を表す列挙型。

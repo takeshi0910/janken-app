@@ -69,7 +69,7 @@
 				</label> <select th:field="*{roomStatus}" class="form-select" required>
 					<option value="">選択してください</option>
 					<option
-						th:each="s : ${T(com.example.app.game.room.domain.RoomStatus).values()}"
+						th:each="s : ${T(com.example.app.room.domain.RoomStatus).values()}"
 						th:value="${s}" th:text="${s.statusLabel}"></option>
 				</select>
 				<div class="text-danger" th:errors="*{roomStatus}"></div>
