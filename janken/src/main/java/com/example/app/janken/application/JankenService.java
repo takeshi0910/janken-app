@@ -12,10 +12,19 @@ import com.example.app.janken.domain.JankenChoice;
 public interface JankenService {
     
     /**
-     * プレイヤーの手の登録・更新
+     * プレイヤーの登録済みの手の情報取得
      * 
-     * @param roomId RoomのID
-     * @param roomId プレイヤーの出し手情報
+     * @param roomId ルームID
+     * @param playerId プレイヤーID
      */
-    public void saveChoices(Integer roomId, List<JankenChoice> choices);
+    public List<JankenChoice> getJankenChoices(Integer roomId, Integer playerId);
+
+        
+    /**
+     * プレイヤーの手の登録（洗い替え）
+     * 
+     * @param roomId ルームID
+     * @param choices プレイヤーの出し手情報
+     */
+    public void registerJankenChoices(Integer roomId, List<JankenChoice> choices);
 }

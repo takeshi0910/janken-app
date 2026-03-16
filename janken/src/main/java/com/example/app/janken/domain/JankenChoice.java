@@ -2,57 +2,33 @@ package com.example.app.janken.domain;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.example.app.janken.JankenHand;
 
 /**
- * janken_choiceテーブルに対応したエンティティ
+ * janken_choiceテーブルのデータ登録用POJO。
  * 
  * <p>本人しか編集できないため、updated_idは不要。また、洗い替えするためupdated_atも不要。
+ * 
+ * <p> created_at は JPA の監査ではなく、アプリ側で明示的に設定する。
+ * （MyBatis で登録するため、JPA の @CreatedDate は使用しない）
  */
-@Entity
-@Table(name = "janken_choice")
-@EntityListeners(AuditingEntityListener.class)
-@IdClass(JankenChoiceId.class)
+@Getter
+@Setter
 public class JankenChoice {
 
-    @Id
     private Integer roomId;
-
-    @Id
-    private Integer order;
-
-    @Id
-    @CreatedBy
-    private Integer createdId;
-
-    @Enumerated(EnumType.STRING)
+    private Integer orderNo;
+    private Integer playerId;
     private JankenHand jankenHand;
-
-    @CreatedDate // 登録日時の自動反映 INSERTの時だけ動く
     private LocalDateTime createdAt;
 
-    public void setRoomId(Integer roomId) {
+    public JankenChoice(Integer roomId, Integer orderNo, Integer playerId, JankenHand jankenHand) {
         this.roomId = roomId;
-    }
-
-    public void setOrder(Integer order) {
-        this.order = order;
-    }
-
-    public void setJankenHand(JankenHand jankenHand) {
+        this.orderNo = orderNo;
+        this.playerId = playerId;
         this.jankenHand = jankenHand;
+        this.createdAt = LocalDateTime.now();
     }
-
 }

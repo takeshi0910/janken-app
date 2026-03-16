@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.janken.domain.JankenChoice;
-import com.example.app.janken.infrastructure.repository.JankenChoiceRepository;
+import com.example.app.janken.infrastructure.mapper.JankenMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,22 +20,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JankenServiceImpl implements JankenService {
 
-    private final JankenChoiceRepository jankenChoiceRepository;
+    private final JankenMapper jankenMapper;
     private final AuditorAware<Integer> auditorAware;
 
     @Override
+    public List<JankenChoice> getJankenChoices(Integer roomId, Integer playerId) {
+        return jankenMapper.selectChoices(roomId, playerId);
+    }
+    
+    @Override
     @Transactional
-    public void saveChoices(Integer roomId, List<JankenChoice> choices) {
+    public void registerJankenChoices(Integer roomId, List<JankenChoice> choices) {
 
-        // ログインユーザーの ID は AuditorAware が自動でセットする
+        // ログインユーザーの ID は AuditorAware がセット
         Integer currentUserId = auditorAware.getCurrentAuditor()
                         .orElseThrow(() -> new IllegalStateException("ログインユーザーが取得できません"));
-
-        jankenChoiceRepository.deleteByRoomIdAndCreatedId(roomId, currentUserId);
-
-        choices.forEach(c -> c.setRoomId(roomId));
-
-        jankenChoiceRepository.saveAll(choices);
+     
+        choices.forEach(c -> {
+            c.setRoomId(roomId); // roomIdの整合性をサービス層で保証する
+            c.setPlayerId(currentUserId);
+        });
+        
+        jankenMapper.deleteChoices(roomId, currentUserId);
+             
+        jankenMapper.insertChoices(choices);
     }
 
 }

@@ -1,0 +1,48 @@
+<mapper namespace="com.example.mapper.JankenMapper">
+
+    <!-- 出し手一覧取得 -->
+    <select id="selectChoices" resultType="com.example.domain.JankenChoice">
+        SELECT
+            room_id,
+            player_id,
+            order_no,
+            janken_hand
+        FROM
+            janken_choice
+        WHERE
+            room_id = #{roomId}
+            AND player_id = #{playerId}
+        ORDER BY
+            order_no ASC
+    </select>
+
+    <!-- 出し手削除 -->
+    <delete id="deleteChoices">
+        DELETE FROM janken_choice
+        WHERE
+            room_id = #{roomId}
+            AND player_id = #{playerId}
+    </delete>
+    
+     <!-- 出し手一覧登録 -->
+     <insert id="insertChoices">
+         INSERT INTO janken_choice (
+             room_id,
+             player_id,
+             janken_hand,
+             order_no,
+             created_at
+         )
+         VALUES
+         <foreach collection="choices" item="c" separator=",">
+             (
+                 #{c.roomId},
+                 #{c.playerId},
+                 #{c.jankenHand},
+                 #{c.orderNo},
+                 #{c.createdAt}
+             )
+         </foreach>
+     </insert>
+
+</mapper>

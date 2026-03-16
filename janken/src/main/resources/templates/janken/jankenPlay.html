@@ -5,16 +5,8 @@
 	layout:decorate="~{layout/layout}">
 
 <head>
-<title>じゃんけん</title>
+<title>じゃんけんゲーム</title>
 <style>
-/* 	.hand-icon {
-	    width: 40px;
-	    height: 40px;
-	    object-fit: contain;
-	    margin-left: 4px;
-	    cursor: pointer;
-	} */
-	
 	.hand-option {
         display: inline-block;
         margin-right: 12px;
@@ -50,28 +42,32 @@
 
 	<div class="container mt-4 text-center">
 
-		<h2 class="text-center">じゃんけん（[[${roundCount}]] 回勝負）</h2>
-		<form method="post" action="/play/multi">
+		<form method="post" action="/play/multi" th:object="${form}">
+			<input type="hidden" th:field="*{roomId}">
+			<h1 class="text-center p-3 bg-info-subtle rounded">[[${roomName}]] </h1>
+			<h2 class="text-center">じゃんけん  [[${roundCount}]] 回勝負</h2>
 
 			<div class="mt-4">
 
 				<div th:each="i, stat : ${#numbers.sequence(1, roundCount)}"
 					class="py-4 border-bottom">
 
+					<input type="hidden" th:field="*{choices[__${stat.index}__].orderNo}" th:value="${i}">
+					
 					<h4>[[${i}]] 回目</h4>
 
 					<label class="hand-option">
-					    <input type="radio" th:name="|hands[${stat.index}]|" value="GU" required>
+					    <input type="radio" th:field="*{choices[__${stat.index}__]}" value="GU" required>
 					    <img th:src="@{/janken/img/gu.png}" alt="グー">
 					</label>
 					
 					<label class="hand-option">
-					    <input type="radio" th:name="|hands[${stat.index}]|" value="CHOKI">
+					    <input type="radio" th:field="*{choices[__${stat.index}__]}" value="CHOKI">
 					    <img th:src="@{/janken/img/choki.png}" alt="チョキ">
 					</label>
 					
 					<label class="hand-option">
-					    <input type="radio" th:name="|hands[${stat.index}]|" value="PA">
+					    <input type="radio" th:field="*{choices[__${stat.index}__]}" value="PA">
 					    <img th:src="@{/janken/img/pa.png}" alt="パー">
 					</label>
 				</div>
