@@ -6,11 +6,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-@MapperScan("com.example.app.room.infrastructure.mapper")
+@MapperScan({
+        "com.example.app.room.infrastructure.mapper",
+        "com.example.app.janken.infrastructure.mapper"
+})
 @EnableJpaAuditing
 public class JankenApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JankenApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(JankenApplication.class, args);
+    }
 }

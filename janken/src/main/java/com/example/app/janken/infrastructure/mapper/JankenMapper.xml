@@ -1,7 +1,12 @@
-<mapper namespace="com.example.mapper.JankenMapper">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.app.janken.infrastructure.mapper.JankenMapper">
 
     <!-- 出し手一覧取得 -->
-    <select id="selectChoices" resultType="com.example.domain.JankenChoice">
+    <select id="selectChoices" resultType="com.example.app.janken.domain.JankenChoice">
         SELECT
             room_id,
             player_id,
