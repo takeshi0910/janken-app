@@ -20,6 +20,11 @@
 		<div th:if="${roomRegisterdMessage}" class="alert alert-success">
 		    <span th:text="${roomRegisterdMessage}"></span>
 		</div>
+		
+		<!-- じゃんけんの手の登録後のメッセージ -->
+		<div th:if="${jankenHandsRegisterdMessage}" class="alert alert-success">
+		    <span th:text="${jankenHandsRegisterdMessage}"></span>
+		</div>
 
 		<div class="my-3">
 			<a class="btn btn-primary" th:href="@{/room/registerform}">

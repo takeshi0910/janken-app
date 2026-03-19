@@ -1,25 +1,25 @@
 package com.example.app.room.domain;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * room_usersテーブルに対応したエンティティ
+ * room_usersテーブルのデータ登録用POJO。
  * 
  * @author takeshi.kashiwagi
  */
-@Entity
-@Table(name = "room_users")
+@Getter
+@Setter
 public class RoomUser {
 
-    @EmbeddedId
-    private RoomUserId id;
+    private Integer roomId;
+    private Integer userId;
 
     protected RoomUser() {}
 
     public RoomUser(Integer roomId, Integer userId) {
-        this.id = new RoomUserId(roomId, userId);
+        this.roomId = roomId;
+        this.userId = userId;
     }
 
 }

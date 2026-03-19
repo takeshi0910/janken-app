@@ -23,6 +23,9 @@ public class JankenChoice {
     private Integer playerId;
     private JankenHand jankenHand;
     private LocalDateTime createdAt;
+    
+    public JankenChoice() {
+    }
 
     public JankenChoice(Integer roomId, Integer orderNo, Integer playerId, JankenHand jankenHand) {
         this.roomId = roomId;

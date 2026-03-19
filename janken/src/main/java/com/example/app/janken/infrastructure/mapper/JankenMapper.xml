@@ -6,7 +6,15 @@
 <mapper namespace="com.example.app.janken.infrastructure.mapper.JankenMapper">
 
     <!-- 出し手一覧取得 -->
-    <select id="selectChoices" resultType="com.example.app.janken.domain.JankenChoice">
+    
+    <resultMap id="choiceMap" type="com.example.app.janken.domain.JankenChoice">
+        <result property="roomId" column="room_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="playerId" column="player_id"/>
+        <result property="jankenHand" column="janken_hand"/>
+    </resultMap>
+    
+    <select id="selectChoices" resultMap="choiceMap">
         SELECT
             room_id,
             player_id,

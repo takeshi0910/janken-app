@@ -3,7 +3,6 @@ package com.example.app.janken.web;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.janken.application.JankenService;
 import com.example.app.janken.domain.JankenChoice;
@@ -33,7 +33,6 @@ public class JankenPlayController {
 
     private final RoomService roomService;
     private final JankenService jankenService;
-    private final AuditorAware<Integer> auditorAware;
 
     /** 
      * じゃんけんのプレイ画面を表示する。
@@ -53,18 +52,20 @@ public class JankenPlayController {
         List<JankenChoice> choices = jankenService.getJankenChoices(roomId,
                         loginUser.getUserId());
 
+        choices.forEach(c -> System.out.println("orderNo=" + c.getOrderNo()));
+
         // --- ② フォームを作成 ---
         JankenChoiceForm form = new JankenChoiceForm();
         form.setRoomId(roomId);
 
         // hands の初期化
         int roundCount = room.getRoundCount();
-        
+
         // じゃんけんの出し手と順番の配列を作成する。
         List<JankenChoiceForm.ChoiceRow> rows = new ArrayList<>();
 
         if (choices.isEmpty()) {
-         // 初回表示 → 空の行を roundCount 分作る
+            // 初回表示 → 空の行を roundCount 分作る
             for (int i = 0; i < roundCount; i++) {
                 JankenChoiceForm.ChoiceRow row = new JankenChoiceForm.ChoiceRow();
                 row.setOrderNo(i + 1);
@@ -78,10 +79,10 @@ public class JankenPlayController {
                 final int order = i + 1;
 
                 JankenHand hand = choices.stream()
-                        .filter(c -> c.getOrderNo() == order)
-                        .map(JankenChoice::getJankenHand)
-                        .findFirst()
-                        .orElse(null);
+                                .filter(c -> c.getOrderNo() == order)
+                                .map(JankenChoice::getJankenHand)
+                                .findFirst()
+                                .orElse(null);
 
                 JankenChoiceForm.ChoiceRow row = new JankenChoiceForm.ChoiceRow();
                 row.setOrderNo(order);
@@ -97,6 +98,7 @@ public class JankenPlayController {
         model.addAttribute("form", form);
         model.addAttribute("roomName", room.getRoomName());
         model.addAttribute("roundCount", roundCount);
+        model.addAttribute("roomId", roomId);
 
         return "janken/jankenPlay";
     }
@@ -108,21 +110,25 @@ public class JankenPlayController {
      * @param form 画面入力値
      */
     @PostMapping("/rooms/{roomId}/choices")
-    public String saveChoices(
+    public String registerChoices(
                     @PathVariable Integer roomId,
-                    @ModelAttribute JankenChoiceForm form) {
-      
+                    @ModelAttribute JankenChoiceForm form,
+                    RedirectAttributes redirectAttributes) {
+
         List<JankenChoice> choices = form.getChoices().stream()
                         .map(row -> new JankenChoice(
-                                roomId,
-                                row.getOrderNo(),
-                                null, //  playerId はサービス層でセット
-                                row.getHand()
-                        ))
+                                        roomId,
+                                        row.getOrderNo(),
+                                        null, //  playerId はサービス層でセット
+                                        row.getHand()))
                         .toList();
 
         jankenService.registerJankenChoices(roomId, choices);
         
+     // Room を取得
+        String roomName = roomService.findById(roomId).getRoomName();
+
+        redirectAttributes.addFlashAttribute("jankenHandsRegisterdMessage",  "じゃんけんルーム：" + roomName + " の手を登録しました。");
         return "redirect:/mypage";
 
     }

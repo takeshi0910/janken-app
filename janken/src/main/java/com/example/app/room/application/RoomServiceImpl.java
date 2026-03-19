@@ -10,8 +10,8 @@ import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.room.domain.Room;
 import com.example.app.room.domain.RoomUser;
 import com.example.app.room.infrastructure.mapper.RoomMapper;
+import com.example.app.room.infrastructure.mapper.RoomUserMapper;
 import com.example.app.room.infrastructure.repository.RoomRepository;
-import com.example.app.room.infrastructure.repository.RoomUsersRepository;
 import com.example.app.room.web.RoomForm;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
     private final RoomRepository roomRepository;
-    private final RoomUsersRepository roomUsersRepository;
+    private final RoomUserMapper roomUserMapper;
 
     @Override
     public List<RoomListItemDto> selectRoomsByUserId(int userId) {
@@ -38,11 +38,11 @@ public class RoomServiceImpl implements RoomService {
     public RoomRegisterDto findById(Integer roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(
                         "Room not found: " + roomId));
-        
-        List<Integer> userIds = roomUsersRepository.findUserIdsByRoomId(roomId);
-        
+
+        List<Integer> userIds = roomUserMapper.selectUserIdsByRoomId(roomId);
+
         RoomRegisterDto dto = new RoomRegisterDto();
-        
+
         dto.setRoomId(room.getRoomId());
         dto.setRoomName(room.getRoomName());
         dto.setGameKind(room.getGameKind());
@@ -51,7 +51,7 @@ public class RoomServiceImpl implements RoomService {
         dto.setStartedDate(room.getStartedDate());
         dto.setEndDate(room.getEndDate());
         dto.setUserIds(userIds);
-        
+
         return dto;
     }
 
@@ -60,14 +60,14 @@ public class RoomServiceImpl implements RoomService {
     public void save(RoomForm form) {
 
         Room entity;
-        
+
         if (form.getRoomId() == null) {
             // 新規
             entity = form.toNewEntity();
         } else {
             // 編集
             entity = roomRepository.findById(form.getRoomId())
-                    .orElseThrow();
+                            .orElseThrow();
 
             entity.setRoomName(form.getRoomName());
             entity.setGameKind(form.getGameKind());
@@ -82,13 +82,13 @@ public class RoomServiceImpl implements RoomService {
         Integer roomId = saved.getRoomId();
 
         // room_users を洗い替え
-        roomUsersRepository.deleteByRoomId(roomId);
+        roomUserMapper.deleteByRoomId(roomId);
 
         // room_users を再挿入
         List<RoomUser> list = form.getUserIds().stream()
                         .map(userId -> new RoomUser(roomId, userId))
                         .toList();
-        
-        roomUsersRepository.saveAll(list);
+
+        roomUserMapper.insertRoomUsers(list);
     }
 }

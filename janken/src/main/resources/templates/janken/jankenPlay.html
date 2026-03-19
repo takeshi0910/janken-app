@@ -7,34 +7,33 @@
 <head>
 <title>じゃんけんゲーム</title>
 <style>
-	.hand-option {
-        display: inline-block;
-        margin-right: 12px;
-        cursor: pointer;
-    }
+.hand-option {
+	display: inline-block;
+	margin-right: 12px;
+	cursor: pointer;
+}
 
-    .hand-option input[type="radio"] {
-        display: none;
-    }
+.hand-option input[type="radio"] {
+	display: none;
+}
 
-    .hand-option img {
-        width: 60px;
-        height: 80px;
-        object-fit: contain;
-        border: 3px solid transparent;
-        border-radius: 8px;
-        transition: 0.2s;
-    }
+.hand-option img {
+	width: 60px;
+	height: 80px;
+	object-fit: contain;
+	border: 3px solid transparent;
+	border-radius: 8px;
+	transition: 0.2s;
+}
 
-    .hand-option input[type="radio"]:checked + img {
-        border-color: #0d6efd; /* Bootstrap primary color */
-        background-color: #e7f1ff;
-    }
+.hand-option input[type="radio"]:checked+img {
+	border-color: #0d6efd; /* Bootstrap primary color */
+	background-color: #e7f1ff;
+}
 
-    .hand-option img:hover {
-        transform: scale(1.05);
-    }
-	
+.hand-option img:hover {
+	transform: scale(1.05);
+}
 </style>
 </head>
 
@@ -42,33 +41,35 @@
 
 	<div class="container mt-4 text-center">
 
-		<form method="post" action="/play/multi" th:object="${form}">
+		<form method="post"
+			th:action="@{/rooms/{roomId}/choices(roomId=${roomId})}"
+			th:object="${form}">
 			<input type="hidden" th:field="*{roomId}">
-			<h1 class="text-center p-3 bg-info-subtle rounded">[[${roomName}]] </h1>
-			<h2 class="text-center">じゃんけん  [[${roundCount}]] 回勝負</h2>
+			<h1 class="text-center p-3 bg-info-subtle rounded">[[${roomName}]]
+			</h1>
+			<h2 class="text-center">じゃんけん [[${roundCount}]] 回勝負</h2>
 
 			<div class="mt-4">
 
 				<div th:each="i, stat : ${#numbers.sequence(1, roundCount)}"
 					class="py-4 border-bottom">
 
-					<input type="hidden" th:field="*{choices[__${stat.index}__].orderNo}" th:value="${i}">
-					
+					<input type="hidden"
+						th:field="*{choices[__${stat.index}__].orderNo}" th:value="${i}">
+
 					<h4>[[${i}]] 回目</h4>
 
 					<label class="hand-option">
-					    <input type="radio" th:field="*{choices[__${stat.index}__]}" value="GU" required>
-					    <img th:src="@{/janken/img/gu.png}" alt="グー">
+					<input type="radio" th:field="*{choices[__${stat.index}__].hand}" value="グー" required>
+						<img th:src="@{/janken/img/gu.png}" alt="グー">
 					</label>
-					
 					<label class="hand-option">
-					    <input type="radio" th:field="*{choices[__${stat.index}__]}" value="CHOKI">
-					    <img th:src="@{/janken/img/choki.png}" alt="チョキ">
+						<input type="radio" th:field="*{choices[__${stat.index}__].hand}" value="チョキ">
+						<img th:src="@{/janken/img/choki.png}" alt="チョキ">
 					</label>
-					
 					<label class="hand-option">
-					    <input type="radio" th:field="*{choices[__${stat.index}__]}" value="PA">
-					    <img th:src="@{/janken/img/pa.png}" alt="パー">
+						<input type="radio" th:field="*{choices[__${stat.index}__].hand}" value="パー">
+						<img th:src="@{/janken/img/pa.png}" alt="パー">
 					</label>
 				</div>
 
@@ -87,7 +88,8 @@
 
 <div layout:fragment="scripts">
 	<script>
-	</script>
+        
+    </script>
 </div>
 
 </html>
