@@ -13,9 +13,6 @@ import com.example.app.security.MyUserDetails;
  * Spring Security からログイン中のユーザーIDを取得し、
  * Spring Data JPA の監査機能（@CreatedBy / @LastModifiedBy）へ提供する。
  * 
- * <p>このクラスは「現在の操作ユーザー」を特定するための公式エントリポイントであり、
- * AuditorPropagationListener によって AuditorContext へ値が伝播される。</p>
- * 
  * @author takeshi.kashiwagi
  */
 @Component

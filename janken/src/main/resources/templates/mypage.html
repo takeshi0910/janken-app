@@ -11,10 +11,6 @@
 	<section layout:fragment="content">
 		
 		<h1>マイページ</h1>
-		<p>
-			ようこそ、 <strong sec:authentication="principal.userName">ユーザー名</strong>
-			さん
-		</p>
 		
 		<!-- ルームの登録・更新後のメッセージ -->
 		<div th:if="${roomRegisterdMessage}" class="alert alert-success">
@@ -27,13 +23,11 @@
 		</div>
 
 		<div class="my-3">
-			<a class="btn btn-primary" th:href="@{/room/registerform}">
+			<a class="btn btn-primary" th:href="@{/room/registerRoomForm}">
 			    ルームを作成
 			</a>
 		</div>
 		<h3>ルーム一覧</h3>
-		
-
 		
 		<table class="table table-striped">
 			<thead>
@@ -43,6 +37,7 @@
 					<th>ステータス</th>
 					<th>開始日時</th>
 					<th>終了日時</th>
+					<th>登録状況</th>
 					<th>参加</th>
 					<th>編集</th>
 				</tr>
@@ -52,16 +47,16 @@
 					<td th:text="${room.roomName}"></td>
 					<td th:text="${room.gameKind}"></td>
 					<td th:text="${room.roomStatus.getStatusLabel}"></td>
-					<td
-						th:text="${#temporals.format(room.startedDate, 'yyyy/MM/dd HH:mm')}"></td>
-					<td
-						th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
+					<td th:text="${#temporals.format(room.startedDate, 'yyyy/MM/dd HH:mm')}"></td>
+					<td th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
+					<td th:text="${room.isHandRegistered == null ? '' : (room.isHandRegistered ? '済' : '未')}"
+					    th:classappend="${room.isHandRegistered == false} ? 'text-danger' : ''"></td>
 					<td>
 					    <a th:if="${room.isPlayer}"
 					       th:href="${room.roomStatus.buildUrlOrEmpty(room.gameKind, room.roomId)}"
 						   class="btn btn-sm smallBtn"
 						   th:classappend="${room.roomStatus.buttonClass} + (!${room.roomStatus.clickable} ? ' disabled' : '')"
-						   th:text="${room.roomStatus.buttonLabel}">
+						   th:text="${room.roomStatus.buttonLabel}">参加/準備中/結果
 						</a>
 					</td>
 					<td>

@@ -36,4 +36,5 @@ public interface JankenMapper {
      */
     void insertChoices(@Param("choices") List<JankenChoice> choices);
 
+
 }

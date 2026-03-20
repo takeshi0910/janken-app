@@ -21,4 +21,7 @@ public class RoomListItemDto {
     private LocalDateTime endDate;
     private boolean isRoomMaster;
     private boolean isPlayer;
+    
+    /**  じゃんけんの出し手の登録有無判定。DB由来ではない */
+    private Boolean isHandRegistered;
 }

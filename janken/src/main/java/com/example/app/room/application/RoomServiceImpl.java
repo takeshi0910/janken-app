@@ -31,13 +31,41 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomListItemDto> selectRoomsByUserId(int userId) {
-        return roomMapper.selectRoomsByUserId(userId);
+        // ① まずルーム一覧を取得（DB 由来）
+        List<RoomListItemDto> rooms = roomMapper.selectRoomsByUserId(userId);
+
+        if (rooms.isEmpty()) {
+            return rooms;
+        }
+
+        // ② ルームID一覧を抽出
+        List<Integer> roomIds = rooms.stream()
+                .map(RoomListItemDto::getRoomId)
+                .toList();
+
+        // ③ じゃんけんルームについて、自分の登録済みのルームを取得
+        List<Integer> registeredRoomIds = roomMapper.selectRoomHandRegisteredMap(userId,
+                roomIds);
+
+        // ④ じゃんけんルームの出し手情報の登録状況　3 値（true / false / null ※じゃんけん以外）をセット。
+        rooms.forEach(room -> {
+            Boolean registered = null;
+
+            // じゃんけんだけ登録状況を判定する
+            if ("じゃんけん".equals(room.getGameKind())) {
+                registered = registeredRoomIds.contains(room.getRoomId());
+            }
+
+            room.setIsHandRegistered(registered);
+        });
+
+        return rooms;
     }
 
     @Override
     public RoomRegisterDto findById(Integer roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(
-                        "Room not found: " + roomId));
+                "Room not found: " + roomId));
 
         List<Integer> userIds = roomUserMapper.selectUserIdsByRoomId(roomId);
 
@@ -67,7 +95,7 @@ public class RoomServiceImpl implements RoomService {
         } else {
             // 編集
             entity = roomRepository.findById(form.getRoomId())
-                            .orElseThrow();
+                    .orElseThrow();
 
             entity.setRoomName(form.getRoomName());
             entity.setGameKind(form.getGameKind());
@@ -86,8 +114,8 @@ public class RoomServiceImpl implements RoomService {
 
         // room_users を再挿入
         List<RoomUser> list = form.getUserIds().stream()
-                        .map(userId -> new RoomUser(roomId, userId))
-                        .toList();
+                .map(userId -> new RoomUser(roomId, userId))
+                .toList();
 
         roomUserMapper.insertRoomUsers(list);
     }

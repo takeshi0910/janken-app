@@ -40,7 +40,7 @@ public class RoomController {
      * 
      * @param roomId
      */
-    @GetMapping("/room/registerform")
+    @GetMapping("/room/registerRoomForm")
     public String showRoomForm(
                     @RequestParam(value = "roomId", required = false) Integer roomId,
                     Model model) {
@@ -55,7 +55,7 @@ public class RoomController {
         }
 
         model.addAttribute("roomForm", form);
-        return "room/registerform";
+        return "room/registerRoomForm";
     }
 
     /** 

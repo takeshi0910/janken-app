@@ -12,14 +12,14 @@ import com.example.app.room.domain.RoomUser;
  * @author takeshi.kashiwagi
  */
 public interface RoomUserMapper {
-    
+
     /**
      * 指定した roomId に紐づく全ての room_users レコードを削除する。
      * 
      * @param roomId
      */
     void deleteByRoomId(@Param("roomId") Integer roomId);
-    
+
     /**
      * 指定した roomId に紐づく全ての user_id のリストを返す。
      * 
@@ -34,4 +34,5 @@ public interface RoomUserMapper {
      * @param list RoomUser登録用POJOのリスト
      */
     void insertRoomUsers(List<RoomUser> list);
+
 }

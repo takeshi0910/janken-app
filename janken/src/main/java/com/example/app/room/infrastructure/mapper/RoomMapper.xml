@@ -15,19 +15,35 @@
             r.room_status AS roomStatus,
             r.started_date AS startedDate,
             r.end_date AS endDate,
-            CASE WHEN r.created_id = 1 THEN TRUE ELSE FALSE END AS isRoomMaster,
+            CASE WHEN r.created_id = #{userId} THEN TRUE ELSE FALSE END AS isRoomMaster,
 			CASE WHEN ru.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS isPlayer
         FROM room r
+        
         <!--  「自分が参加している部屋」または「自分が主催している部屋」を取得 -->
         LEFT JOIN room_users ru
             ON r.room_id = ru.room_id
             AND ru.user_id = #{userId}
-            
+      
         WHERE
             ru.user_id IS NOT NULL
             OR r.created_id = #{userId}
 
         ORDER BY r.started_date, r.end_date
+    </select>
+    
+    <!-- ログインユーザーのじゃんけんの手の登録状況のリストを取得 -->
+    <select id="selectRoomHandRegisteredMap" resultType="Integer">
+       SELECT
+         jc.room_id  AS roomId
+       FROM janken_choice jc
+       JOIN room r ON r.room_id = jc.room_id
+       WHERE jc.player_id = #{userId}
+         AND r.game_kind = 'じゃんけん'
+         AND jc.room_id IN
+           <foreach item="id" collection="roomIds" open="(" separator="," close=")">
+             #{id}
+           </foreach>
+       GROUP BY jc.room_id
     </select>
 
 </mapper>

@@ -17,12 +17,13 @@
 
 			<div>
 				<!-- ログイン中のユーザー名 -->
-				<span sec:authentication="name">username</span>
+				<strong sec:authentication="principal.userName">ユーザー名</strong> さん
 
+				<a th:href="@{/mypage}" class="btn btn-light btn-sm ms-3">マイページ</a>
 
 				<!-- ログアウト -->
 				<form th:action="@{/logout}" method="post" class="d-inline">
-					<button type="submit" class="btn btn-secondary btn-sm">ログアウト</button>
+					<button type="submit" class="btn btn-secondary btn-sm ms-3">ログアウト</button>
 				</form>
 			</div>
 		</div>
