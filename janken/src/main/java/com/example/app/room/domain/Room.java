@@ -13,8 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Data;
@@ -42,6 +40,9 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private GameKind gameKind;
     
+    @Column(name = "game_mode", length = 45) // null 許容（じゃんけん以外は null）
+    private GameKind gameMode;
+    
     @Column(name = "round_count", nullable = false)
     private Integer roundCount;
 
@@ -55,12 +56,10 @@ public class Room {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @CreatedDate // 登録日時の自動反映 INSERTの時だけ動く
-    @Column(name = "created_at")
+    @Column(name = "created_at", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @LastModifiedDate // 更新日時の自動反映 UPDATEの時だけ動く
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
     
     @CreatedBy // 登録ユーザーの自動反映 INSERTの時だけ動く

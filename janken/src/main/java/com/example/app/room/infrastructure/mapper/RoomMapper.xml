@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.app.room.infrastructure.mapper.RoomMapper">
@@ -11,6 +10,7 @@
             r.room_id AS roomId,
             r.room_name AS roomName,
             r.game_kind AS gameKind,
+            r.game_mode AS gameMode,
             r.round_count AS roundCount,
             r.room_status AS roomStatus,
             r.started_date AS startedDate,
@@ -18,16 +18,13 @@
             CASE WHEN r.created_id = #{userId} THEN TRUE ELSE FALSE END AS isRoomMaster,
 			CASE WHEN ru.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS isPlayer
         FROM room r
-        
         <!--  「自分が参加している部屋」または「自分が主催している部屋」を取得 -->
         LEFT JOIN room_users ru
             ON r.room_id = ru.room_id
             AND ru.user_id = #{userId}
-      
         WHERE
             ru.user_id IS NOT NULL
             OR r.created_id = #{userId}
-
         ORDER BY r.started_date, r.end_date
     </select>
     

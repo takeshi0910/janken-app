@@ -31,6 +31,18 @@
 				</select>
 				<div class="text-danger" th:errors="*{gameKind}"></div>
 			</div>
+			
+			<!-- GameMode（編集時 or Ajax で Kind 選択後） -->
+			<div th:if="${modes != null and modes.size() > 0}">
+			    <label class="form-label">ゲームモード</label>
+			    <select th:field="*{gameMode}" class="form-control">
+			        <option th:each="mode : ${modes}"
+			                th:value="${mode}"
+			                th:text="${mode}">
+			        </option>
+			    </select>
+			</div>
+							
 
 			<!-- roomName -->
 			<div class="mb-3">

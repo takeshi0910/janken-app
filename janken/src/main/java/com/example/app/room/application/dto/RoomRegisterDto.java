@@ -19,6 +19,7 @@ public class RoomRegisterDto {
     private int roomId;
     private String roomName;
     private GameKind gameKind;
+    private String gameMode;
     private int roundCount;
     private RoomStatus roomStatus;
     private List<Integer> userIds;
@@ -31,6 +32,7 @@ public class RoomRegisterDto {
         form.setRoomId(this.roomId);
         form.setRoomName(this.roomName);
         form.setGameKind(this.gameKind);
+        form.setGameMode(this.gameMode);
         form.setRoundCount(this.roundCount);
         form.setRoomStatus(this.roomStatus);
         form.setUserIds(this.userIds);

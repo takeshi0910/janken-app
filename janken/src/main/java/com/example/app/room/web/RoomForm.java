@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +36,24 @@ public class RoomForm {
 
     @NotNull(message = "ゲーム種別を選択してください")
     private GameKind gameKind;
+    
+    private String gameMode;
+    
+    @AssertTrue(message = "じゃんけんの場合はゲームモードを選択してください")
+    public boolean isGameModeValid() {
+        // gameKind が null の場合は他のバリデーションに任せる
+        if (gameKind == null) {
+            return true;
+        }
+
+        // じゃんけんのときだけ gameMode が必須
+        if (gameKind == GameKind.じゃんけん) {
+            return gameMode != null && !gameMode.isBlank();
+        }
+
+        // それ以外のゲームでは不要
+        return true;
+    }
     
     @NotNull(message = "ラウンド数を選択してください")
     @Min(value = 1, message = "ラウンド数は1以上で指定してください")

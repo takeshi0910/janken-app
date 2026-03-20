@@ -37,7 +37,6 @@
 					<th>ステータス</th>
 					<th>開始日時</th>
 					<th>終了日時</th>
-					<th>登録状況</th>
 					<th>参加</th>
 					<th>編集</th>
 				</tr>
@@ -45,12 +44,16 @@
 			<tbody>
 				<tr th:each="room : ${rooms}">
 					<td th:text="${room.roomName}"></td>
-					<td th:text="${room.gameKind}"></td>
+					<td>
+					    <span th:text="${room.gameKind}"></span>
+					    <span th:if="${room.isHandRegistered != null}"
+					          th:text="${room.isHandRegistered ? '（済）' : '（未）'}"
+					          th:classappend="${room.isHandRegistered == false} ? 'text-danger' : ''">
+					    </span>
+					</td>
 					<td th:text="${room.roomStatus.getStatusLabel}"></td>
 					<td th:text="${#temporals.format(room.startedDate, 'yyyy/MM/dd HH:mm')}"></td>
 					<td th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
-					<td th:text="${room.isHandRegistered == null ? '' : (room.isHandRegistered ? '済' : '未')}"
-					    th:classappend="${room.isHandRegistered == false} ? 'text-danger' : ''"></td>
 					<td>
 					    <a th:if="${room.isPlayer}"
 					       th:href="${room.roomStatus.buildUrlOrEmpty(room.gameKind, room.roomId)}"
@@ -61,7 +64,7 @@
 					</td>
 					<td>
 					    <a th:if="${room.isRoomMaster}"
-					       th:href="@{/room/registerform?roomId={id}(id=${room.roomId})}"
+					       th:href="@{/room/registerRoomForm?roomId={id}(id=${room.roomId})}"
 					       class="btn btn-sm btn-warning smallBtn">
 					        編集
 					    </a>
