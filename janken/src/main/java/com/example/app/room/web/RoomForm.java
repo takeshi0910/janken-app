@@ -1,8 +1,8 @@
 package com.example.app.room.web;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
@@ -71,7 +71,7 @@ public class RoomForm {
 
     /** 参加者のユーザーIDリスト */
     @NotEmpty(message = "ユーザーを1人以上選択してください")
-    private List<Integer> userIds = new ArrayList<>();
+    private Set<Integer> userIds = new HashSet<>();
 
     public RoomForm() {}
 
@@ -84,7 +84,7 @@ public class RoomForm {
             RoomStatus roomStatus,
             LocalDateTime startedDate,
             LocalDateTime endDate,
-            List<Integer> userIds) {
+            Set<Integer> userIds) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.gameKind = gameKind;

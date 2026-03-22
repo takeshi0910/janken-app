@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.app.room.infrastructure.mapper.RoomUserMapper">
+<mapper namespace="com.example.app.room.roomuser.infrastructure.mapper.RoomUserMapper">
 
   <!-- 指定した roomId に紐づく全ての room_users レコードを削除 -->
   <delete id="deleteByRoomId">

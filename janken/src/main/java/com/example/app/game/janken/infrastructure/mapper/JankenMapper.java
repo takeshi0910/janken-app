@@ -8,14 +8,23 @@ import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice
 
 public interface JankenMapper {
     /**
-     * プレイヤーの登録済みの出し手一覧を取得
+     * 対象ルームにおける対象プレイヤーの登録済みの出し手一覧を取得
      *
      * @param roomId   ルームID
      * @param playerId プレイヤーID
+     * @return 対象ルームにおける対象プレイヤーの出し手情報
      */
     List<JankenChoice> selectChoices(
                     @Param("roomId") Integer roomId,
                     @Param("playerId") Integer playerId);
+
+    /**
+     * 対象ルームにおける全プレイヤーの出し手一覧を取得
+     *
+     * @param roomId   ルームID
+     * @return 対象ルームにおける全プレイヤーの出し手情報
+     */
+    List<JankenChoice> selectChoicesByRoomId(Integer roomId);
 
     /**
      * プレイヤーの登録済みの出し手を削除

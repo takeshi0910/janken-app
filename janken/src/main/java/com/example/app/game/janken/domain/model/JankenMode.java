@@ -19,4 +19,16 @@ public enum JankenMode {
     public String getLabel() {
         return label;
     }
+    
+    /** 文字列からEnumを返す */
+    public static JankenMode fromString(String value) {
+        for (JankenMode mode : values()) {
+            if (mode.name().equalsIgnoreCase(value) ||
+                mode.label.equals(value)) {
+                return mode;
+            }
+        }
+        throw new IllegalArgumentException("Unknown JankenMode: " + value);
+    }
+
 }

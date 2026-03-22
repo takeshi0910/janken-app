@@ -1,6 +1,7 @@
 package com.example.app.room.application;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.room.domain.Room;
-import com.example.app.room.domain.RoomUser;
 import com.example.app.room.infrastructure.mapper.RoomMapper;
-import com.example.app.room.infrastructure.mapper.RoomUserMapper;
 import com.example.app.room.infrastructure.repository.RoomRepository;
+import com.example.app.room.roomuser.application.RoomUserService;
+import com.example.app.room.roomuser.domain.RoomUser;
 import com.example.app.room.web.RoomForm;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
     private final RoomRepository roomRepository;
-    private final RoomUserMapper roomUserMapper;
+    private final RoomUserService roomUserService;
 
     @Override
     public List<RoomListItemDto> selectRoomsByUserId(int userId) {
@@ -67,7 +68,7 @@ public class RoomServiceImpl implements RoomService {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(
                 "Room not found: " + roomId));
 
-        List<Integer> userIds = roomUserMapper.selectUserIdsByRoomId(roomId);
+        Set<Integer> userIds = roomUserService.findUserIdsByRoomId(roomId);
 
         RoomRegisterDto dto = new RoomRegisterDto();
 
@@ -112,13 +113,15 @@ public class RoomServiceImpl implements RoomService {
         Integer roomId = saved.getRoomId();
 
         // room_users を洗い替え
-        roomUserMapper.deleteByRoomId(roomId);
+        roomUserService.deleteByRoomId(roomId);
 
         // room_users を再挿入
         List<RoomUser> list = form.getUserIds().stream()
                 .map(userId -> new RoomUser(roomId, userId))
                 .toList();
 
-        roomUserMapper.insertRoomUsers(list);
+        roomUserService.insertRoomUsers(list);
     }
+    
+
 }

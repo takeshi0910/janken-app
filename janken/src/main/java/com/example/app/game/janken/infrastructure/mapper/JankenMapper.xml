@@ -6,13 +6,26 @@
 <mapper namespace="com.example.app.game.janken.infrastructure.mapper.JankenMapper">
 
     <!-- 出し手一覧取得 -->
-    
-    <resultMap id="choiceMap" type="com.example.app.game.janken.domain.JankenChoice">
+    <resultMap id="choiceMap" type="com.example.app.game.janken.infrastructure.persistence.model.JankenChoice">
         <result property="roomId" column="room_id"/>
         <result property="orderNo" column="order_no"/>
         <result property="playerId" column="player_id"/>
         <result property="jankenHand" column="janken_hand"/>
     </resultMap>
+    
+    <select id="selectChoicesByRoomId" resultMap="choiceMap">
+        SELECT
+            room_id,
+            player_id,
+            order_no,
+            janken_hand
+        FROM
+            janken_choice
+        WHERE
+            room_id = #{roomId}
+        ORDER BY
+            order_no ASC
+    </select>
     
     <select id="selectChoices" resultMap="choiceMap">
         SELECT

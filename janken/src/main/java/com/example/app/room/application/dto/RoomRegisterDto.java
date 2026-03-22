@@ -1,7 +1,7 @@
 package com.example.app.room.application.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 import com.example.app.game.core.GameKind;
 import com.example.app.room.domain.RoomStatus;
@@ -24,7 +24,7 @@ public class RoomRegisterDto {
     private RoomStatus roomStatus;
     private LocalDateTime startedDate;
     private LocalDateTime endDate;
-    private List<Integer> userIds;
+    private Set<Integer> userIds;
     
     /**フォーム変換 */
     public RoomForm toForm() {

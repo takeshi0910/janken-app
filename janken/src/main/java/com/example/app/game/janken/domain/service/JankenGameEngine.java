@@ -14,44 +14,52 @@ import com.example.app.game.janken.domain.model.round.RoundResult;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 
 /**
- * じゃんけんゲームの進行を管理するエンジンクラス。
- * <p>
- * 本クラスは以下の責務を持つ：
- * <ul>
- *   <li>ゲームに参加するプレイヤーとその選択（JankenChoice）の保持</li>
- *   <li>アクティブプレイヤー（勝敗判定対象）の管理</li>
- *   <li>1回分の勝敗判定（judgeRound）の実行</li>
- *   <li>モード別の進行（総当たり／勝ち残り／負け残り）の提供</li>
- * </ul>
+ * じゃんけんゲームの勝敗判定ロジックを提供するエンジンクラス。
  * 
- * ゲームの状態（activePlayers）はラウンド結果に応じて変化する。
- * そのため、本クラスは状態を持つオブジェクトとして設計されている。
+ * <p>
+ * 本クラスは状態を保持せず、与えられた入力（プレイヤーの選択や
+ * アクティブプレイヤー集合）に基づいて勝敗判定を行う純粋な
+ * ドメインサービスとして機能する。
+
+ * <p>主な責務：
+ * <ul>
+ *   <li>1ラウンド分の勝敗判定（judgeRound）の実行</li>
+ *   <li>モード別（総当たり／勝ち残り／負け残り）の判定ロジック提供
+ *   <li>入力値をもとに判定結果を返す</li>
+ * </ul>
  * 
  * @author takeshi.kashiwagi
  */
 public class JankenGameEngine {
 
-    private List<JankenChoice> choices;
-
-    /** 現在のラウンドで勝敗判定対象となるプレイヤーID集合 */
-    private Set<Integer> activePlayers;
-
     /**
-     * コンストラクタ。
-     * ゲーム開始時点での全プレイヤーの選択を受け取り、
-     * activePlayers を全プレイヤーで初期化する。
+     * モードに応じて勝敗判定を実行する。
      *
-     * @param choices 全プレイヤーの選択リスト
+     * @param mode          じゃんけんモード
+     * @param choices       全プレイヤーの選択
+     * @param activePlayers 判定対象プレイヤー
+     * @return ラウンド結果
      */
-    public JankenGameEngine(List<JankenChoice> choices) {
-        this.choices = choices;
-        this.activePlayers = extractAllPlayers(choices);
-    }
+    public Map<OrderNo, RoundResult> judge(
+            JankenMode mode,
+            List<JankenChoice> choices,
+            Set<Integer> allPlayers,
+            int maxRounds) {
 
+        // activePlayers はモードによってはラウンドごとに変化するためコピーを使用
+        Set<Integer> activePlayers = new HashSet<>(allPlayers);
+
+        return switch (mode) {
+            case TOTAL_BATTLE -> judgeTotalBattle(choices, activePlayers, maxRounds);
+            case WINNER_STAYS -> judgeWinnerStays(choices, activePlayers, maxRounds);
+            case LOSER_STAYS -> judgeLoserStays(choices, activePlayers, maxRounds);
+        };
+    }
+    
     /**
      * 1回分の勝敗判定を行う。
-     * <p>
-     * activePlayers に含まれるプレイヤーのみを対象に、
+     * 
+     * <p>activePlayers に含まれるプレイヤーのみを対象に、
      * 出した手ごとにプレイヤーをグルーピングし、勝敗を決定する。
      *
      * @param choices       全プレイヤーの選択
@@ -85,30 +93,6 @@ public class JankenGameEngine {
                 .collect(Collectors.toSet());
 
         return RoundResult.decided(winners, losers);
-    }
-
-    /**
-     * モードに応じて勝敗判定を実行する。
-     *
-     * @param mode          じゃんけんモード
-     * @param choices       全プレイヤーの選択
-     * @param activePlayers 判定対象プレイヤー
-     * @return ラウンド結果
-     */
-    public Map<OrderNo, RoundResult> judge(
-            JankenMode mode,
-            List<JankenChoice> choices,
-            Set<Integer> allPlayers,
-            int maxRounds) {
-
-        // activePlayers はモードによってはラウンドごとに変化するためコピーを使用
-        Set<Integer> activePlayers = new HashSet<>(allPlayers);
-
-        return switch (mode) {
-            case TOTAL_BATTLE -> judgeTotalBattle(choices, activePlayers, maxRounds);
-            case WINNER_STAYS -> judgeWinnerStays(choices, activePlayers, maxRounds);
-            case LOSER_STAYS -> judgeLoserStays(choices, activePlayers, maxRounds);
-        };
     }
 
     /**
@@ -218,18 +202,6 @@ public class JankenGameEngine {
         }
 
         return results;
-    }
-
-    /**
-     * choices から全プレイヤーIDを抽出する。
-     *
-     * @param choices 全プレイヤーの選択
-     * @return プレイヤーID集合
-     */
-    private Set<Integer> extractAllPlayers(List<JankenChoice> choices) {
-        return choices.stream()
-                .map(JankenChoice::getPlayerId)
-                .collect(Collectors.toSet());
     }
 
 }

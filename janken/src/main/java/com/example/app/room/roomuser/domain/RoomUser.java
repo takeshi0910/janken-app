@@ -1,4 +1,4 @@
-package com.example.app.room.domain;
+package com.example.app.room.roomuser.domain;
 
 import lombok.Getter;
 import lombok.Setter;

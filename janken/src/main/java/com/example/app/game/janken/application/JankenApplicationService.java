@@ -27,4 +27,12 @@ public interface JankenApplicationService {
      * @param choices プレイヤーの出し手情報
      */
     public void registerJankenChoices(Integer roomId, List<JankenChoice> choices);
+
+
+    /**
+     * じゃんけんの対戦実施。結果をDB登録する。
+     * 
+     * @param roomId ルームID
+     */
+    public void battle(Integer roomId);
 }
