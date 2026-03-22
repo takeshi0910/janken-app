@@ -1,10 +1,10 @@
-package com.example.app.janken.infrastructure.mapper;
+package com.example.app.game.janken.infrastructure.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.example.app.janken.domain.JankenChoice;
+import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 
 public interface JankenMapper {
     /**

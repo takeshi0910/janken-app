@@ -1,5 +1,6 @@
 package com.example.app.room.domain;
 
+import com.example.app.game.core.GameKind;
 import com.example.app.room.application.Destination;
 import com.example.app.room.application.UrlBuilder;
 

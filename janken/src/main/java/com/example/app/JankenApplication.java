@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @MapperScan({
         "com.example.app.room.infrastructure.mapper",
-        "com.example.app.janken.infrastructure.mapper"
+        "com.example.app.game.janken.infrastructure.mapper"
 })
 @EnableJpaAuditing
 public class JankenApplication {

@@ -3,7 +3,7 @@ package com.example.app.room.application.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.app.room.domain.GameKind;
+import com.example.app.game.core.GameKind;
 import com.example.app.room.domain.RoomStatus;
 import com.example.app.room.web.RoomForm;
 
@@ -22,22 +22,23 @@ public class RoomRegisterDto {
     private String gameMode;
     private int roundCount;
     private RoomStatus roomStatus;
-    private List<Integer> userIds;
     private LocalDateTime startedDate;
     private LocalDateTime endDate;
+    private List<Integer> userIds;
     
     /**フォーム変換 */
     public RoomForm toForm() {
-        RoomForm form = new RoomForm();
-        form.setRoomId(this.roomId);
-        form.setRoomName(this.roomName);
-        form.setGameKind(this.gameKind);
-        form.setGameMode(this.gameMode);
-        form.setRoundCount(this.roundCount);
-        form.setRoomStatus(this.roomStatus);
-        form.setUserIds(this.userIds);
-        form.setStartedDate(this.startedDate);
-        form.setEndDate(this.endDate);
-        return form;
+        return new RoomForm(
+            this.roomId,
+            this.roomName,
+            this.gameKind,
+            this.gameMode,
+            this.roundCount,
+            this.roomStatus,
+            this.startedDate,
+            this.endDate,
+            this.userIds
+        );
     }
+
 }

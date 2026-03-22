@@ -1,4 +1,4 @@
-package com.example.app.janken.web;
+package com.example.app.game.janken.web;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.app.janken.application.JankenService;
-import com.example.app.janken.domain.JankenChoice;
-import com.example.app.janken.domain.JankenHand;
+import com.example.app.game.janken.application.JankenApplicationService;
+import com.example.app.game.janken.domain.model.JankenHand;
+import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.security.MyUserDetails;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class JankenPlayController {
 
     private final RoomService roomService;
-    private final JankenService jankenService;
+    private final JankenApplicationService jankenService;
 
     /** 
      * じゃんけんのプレイ画面を表示する。

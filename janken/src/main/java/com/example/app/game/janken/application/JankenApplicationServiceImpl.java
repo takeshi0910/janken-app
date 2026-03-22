@@ -1,4 +1,4 @@
-package com.example.app.janken.application;
+package com.example.app.game.janken.application;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.app.janken.domain.JankenChoice;
-import com.example.app.janken.infrastructure.mapper.JankenMapper;
+import com.example.app.game.janken.infrastructure.mapper.JankenMapper;
+import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class JankenServiceImpl implements JankenService {
+public class JankenApplicationServiceImpl implements JankenApplicationService {
 
     private final JankenMapper jankenMapper;
     private final AuditorAware<Integer> auditorAware;

@@ -1,15 +1,15 @@
-package com.example.app.janken.application;
+package com.example.app.game.janken.application;
 
 import java.util.List;
 
-import com.example.app.janken.domain.JankenChoice;
+import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 
 /**
  * じゃんけんゲームのサービスインターフェース
  * 
  * @author takeshi.kashiwagi
  */
-public interface JankenService {
+public interface JankenApplicationService {
     
     /**
      * プレイヤーの登録済みの手の情報取得

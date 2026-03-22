@@ -1,10 +1,11 @@
-package com.example.app.room.domain;
+package com.example.app.game.core;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-import com.example.app.janken.domain.JankenMode;
+import com.example.app.game.janken.domain.model.JankenMode;
 
 /**
  * ゲーム種別を表す列挙型。
@@ -54,5 +55,12 @@ public enum GameKind {
     
     /** 各ゲームが持つモード一覧を返す */
     public abstract List<String> modes();
+    
+    /** pathが該当するゲームの保持するモード一覧を返す。 */
+    public static Optional<GameKind> fromPath(String path) {
+        return Arrays.stream(values())
+                .filter(k -> k.path.equals(path))
+                .findFirst();
+    }
 
 }

@@ -1,6 +1,8 @@
-package com.example.app.janken.domain;
+package com.example.app.game.janken.infrastructure.persistence.model;
 
 import java.time.LocalDateTime;
+
+import com.example.app.game.janken.domain.model.JankenHand;
 
 import lombok.Getter;
 import lombok.Setter;

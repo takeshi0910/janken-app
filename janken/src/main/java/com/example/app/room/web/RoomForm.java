@@ -14,7 +14,7 @@ import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.example.app.room.domain.GameKind;
+import com.example.app.game.core.GameKind;
 import com.example.app.room.domain.Room;
 import com.example.app.room.domain.RoomStatus;
 
@@ -36,9 +36,9 @@ public class RoomForm {
 
     @NotNull(message = "ゲーム種別を選択してください")
     private GameKind gameKind;
-    
+
     private String gameMode;
-    
+
     @AssertTrue(message = "じゃんけんの場合はゲームモードを選択してください")
     public boolean isGameModeValid() {
         // gameKind が null の場合は他のバリデーションに任せる
@@ -54,7 +54,7 @@ public class RoomForm {
         // それ以外のゲームでは不要
         return true;
     }
-    
+
     @NotNull(message = "ラウンド数を選択してください")
     @Min(value = 1, message = "ラウンド数は1以上で指定してください")
     @Max(value = 100, message = "ラウンド数は100以下で指定してください")
@@ -73,12 +73,36 @@ public class RoomForm {
     @NotEmpty(message = "ユーザーを1人以上選択してください")
     private List<Integer> userIds = new ArrayList<>();
 
+    public RoomForm() {}
+
+    public RoomForm(
+            Integer roomId,
+            String roomName,
+            GameKind gameKind,
+            String gameMode,
+            Integer roundCount,
+            RoomStatus roomStatus,
+            LocalDateTime startedDate,
+            LocalDateTime endDate,
+            List<Integer> userIds) {
+        this.roomId = roomId;
+        this.roomName = roomName;
+        this.gameKind = gameKind;
+        this.gameMode = gameMode;
+        this.roundCount = roundCount;
+        this.roomStatus = roomStatus;
+        this.startedDate = startedDate;
+        this.endDate = endDate;
+        this.userIds = userIds;
+    }
+
     public Room toNewEntity() {
         Room room = new Room();
         room.setRoomId(roomId);
         room.setRoomName(roomName);
         room.setRoundCount(roundCount);
         room.setGameKind(gameKind);
+        room.setGameMode(gameMode);
         room.setRoomStatus(roomStatus);
         room.setStartedDate(startedDate);
         room.setEndDate(endDate);

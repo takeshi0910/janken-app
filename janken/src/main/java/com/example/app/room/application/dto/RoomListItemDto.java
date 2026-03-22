@@ -16,6 +16,7 @@ public class RoomListItemDto {
     private Integer roomId;
     private String roomName;
     private String gameKind;
+    private String gameMode;
     private RoomStatus roomStatus;
     private LocalDateTime startedDate;
     private LocalDateTime endDate;

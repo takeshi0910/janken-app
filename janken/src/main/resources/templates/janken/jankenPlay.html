@@ -40,27 +40,22 @@
 <section layout:fragment="content">
 	
 	<div class="container mt-4 text-center">
-
 		<form method="post"
-			th:action="@{/rooms/{roomId}/choices(roomId=${roomId})}"
-			th:object="${form}">
+				th:action="@{/rooms/{roomId}/choices(roomId=${roomId})}"
+				th:object="${form}">
 			<input type="hidden" th:field="*{roomId}">
 			<h1 class="text-center p-3 bg-info-subtle rounded">[[${roomName}]]
 			</h1>
 			<h2 class="text-center">じゃんけん [[${roundCount}]] 回勝負</h2>
 
 			<div class="mt-4">
-
 				<div th:each="i, stat : ${#numbers.sequence(1, roundCount)}"
-					class="py-4 border-bottom">
-
+						class="py-4 border-bottom">
 					<input type="hidden"
 						th:field="*{choices[__${stat.index}__].orderNo}" th:value="${i}">
-
 					<h4>[[${i}]] 回目</h4>
-
 					<label class="hand-option">
-					<input type="radio" th:field="*{choices[__${stat.index}__].hand}" value="グー" required>
+						<input type="radio" th:field="*{choices[__${stat.index}__].hand}" value="グー" required>
 						<img th:src="@{/janken/img/gu.png}" alt="グー">
 					</label>
 					<label class="hand-option">
@@ -72,20 +67,14 @@
 						<img th:src="@{/janken/img/pa.png}" alt="パー">
 					</label>
 				</div>
-
 			</div>
-
 			
 			<div class="text-center mt-4">
 				<button class="btn btn-primary btn-lg">送信</button>
 			</div>
-			
-			
 
 		</form>
-
 	</div>
-
 </section>
 
 

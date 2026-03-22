@@ -74,6 +74,7 @@ public class RoomServiceImpl implements RoomService {
         dto.setRoomId(room.getRoomId());
         dto.setRoomName(room.getRoomName());
         dto.setGameKind(room.getGameKind());
+        dto.setGameMode(room.getGameMode());
         dto.setRoundCount(room.getRoundCount());
         dto.setRoomStatus(room.getRoomStatus());
         dto.setStartedDate(room.getStartedDate());
@@ -99,6 +100,7 @@ public class RoomServiceImpl implements RoomService {
 
             entity.setRoomName(form.getRoomName());
             entity.setGameKind(form.getGameKind());
+            entity.setGameMode(form.getGameMode());
             entity.setRoundCount(form.getRoundCount());
             entity.setRoomStatus(form.getRoomStatus());
             entity.setStartedDate(form.getStartedDate());

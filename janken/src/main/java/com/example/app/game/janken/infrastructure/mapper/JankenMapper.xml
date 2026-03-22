@@ -3,11 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.app.janken.infrastructure.mapper.JankenMapper">
+<mapper namespace="com.example.app.game.janken.infrastructure.mapper.JankenMapper">
 
     <!-- 出し手一覧取得 -->
     
-    <resultMap id="choiceMap" type="com.example.app.janken.domain.JankenChoice">
+    <resultMap id="choiceMap" type="com.example.app.game.janken.domain.JankenChoice">
         <result property="roomId" column="room_id"/>
         <result property="orderNo" column="order_no"/>
         <result property="playerId" column="player_id"/>

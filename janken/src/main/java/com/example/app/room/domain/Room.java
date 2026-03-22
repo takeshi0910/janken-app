@@ -15,6 +15,8 @@ import jakarta.persistence.Table;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.example.app.game.core.GameKind;
+
 import lombok.Data;
 
 /**
@@ -41,7 +43,7 @@ public class Room {
     private GameKind gameKind;
     
     @Column(name = "game_mode", length = 45) // null 許容（じゃんけん以外は null）
-    private GameKind gameMode;
+    private String gameMode;
     
     @Column(name = "round_count", nullable = false)
     private Integer roundCount;

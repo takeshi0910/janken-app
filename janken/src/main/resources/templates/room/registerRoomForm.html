@@ -24,25 +24,35 @@
 				<label class="form-label">
 					ゲーム種別<span class="text-danger">*</span>
 				</label>
-				<select th:field="*{gameKind}" class="form-control" required>
+				<select th:field="*{gameKind}" class="form-control" required
+						th:disabled="*{roomId != null}" >
 					<option value="">-- 選択してください --</option>
-					<option
-						th:each="kind : ${gameKinds}" th:value="${kind}" th:text="${kind}"></option>
+					<option th:each="kind : ${gameKinds}"
+				        th:value="${kind.name}"
+				        th:text="${kind.name}"
+				        th:data-path="${kind.path}">
+					</option>
 				</select>
+				<!-- 編集時は hidden で値を送信 -->
+				<input type="hidden" th:if="*{roomId != null}" th:field="*{gameKind}" />
 				<div class="text-danger" th:errors="*{gameKind}"></div>
 			</div>
 			
 			<!-- GameMode（編集時 or Ajax で Kind 選択後） -->
-			<div th:if="${modes != null and modes.size() > 0}">
+			<div id="gameModeContainer"  class="mb-3"
+			     th:style="${#lists.isEmpty(gameModes)} ? 'display:none;' : 'display:block;'">
 			    <label class="form-label">ゲームモード</label>
-			    <select th:field="*{gameMode}" class="form-control">
-			        <option th:each="mode : ${modes}"
+			    <select th:field="*{gameMode}" class="form-control" required>
+			        <option value="">-- 選択してください --</option>
+			        <option th:each="mode : ${gameModes}"
 			                th:value="${mode}"
 			                th:text="${mode}">
 			        </option>
 			    </select>
+			    <div th:if="${#fields.hasErrors('gameModeValid')}" class="text-danger" 
+				     th:errors="*{gameModeValid}">
+				</div>
 			</div>
-							
 
 			<!-- roomName -->
 			<div class="mb-3">
@@ -107,29 +117,13 @@
 			<div class="mt-4">
 				<button type="submit" class="btn btn-primary">保存</button>
 			</div>
-
 		</form>
-
 	</div>
 
 </section>
 
-
 <div layout:fragment="scripts">
-	<script>
-	document.getElementById("toggleAll").addEventListener("change", function() {
-	    const select = document.querySelector("select[multiple]");
-	    const options = select.options;
-	    const checked = this.checked;
-	
-	    for (let opt of options) {
-	        opt.selected = checked;
-	    }
-	
-	    const label = document.querySelector("label[for='toggleAll']");
-	    label.lastChild.textContent = checked ? " 全員不参加" : " 全員参加";
-	});
-	</script>
+	<script th:src="@{/js/registerRoomForm.js}"></script>
 </div>
 
 </html>

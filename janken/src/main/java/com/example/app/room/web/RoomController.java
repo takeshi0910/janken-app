@@ -1,5 +1,8 @@
 package com.example.app.room.web;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.app.game.core.GameKind;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
-import com.example.app.room.domain.GameKind;
 import com.example.app.user.application.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -46,20 +49,25 @@ public class RoomController {
                     Model model) {
 
         RoomForm form;
+        List<String> gameModes;
 
         if (roomId == null) {       // 新規
             form = new RoomForm();
+            gameModes = Collections.emptyList();
         } else {        // 編集
             RoomRegisterDto dto = roomService.findById(roomId);
             form = dto.toForm();
+            gameModes = form.getGameKind().modes();
         }
 
         model.addAttribute("roomForm", form);
+        model.addAttribute("gameModes", gameModes);
+        
         return "room/registerRoomForm";
     }
 
     /** 
-     * ルームを登録・編集する。
+     * ルーム情報を登録・更新する。
      * 
      * @param roomId
      */
@@ -72,8 +80,9 @@ public class RoomController {
 
         if (bindingResult.hasErrors()) {
             // セレクトボックス再描画用
-            model.addAttribute("gameKinds", GameKind.values());
-            return "room/registerform";
+            List<String> gameModes = form.getGameKind().modes();
+            model.addAttribute("gameModes", gameModes);
+            return "room/registerRoomForm";
         }
 
         roomService.save(form);

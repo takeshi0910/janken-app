@@ -1,9 +1,9 @@
-package com.example.app.janken.web;
+package com.example.app.game.janken.web;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.app.janken.domain.JankenHand;
+import com.example.app.game.janken.domain.model.JankenHand;
 
 import lombok.Getter;
 import lombok.Setter;
