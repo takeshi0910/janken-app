@@ -1,5 +1,8 @@
 package com.example.app.game.janken.application;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,8 +17,11 @@ import com.example.app.game.janken.domain.model.round.RoundResult;
 import com.example.app.game.janken.domain.service.JankenGameEngine;
 import com.example.app.game.janken.infrastructure.mapper.JankenMapper;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
+import com.example.app.game.janken.infrastructure.persistence.model.JankenPlayerResultRecord;
+import com.example.app.game.janken.infrastructure.persistence.model.JankenRoundResultRecord;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
+import com.example.app.room.domain.RoomId;
 import com.example.app.room.roomuser.infrastructure.mapper.RoomUserMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -59,7 +65,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     }
 
     @Override
-    public void battle(Integer roomId) {
+    public void battle(RoomId roomId) {
         // 1. ルーム情報を取得
         RoomRegisterDto room = roomService.findById(roomId);
 
@@ -68,24 +74,181 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         JankenMode mode = JankenMode.fromString(modeStr);
 
         // 3. ルームに登録されている全プレイヤーID
-        Set<Integer> allPlayers = roomUserMapper.selectUserIdsByRoomId(roomId);
+        Set<Integer> allPlayers = roomUserMapper.selectUserIdsByRoomId(roomId.value());
 
         // 4. choices を組み立てる
-        List<JankenChoice> choices = jankenMapper.selectChoicesByRoomId(roomId);
+        List<JankenChoice> choices = jankenMapper.selectChoicesByRoomId(roomId.value());
 
         // 5. maxRounds を取得
         int maxRounds = room.getRoundCount();
 
-        // 6. JankenGameEngine に丸投げ（モードごとのディスパッチはエンジン側）
+        // 6. 判定処理はJankenGameEngine に任せる
         Map<OrderNo, RoundResult> results = jankenGameEngine.judge(
                 mode,
                 choices,
                 allPlayers,
                 maxRounds);
 
-        // 7. 結果を保存（必要なら）
-       // TODO battleResultRepository.save(roomId, results);
+        // 7. ラウンドごとの判定結果をDB保存
+        saveRoundResults(roomId.value(), results);
 
+        // 8. プレイヤーの成績を集計
+        List<JankenPlayerResultRecord> playerResults = calculatePlayerResults(roomId.value(), mode, results,
+                allPlayers);
+
+        savePlayerResults(roomId.value(), playerResults);
+    }
+
+    /** 
+     * ラウンドごとの対戦結果を集計し、プレイヤーごとの成績を返す。
+     * 
+     *  @param mode じゃんけんモード
+     *  @param result ラウンドごとの対戦結果
+     *  @param allPlayers 全プレイヤーID
+     *  @author takeshi.kashiwagi
+     */
+    private List<JankenPlayerResultRecord> calculatePlayerResults(
+            int roomId, JankenMode mode,
+            Map<OrderNo, RoundResult> results, Set<Integer> allPlayers) {
+
+        // --- 1. 勝ち数・負け数の集計 ---
+        Map<Integer, Integer> winCount = new HashMap<>(); // プレイヤーID → 勝利数
+        Map<Integer, Integer> loseCount = new HashMap<>(); // プレイヤーID → 敗北数
+        allPlayers.forEach(p -> {
+            winCount.put(p, 0);
+            loseCount.put(p, 0);
+        });
+
+        for (RoundResult result : results.values()) {
+            if (result.isDraw())
+                continue;
+            result.getWinners().forEach(w -> winCount.put(w, winCount.get(w) + 1));
+            result.getLosers().forEach(l -> loseCount.put(l, loseCount.get(l) + 1));
+        }
+
+        // --- 2. ゲームモーごとのルールでソートする。 ---
+        List<Integer> sortedPlayers = allPlayers.stream()
+                .sorted((p1, p2) -> {
+                    Score s1 = scoreOf(mode, winCount.get(p1), loseCount.get(p1));
+                    Score s2 = scoreOf(mode, winCount.get(p2), loseCount.get(p2));
+
+                    int cmp = Integer.compare(s2.primary(), s1.primary());
+                    if (cmp != 0)
+                        return cmp;
+
+                    return Integer.compare(s2.secondary(), s1.secondary());
+                })
+                .toList();
+
+        // --- 3. 順位を付けながら JankenPlayerResultRecord を生成 ---
+        List<JankenPlayerResultRecord> playerResults = new ArrayList<>();
+
+        int rank = 1;
+        int index = 0;
+        Integer prevPlayer = null;
+
+        // 同着の判定。同じ戦績（勝利数と敗北数が一致）の場合は、同着とみなす。
+        for (Integer player : sortedPlayers) {
+
+            if (prevPlayer != null) {
+                boolean sameRank = scoreOf(mode, winCount.get(player), loseCount.get(player))
+                        .equals(scoreOf(mode, winCount.get(prevPlayer), loseCount.get(prevPlayer)));
+
+                if (!sameRank) {
+                    rank = index + 1;
+                }
+            }
+
+            playerResults.add(new JankenPlayerResultRecord(
+                    roomId,
+                    player,
+                    winCount.get(player),
+                    loseCount.get(player),
+                    rank));
+
+            prevPlayer = player;
+            index++;
+        }
+
+        return playerResults;
+
+    }
+
+    /**
+     * プレイヤーの順位付けに使用する比較用スコア。
+     *
+     * <p>primary と secondary の 2 軸で比較を行う。
+     * ゲームモードごとに scoreOf() で生成され、
+     * ソートおよび同着判定の両方で利用される。
+     *
+     * <ul>
+     *   <li>WINNER_STAYS：primary = 勝利数（降順）</li>
+     *   <li>LOSER_STAYS：primary = -敗北数（昇順）</li>
+     *   <li>TOTAL_BATTLE：primary = 勝利数（降順）、secondary = -敗北数（昇順）</li>
+     * </ul>
+     */
+    private record Score(int primary, int secondary) {}
+
+    /**
+     * 指定されたゲームモードに基づき、順位付けに使用する Score を生成する。
+     *
+     * @param mode ゲームモード
+     * @param win  プレイヤーの勝利数
+     * @param lose プレイヤーの敗北数
+     * @return 比較用の Score（primary / secondary の 2 軸）
+     */
+    private Score scoreOf(
+            JankenMode mode,
+            int win,
+            int lose) {
+        return switch (mode) {
+            case WINNER_STAYS -> new Score(win, 0); // 勝ち数だけで比較
+
+            case LOSER_STAYS -> new Score(-lose, 0); // 負け数が少ないほど上位 → 符号反転
+
+            case TOTAL_BATTLE -> new Score(win, -lose); // 勝ち数降順 → 負け数昇順
+        };
+    }
+
+    /**
+     * janken_round_resultテーブルの洗替
+     */
+    private void saveRoundResults(Integer roomId, Map<OrderNo, RoundResult> results) {
+        jankenMapper.deleteJankenRoundResults(roomId);
+        jankenMapper.insertJankenRoundResults(convertRoundResults(roomId, results));
+    }
+
+    /** 
+     * RoundResult：ラウンドごとの対戦結果からRoundResultRecord：DB保存用POJOを生成する
+     * 
+     * @param roomId
+     * @param results
+     * @return
+     */
+    private List<JankenRoundResultRecord> convertRoundResults(Integer roomId,
+            Map<OrderNo, RoundResult> results) {
+        return results.entrySet().stream()
+                .map(entry -> {
+                    OrderNo orderNo = entry.getKey();
+                    RoundResult roundResult = entry.getValue();
+
+                    return new JankenRoundResultRecord(
+                            roomId,
+                            orderNo.value(),
+                            roundResult.isDraw(),
+                            roundResult.getWinners().stream().toList(),
+                            roundResult.getLosers().stream().toList());
+                })
+                .sorted(Comparator.comparing(JankenRoundResultRecord::getOrderNo))
+                .toList();
+    }
+
+    /**
+     * janken_player_resultテーブルの洗替
+     */
+    private void savePlayerResults(Integer roomId, List<JankenPlayerResultRecord> playerResults) {
+        jankenMapper.deleteJankenPlayerResults(roomId);
+        jankenMapper.insertJankenPlayerResults(playerResults);
     }
 
 }

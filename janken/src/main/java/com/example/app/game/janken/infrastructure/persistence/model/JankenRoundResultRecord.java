@@ -1,22 +1,33 @@
 package com.example.app.game.janken.infrastructure.persistence.model;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
- * DB janken_round_result テーブルに対応したモデルクラス
+ * janken_round_result テーブルのデータ登録用POJO。
  * 
  *  @author takeshi.kashiwagi
  */
 @Getter
-@Setter
 public class JankenRoundResultRecord {
     private Integer roomId;
     private Integer orderNo;
-    private boolean isDecided;
-    private String winnerPlayerIdsJson;
-    private String loserPlayerIdsJson;
-    private LocalDateTime createdAt;
+    private boolean isDraw;
+    private  List<Integer>  winnerPlayerIdsJson;
+    private  List<Integer>  loserPlayerIdsJson;
+
+    public JankenRoundResultRecord(
+            Integer roomId,
+            Integer orderNo,
+            boolean isDraw,
+            List<Integer> winnerPlayerIdsJson,
+            List<Integer> loserPlayerIdsJson) {
+        this.roomId = roomId;
+        this.orderNo = orderNo;
+        this.isDraw = isDraw;
+        this.winnerPlayerIdsJson = winnerPlayerIdsJson;
+        this.loserPlayerIdsJson = loserPlayerIdsJson;
+    }
+
 }

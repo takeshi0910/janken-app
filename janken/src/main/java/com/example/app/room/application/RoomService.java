@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.application.dto.RoomRegisterDto;
+import com.example.app.room.domain.RoomId;
 import com.example.app.room.web.RoomForm;
 
 /**
@@ -27,7 +28,7 @@ public interface RoomService {
      * @param roomId
      * @return 登録済みのルーム情報
      */
-    public RoomRegisterDto findById(Integer roomId);
+    public RoomRegisterDto findById(RoomId roomId);
 
     /**
      * ルーム情報の登録・更新

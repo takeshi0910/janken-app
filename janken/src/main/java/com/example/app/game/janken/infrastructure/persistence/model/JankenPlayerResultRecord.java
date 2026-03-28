@@ -1,0 +1,31 @@
+package com.example.app.game.janken.infrastructure.persistence.model;
+
+import lombok.Getter;
+
+/**
+ * janken_player_resultテーブルの登録用POJO
+ * 
+ * @author takeshi.kashiwagi
+ */
+@Getter
+public class JankenPlayerResultRecord{
+    
+    private final int roomId;
+    private final int playerId;
+    private final int winCount;
+    private final int loseCount;
+    private final Integer finalRank; // nullable 不参加の人用
+
+    public JankenPlayerResultRecord(
+            int roomId,
+            int playerId,
+            int winCount,
+            int loseCount,
+            Integer finalRank) {
+        this.roomId = roomId;
+        this.playerId = playerId;
+        this.winCount = winCount;
+        this.loseCount = loseCount;
+        this.finalRank = finalRank;
+    }
+}

@@ -18,6 +18,7 @@ import com.example.app.game.janken.domain.model.JankenHand;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
+import com.example.app.room.domain.RoomId;
 import com.example.app.security.MyUserDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class JankenPlayController {
      */
     @GetMapping("/room/janken/play")
     public String show(
-                    @RequestParam(value = "roomId") Integer roomId,
+                    @RequestParam(value = "roomId") RoomId roomId,
                     Model model,
                     @AuthenticationPrincipal MyUserDetails loginUser) {
 

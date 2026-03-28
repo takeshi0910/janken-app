@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.example.app.game.janken.domain.model.JankenHand;
 import com.example.app.game.janken.domain.model.JankenMode;
 import com.example.app.game.janken.domain.model.round.OrderNo;
@@ -30,6 +32,7 @@ import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice
  * 
  * @author takeshi.kashiwagi
  */
+@Service
 public class JankenGameEngine {
 
     /**

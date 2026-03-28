@@ -3,7 +3,7 @@ package com.example.app.game.janken.domain.model.round;
 import java.util.Set;
 
 /**
- * じゃんけんのターン毎の勝敗をデータを保持するモデルクラス
+ * じゃんけんのラウンド毎の勝敗をデータを保持するモデルクラス
  * 
  * @author takeshi.kashiwagi
  */
@@ -40,6 +40,5 @@ public class RoundResult {
     public Set<Integer> getLosers() {
         return losers;
     }
-
 
 }
