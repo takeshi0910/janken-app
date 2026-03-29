@@ -1,6 +1,7 @@
 package com.example.app.room.application;
 
 import com.example.app.game.core.GameKind;
+import com.example.app.room.domain.RoomId;
 
 /** 
  * マイページ一覧上のルームの参加カラムのURLを生成する。
@@ -12,17 +13,17 @@ import com.example.app.game.core.GameKind;
  * @author takeshi.kashiwagi
  */
 public class UrlBuilder {
-    public static String build(GameKind game, Destination dest, Integer roomId) {
-        
+    public static String build(GameKind game, Destination dest, RoomId roomId) {
+
         if (dest == Destination.NONE) {
             return "";
         }
 
         return "/room/"
-                        + game.path()
-                        + "/"
-                        + dest.action()
-                        + "?roomId=" 
-                        + roomId;
+                + game.path()
+                + "/"
+                + dest.action()
+                + "?roomId="
+                + roomId.value();
     }
 }

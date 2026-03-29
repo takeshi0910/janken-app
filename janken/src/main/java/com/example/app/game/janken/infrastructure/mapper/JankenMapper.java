@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenPlayerResultRecord;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenRoundResultRecord;
+import com.example.app.room.domain.RoomId;
 
 public interface JankenMapper {
     /**
@@ -17,7 +18,7 @@ public interface JankenMapper {
      * @return 対象ルームにおける対象プレイヤーの出し手情報
      */
     List<JankenChoice> selectChoices(
-                    @Param("roomId") Integer roomId,
+                    @Param("roomId") RoomId roomId,
                     @Param("playerId") Integer playerId);
 
     /**
@@ -26,7 +27,7 @@ public interface JankenMapper {
      * @param roomId   ルームID
      * @return 対象ルームにおける全プレイヤーの出し手情報
      */
-    List<JankenChoice> selectChoicesByRoomId(Integer roomId);
+    List<JankenChoice> selectChoicesByRoomId(RoomId roomId);
 
     /**
      * プレイヤーの登録済みの出し手を削除
@@ -35,7 +36,7 @@ public interface JankenMapper {
      * @param playerId プレイヤーID
      */
     void deleteChoices(
-                    @Param("roomId") Integer roomId,
+                    @Param("roomId") RoomId roomId,
                     @Param("playerId") Integer playerId);
 
     /**
@@ -52,7 +53,7 @@ public interface JankenMapper {
      * 
      * @param choices 出し手情報のリスト
      */
-    void deleteJankenRoundResults(Integer roomId);
+    void deleteJankenRoundResults(RoomId roomId);
     
     /**
      * ラウンドごとのじゃんけん結果を登録
@@ -68,7 +69,7 @@ public interface JankenMapper {
      * 
      * @param choices 出し手情報のリスト
      */
-    void deleteJankenPlayerResults(Integer roomId);
+    void deleteJankenPlayerResults(RoomId roomId);
     
     /**
      * プレイヤーごとのじゃんけん結果を登録

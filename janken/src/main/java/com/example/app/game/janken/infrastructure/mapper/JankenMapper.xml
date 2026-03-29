@@ -71,4 +71,23 @@
          </foreach>
      </insert>
      
+     <insert id="insertJankenPlayerResults">
+         INSERT INTO janken_player_result (
+             room_id,
+             player_id,
+             win_count,
+             lose_count,
+             final_rank
+         )
+         VALUES
+         <foreach collection="playerResults" item="r" separator=",">
+             (
+                 #{r.roomId},
+                 #{r.playerId},
+                 #{r.winCount},
+                 #{r.loseCount},
+                 #{r.finalRank}
+             )
+         </foreach>
+     </insert>
 </mapper>

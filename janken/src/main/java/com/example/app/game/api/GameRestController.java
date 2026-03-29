@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.app.game.core.GameKind;
+import com.example.app.game.core.GameModeDto;
 
 /**
  * Gameに関連するRestController
@@ -15,7 +16,7 @@ import com.example.app.game.core.GameKind;
  */
 @RestController
 public class GameRestController {
-    
+
     /**
      * 指定されたゲーム種別に対応するモード一覧を返す API
      *
@@ -23,11 +24,15 @@ public class GameRestController {
      * @return ゲームが保持するモードの一覧
      */
     @GetMapping("/api/game-modes")
-    public List<String> getGameModes(@RequestParam String gameKindPath) {
+    public List<GameModeDto> getGameModes(@RequestParam String gameKindPath) {
 
         GameKind kind = GameKind.fromPath(gameKindPath)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown gameKind: " + gameKindPath));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Unknown gameKind: " + gameKindPath));
 
-        return kind.modes();
+        return kind.modes().stream()
+                .map(mode -> new GameModeDto(mode.name(), mode.label()))
+                .toList();
+
     }
 }

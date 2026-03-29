@@ -42,13 +42,13 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     private final RoomUserMapper roomUserMapper;
 
     @Override
-    public List<JankenChoice> getJankenChoices(Integer roomId, Integer playerId) {
+    public List<JankenChoice> getJankenChoices(RoomId roomId, Integer playerId) {
         return jankenMapper.selectChoices(roomId, playerId);
     }
 
     @Override
     @Transactional
-    public void registerJankenChoices(Integer roomId, List<JankenChoice> choices) {
+    public void registerJankenChoices(RoomId roomId, List<JankenChoice> choices) {
 
         // ログインユーザーの ID は AuditorAware がセット
         Integer currentUserId = auditorAware.getCurrentAuditor()
@@ -70,14 +70,13 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         RoomRegisterDto room = roomService.findById(roomId);
 
         // 2. JankenMode を取得
-        String modeStr = room.getGameMode();
-        JankenMode mode = JankenMode.fromString(modeStr);
+        JankenMode mode = (JankenMode) room.getGameMode();
 
         // 3. ルームに登録されている全プレイヤーID
-        Set<Integer> allPlayers = roomUserMapper.selectUserIdsByRoomId(roomId.value());
+        Set<Integer> allPlayers = roomUserMapper.selectUserIdsByRoomId(roomId);
 
         // 4. choices を組み立てる
-        List<JankenChoice> choices = jankenMapper.selectChoicesByRoomId(roomId.value());
+        List<JankenChoice> choices = jankenMapper.selectChoicesByRoomId(roomId);
 
         // 5. maxRounds を取得
         int maxRounds = room.getRoundCount();
@@ -90,13 +89,13 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
                 maxRounds);
 
         // 7. ラウンドごとの判定結果をDB保存
-        saveRoundResults(roomId.value(), results);
+        saveRoundResults(roomId, results);
 
         // 8. プレイヤーの成績を集計
-        List<JankenPlayerResultRecord> playerResults = calculatePlayerResults(roomId.value(), mode, results,
+        List<JankenPlayerResultRecord> playerResults = calculatePlayerResults(roomId, mode, results,
                 allPlayers);
 
-        savePlayerResults(roomId.value(), playerResults);
+        savePlayerResults(roomId, playerResults);
     }
 
     /** 
@@ -108,7 +107,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
      *  @author takeshi.kashiwagi
      */
     private List<JankenPlayerResultRecord> calculatePlayerResults(
-            int roomId, JankenMode mode,
+            RoomId roomId, JankenMode mode,
             Map<OrderNo, RoundResult> results, Set<Integer> allPlayers) {
 
         // --- 1. 勝ち数・負け数の集計 ---
@@ -213,7 +212,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     /**
      * janken_round_resultテーブルの洗替
      */
-    private void saveRoundResults(Integer roomId, Map<OrderNo, RoundResult> results) {
+    private void saveRoundResults(RoomId roomId, Map<OrderNo, RoundResult> results) {
         jankenMapper.deleteJankenRoundResults(roomId);
         jankenMapper.insertJankenRoundResults(convertRoundResults(roomId, results));
     }
@@ -225,7 +224,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
      * @param results
      * @return
      */
-    private List<JankenRoundResultRecord> convertRoundResults(Integer roomId,
+    private List<JankenRoundResultRecord> convertRoundResults(RoomId roomId,
             Map<OrderNo, RoundResult> results) {
         return results.entrySet().stream()
                 .map(entry -> {
@@ -246,7 +245,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     /**
      * janken_player_resultテーブルの洗替
      */
-    private void savePlayerResults(Integer roomId, List<JankenPlayerResultRecord> playerResults) {
+    private void savePlayerResults(RoomId roomId, List<JankenPlayerResultRecord> playerResults) {
         jankenMapper.deleteJankenPlayerResults(roomId);
         jankenMapper.insertJankenPlayerResults(playerResults);
     }

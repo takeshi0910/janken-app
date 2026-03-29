@@ -3,13 +3,11 @@ package com.example.app.room.domain;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -30,10 +28,8 @@ import lombok.Data;
 @EntityListeners(AuditingEntityListener.class)
 public class Room {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "room_id")
-    private Integer roomId;
+    @EmbeddedId
+    private RoomId roomId;
 
     @Column(name = "room_name", nullable = false, length = 100)
     private String roomName;
@@ -42,7 +38,8 @@ public class Room {
     @Enumerated(EnumType.STRING)
     private GameKind gameKind;
     
-    @Column(name = "game_mode", length = 45) // null 許容（じゃんけん以外は null）
+    // JPA登録に際してGameModeインターフェースでは対応できないためStringで登録
+    @Column(name = "game_mode", length = 45) 
     private String gameMode;
     
     @Column(name = "round_count", nullable = false)

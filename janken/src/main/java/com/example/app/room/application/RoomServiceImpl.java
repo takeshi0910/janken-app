@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.room.domain.Room;
+import com.example.app.room.domain.RoomId;
 import com.example.app.room.infrastructure.mapper.RoomMapper;
 import com.example.app.room.infrastructure.repository.RoomRepository;
 import com.example.app.room.roomuser.application.RoomUserService;
@@ -40,12 +41,12 @@ public class RoomServiceImpl implements RoomService {
         }
 
         // ② ルームID一覧を抽出
-        List<Integer> roomIds = rooms.stream()
+        List<RoomId> roomIds = rooms.stream()
                 .map(RoomListItemDto::getRoomId)
                 .toList();
 
         // ③ じゃんけんルームについて、自分の登録済みのルームを取得
-        List<Integer> registeredRoomIds = roomMapper.selectRoomHandRegisteredMap(userId,
+        List<RoomId> registeredRoomIds = roomMapper.selectRoomHandRegisteredMap(userId,
                 roomIds);
 
         // ④ じゃんけんルームの出し手情報の登録状況　3 値（true / false / null ※じゃんけん以外）をセット。
@@ -64,7 +65,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public RoomRegisterDto findById(Integer roomId) {
+    public RoomRegisterDto findById(RoomId roomId) {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(
                 "Room not found: " + roomId));
 
@@ -75,7 +76,7 @@ public class RoomServiceImpl implements RoomService {
         dto.setRoomId(room.getRoomId());
         dto.setRoomName(room.getRoomName());
         dto.setGameKind(room.getGameKind());
-        dto.setGameMode(room.getGameMode());
+        dto.setGameMode(room.getGameKind().toMode(room.getGameMode()));
         dto.setRoundCount(room.getRoundCount());
         dto.setRoomStatus(room.getRoomStatus());
         dto.setStartedDate(room.getStartedDate());
@@ -93,24 +94,28 @@ public class RoomServiceImpl implements RoomService {
 
         if (form.getRoomId() == null) {
             // 新規
-            entity = form.toNewEntity();
+            entity = new Room();
+            entity.setRoomId(null); // DB が採番するなら null のまま
         } else {
             // 編集
-            entity = roomRepository.findById(form.getRoomId())
+            RoomId id = new RoomId(form.getRoomId());
+            entity = roomRepository.findById(id)
                     .orElseThrow();
 
-            entity.setRoomName(form.getRoomName());
-            entity.setGameKind(form.getGameKind());
-            entity.setGameMode(form.getGameMode());
-            entity.setRoundCount(form.getRoundCount());
-            entity.setRoomStatus(form.getRoomStatus());
-            entity.setStartedDate(form.getStartedDate());
-            entity.setEndDate(form.getEndDate());
         }
+        
+     // 新規・編集共通の上書き処理
+        entity.setRoomName(form.getRoomName());
+        entity.setGameKind(form.getGameKind());
+        entity.setGameMode(form.getGameMode());
+        entity.setRoundCount(form.getRoundCount());
+        entity.setRoomStatus(form.getRoomStatus());
+        entity.setStartedDate(form.getStartedDate());
+        entity.setEndDate(form.getEndDate());
 
         // Room を保存して ID を確定
         Room saved = roomRepository.save(entity);
-        Integer roomId = saved.getRoomId();
+        RoomId roomId = saved.getRoomId();
 
         // room_users を洗い替え
         roomUserService.deleteByRoomId(roomId);

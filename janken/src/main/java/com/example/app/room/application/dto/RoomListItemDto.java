@@ -2,6 +2,7 @@ package com.example.app.room.application.dto;
 
 import java.time.LocalDateTime;
 
+import com.example.app.room.domain.RoomId;
 import com.example.app.room.domain.RoomStatus;
 
 import lombok.Data;
@@ -13,7 +14,7 @@ import lombok.Data;
  */
 @Data
 public class RoomListItemDto {
-    private Integer roomId;
+    private RoomId roomId;
     private String roomName;
     private String gameKind;
     private String gameMode;

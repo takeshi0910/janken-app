@@ -15,7 +15,6 @@ import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.app.game.core.GameKind;
-import com.example.app.room.domain.Room;
 import com.example.app.room.domain.RoomStatus;
 
 import lombok.Data;
@@ -48,7 +47,7 @@ public class RoomForm {
 
         // じゃんけんのときだけ gameMode が必須
         if (gameKind == GameKind.じゃんけん) {
-            return gameMode != null && !gameMode.isBlank();
+            return gameMode != null;
         }
 
         // それ以外のゲームでは不要
@@ -73,7 +72,8 @@ public class RoomForm {
     @NotEmpty(message = "ユーザーを1人以上選択してください")
     private Set<Integer> userIds = new HashSet<>();
 
-    public RoomForm() {}
+    public RoomForm() {
+    }
 
     public RoomForm(
             Integer roomId,
@@ -96,16 +96,4 @@ public class RoomForm {
         this.userIds = userIds;
     }
 
-    public Room toNewEntity() {
-        Room room = new Room();
-        room.setRoomId(roomId);
-        room.setRoomName(roomName);
-        room.setRoundCount(roundCount);
-        room.setGameKind(gameKind);
-        room.setGameMode(gameMode);
-        room.setRoomStatus(roomStatus);
-        room.setStartedDate(startedDate);
-        room.setEndDate(endDate);
-        return room;
-    }
 }

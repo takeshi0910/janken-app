@@ -45,8 +45,8 @@
 			    <select th:field="*{gameMode}" class="form-control" required>
 			        <option value="">-- 選択してください --</option>
 			        <option th:each="mode : ${gameModes}"
-			                th:value="${mode}"
-			                th:text="${mode}">
+			                th:value="${mode.name()}"
+			                th:text="${mode.label}">
 			        </option>
 			    </select>
 			    <div th:if="${#fields.hasErrors('gameModeValid')}" class="text-danger" 

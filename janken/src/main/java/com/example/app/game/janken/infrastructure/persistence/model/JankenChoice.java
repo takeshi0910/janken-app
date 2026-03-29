@@ -3,6 +3,7 @@ package com.example.app.game.janken.infrastructure.persistence.model;
 import java.time.LocalDateTime;
 
 import com.example.app.game.janken.domain.model.JankenHand;
+import com.example.app.room.domain.RoomId;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class JankenChoice {
 
-    private Integer roomId;
+    private RoomId roomId;
     private Integer orderNo;
     private Integer playerId;
     private JankenHand jankenHand;
@@ -29,7 +30,7 @@ public class JankenChoice {
     public JankenChoice() {
     }
 
-    public JankenChoice(Integer roomId, Integer orderNo, Integer playerId, JankenHand jankenHand) {
+    public JankenChoice(RoomId roomId, Integer orderNo, Integer playerId, JankenHand jankenHand) {
         this.roomId = roomId;
         this.orderNo = orderNo;
         this.playerId = playerId;

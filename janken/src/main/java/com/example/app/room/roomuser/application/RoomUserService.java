@@ -3,6 +3,7 @@ package com.example.app.room.roomuser.application;
 import java.util.List;
 import java.util.Set;
 
+import com.example.app.room.domain.RoomId;
 import com.example.app.room.roomuser.domain.RoomUser;
 
 /**
@@ -18,14 +19,14 @@ public interface RoomUserService {
      * @param roomId
      * @return UserIdのリスト
      */
-    public Set<Integer> findUserIdsByRoomId(Integer roomId);
+    public Set<Integer> findUserIdsByRoomId(RoomId roomId);
 
     /**
      * 指定した roomId に紐づく全ての room_users レコードを削除する。
      * 
      * @param roomId
      */
-    public void deleteByRoomId(Integer roomId);
+    public void deleteByRoomId(RoomId roomId);
 
     /**
      * RoomUserを一括で登録する。

@@ -1,11 +1,13 @@
 package com.example.app.game.janken.domain.model;
 
+import com.example.app.game.core.GameMode;
+
 /** 
  * じゃんけん専用のゲームモードを表す列挙型
  * 
  * @author takeshi.kashiwagi
  */
-public enum JankenMode {
+public enum JankenMode  implements GameMode{
     WINNER_STAYS("勝ち残り"),
     LOSER_STAYS("負け残り"),
     TOTAL_BATTLE("総当たり");
@@ -16,7 +18,7 @@ public enum JankenMode {
         this.label = label;
     }
 
-    public String getLabel() {
+    public String label() {
         return label;
     }
     

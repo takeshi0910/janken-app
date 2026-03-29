@@ -42,22 +42,24 @@ public class JankenPlayController {
      */
     @GetMapping("/room/janken/play")
     public String show(
-                    @RequestParam(value = "roomId") RoomId roomId,
-                    Model model,
-                    @AuthenticationPrincipal MyUserDetails loginUser) {
+            @RequestParam(value = "roomId") Integer roomIdValue,
+            Model model,
+            @AuthenticationPrincipal MyUserDetails loginUser) {
+
+        RoomId roomId = new RoomId(roomIdValue);
 
         // Room を取得
         RoomRegisterDto room = roomService.findById(roomId);
 
         // --- ① 既存の選択肢を取得（編集モード対応） ---
         List<JankenChoice> choices = jankenService.getJankenChoices(roomId,
-                        loginUser.getUserId());
+                loginUser.getUserId());
 
         choices.forEach(c -> System.out.println("orderNo=" + c.getOrderNo()));
 
         // --- ② フォームを作成 ---
         JankenChoiceForm form = new JankenChoiceForm();
-        form.setRoomId(roomId);
+        form.setRoomId(roomIdValue);
 
         // hands の初期化
         int roundCount = room.getRoundCount();
@@ -80,10 +82,10 @@ public class JankenPlayController {
                 final int order = i + 1;
 
                 JankenHand hand = choices.stream()
-                                .filter(c -> c.getOrderNo() == order)
-                                .map(JankenChoice::getJankenHand)
-                                .findFirst()
-                                .orElse(null);
+                        .filter(c -> c.getOrderNo() == order)
+                        .map(JankenChoice::getJankenHand)
+                        .findFirst()
+                        .orElse(null);
 
                 JankenChoiceForm.ChoiceRow row = new JankenChoiceForm.ChoiceRow();
                 row.setOrderNo(order);
@@ -112,24 +114,27 @@ public class JankenPlayController {
      */
     @PostMapping("/rooms/{roomId}/choices")
     public String registerChoices(
-                    @PathVariable Integer roomId,
-                    @ModelAttribute JankenChoiceForm form,
-                    RedirectAttributes redirectAttributes) {
+            @PathVariable("roomId") Integer roomIdValue,
+            @ModelAttribute JankenChoiceForm form,
+            RedirectAttributes redirectAttributes) {
+
+        RoomId roomId = new RoomId(roomIdValue);
 
         List<JankenChoice> choices = form.getChoices().stream()
-                        .map(row -> new JankenChoice(
-                                        roomId,
-                                        row.getOrderNo(),
-                                        null, //  playerId はサービス層でセット
-                                        row.getHand()))
-                        .toList();
+                .map(row -> new JankenChoice(
+                        roomId,
+                        row.getOrderNo(),
+                        null, //  playerId はサービス層でセット
+                        row.getHand()))
+                .toList();
 
         jankenService.registerJankenChoices(roomId, choices);
-        
-     // Room を取得
+
+        // Room を取得
         String roomName = roomService.findById(roomId).getRoomName();
 
-        redirectAttributes.addFlashAttribute("jankenHandsRegisterdMessage",  "じゃんけんルーム：" + roomName + " の手を登録しました。");
+        redirectAttributes.addFlashAttribute("jankenHandsRegisterdMessage",
+                "じゃんけんルーム：" + roomName + " の手を登録しました。");
         return "redirect:/mypage";
 
     }

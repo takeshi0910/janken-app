@@ -28,13 +28,15 @@ async function fetchGameModes(gameKindPath) {
 
 // プルダウンの<option>タグ作成
 function fillSelect(select, items) {
-	select.innerHTML = "";
-	items.forEach(item => {
-		const opt = document.createElement("option");
-		opt.value = item;
-		opt.textContent = item;
-		select.appendChild(opt);
-	});
+    select.innerHTML = "";
+	console.log("API result:", items);
+
+    items.forEach(item => {
+        const opt = document.createElement("option");
+        opt.value = item.name;      // Enum.name()
+        opt.textContent = item.label; // 日本語ラベル
+        select.appendChild(opt);
+    });
 }
 
 document.getElementById("gameKind").addEventListener("change", async function() {

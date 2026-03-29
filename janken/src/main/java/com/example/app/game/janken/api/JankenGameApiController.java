@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.app.game.janken.application.JankenApplicationService;
+import com.example.app.room.domain.RoomId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +28,7 @@ public class JankenGameApiController {
      * @return 対戦結果
      */
     @PostMapping("/janken/battle")
-    public ResponseEntity<Void> battle(@PathVariable("roomId") Integer roomId) {
+    public ResponseEntity<Void> battle(@PathVariable("roomId") RoomId roomId) {
         jankenService.battle(roomId);
         return ResponseEntity.ok().build();
     }

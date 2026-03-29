@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 import com.example.app.game.core.GameKind;
+import com.example.app.game.core.GameMode;
+import com.example.app.room.domain.RoomId;
 import com.example.app.room.domain.RoomStatus;
 import com.example.app.room.web.RoomForm;
 
@@ -16,10 +18,10 @@ import lombok.Data;
  */
 @Data
 public class RoomRegisterDto {
-    private int roomId;
+    private RoomId roomId;
     private String roomName;
     private GameKind gameKind;
-    private String gameMode;
+    private GameMode gameMode;
     private int roundCount;
     private RoomStatus roomStatus;
     private LocalDateTime startedDate;
@@ -28,11 +30,14 @@ public class RoomRegisterDto {
     
     /**フォーム変換 */
     public RoomForm toForm() {
+        
+        String modeLabel = (gameMode != null) ? gameMode.name() : null;
+
         return new RoomForm(
-            this.roomId,
+            this.roomId.value(),
             this.roomName,
             this.gameKind,
-            this.gameMode,
+            modeLabel,
             this.roundCount,
             this.roomStatus,
             this.startedDate,

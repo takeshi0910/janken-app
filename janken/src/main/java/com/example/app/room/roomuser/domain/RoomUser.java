@@ -1,5 +1,7 @@
 package com.example.app.room.roomuser.domain;
 
+import com.example.app.room.domain.RoomId;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,12 +14,12 @@ import lombok.Setter;
 @Setter
 public class RoomUser {
 
-    private Integer roomId;
+    private RoomId roomId;
     private Integer userId;
 
     protected RoomUser() {}
 
-    public RoomUser(Integer roomId, Integer userId) {
+    public RoomUser(RoomId roomId, Integer userId) {
         this.roomId = roomId;
         this.userId = userId;
     }

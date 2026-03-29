@@ -18,27 +18,44 @@ import com.example.app.game.janken.domain.model.JankenMode;
 public enum GameKind {
     じゃんけん("janken") {
         @Override
-        public List<String> modes() {
-            return Arrays.stream(JankenMode.values())
-                    .map(Enum::name)
-                    .toList();
+        public GameMode toMode(String value) {
+            return JankenMode.fromString(value);
+        }
+        
+        @Override
+        public List<JankenMode> modes() {
+            return Arrays.asList(JankenMode.values());
         }
     },
     ポーカー("poker") {
         @Override
-        public List<String> modes() {
+        public GameMode toMode(String value) {
+            return null;
+        }
+
+        @Override
+        public List<? extends GameMode> modes() {
             return Collections.emptyList();
         }
     },
     麻雀("mahjong") {
         @Override
-        public List<String> modes() {
+        public GameMode toMode(String value) {
+            return null;
+        }
+
+        @Override
+        public List<? extends GameMode> modes() {
             return Collections.emptyList();
         }
     },
     あみだくじ("amidakuji") {
+        public GameMode toMode(String value) {
+            return null;
+        }
+        
         @Override
-        public List<String> modes() {
+        public List<? extends GameMode> modes() {
             return Collections.emptyList();
         }
     };
@@ -52,10 +69,17 @@ public enum GameKind {
     public String path() {
         return path;
     }
-    
+
     /** 各ゲームが持つモード一覧を返す */
-    public abstract List<String> modes();
+    public abstract List<? extends GameMode> modes();
     
+    /** 各ゲームがもつゲームモードを返す。日本語名でもEnum名でも参照可
+     * @Param Enum名もしくは日本語表記
+     * @return GameMode(Enum)
+     */
+    public abstract GameMode toMode(String value);
+
+
     /** pathが該当するゲームの保持するモード一覧を返す。 */
     public static Optional<GameKind> fromPath(String path) {
         return Arrays.stream(values())

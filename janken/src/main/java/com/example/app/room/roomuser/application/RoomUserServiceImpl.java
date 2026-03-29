@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.example.app.room.domain.RoomId;
 import com.example.app.room.roomuser.domain.RoomUser;
 import com.example.app.room.roomuser.infrastructure.mapper.RoomUserMapper;
 
@@ -22,12 +23,12 @@ public class RoomUserServiceImpl implements  RoomUserService{
     private final RoomUserMapper roomUserMapper;
     
     @Override
-    public Set<Integer> findUserIdsByRoomId(Integer roomId) {
+    public Set<Integer> findUserIdsByRoomId(RoomId roomId) {
         return roomUserMapper.selectUserIdsByRoomId(roomId);
     }
     
     @Override
-    public void deleteByRoomId(Integer roomId) {
+    public void deleteByRoomId(RoomId roomId) {
         roomUserMapper.deleteByRoomId(roomId);
     }
 

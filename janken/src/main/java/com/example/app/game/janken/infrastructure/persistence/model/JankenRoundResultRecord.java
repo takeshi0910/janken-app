@@ -2,6 +2,8 @@ package com.example.app.game.janken.infrastructure.persistence.model;
 
 import java.util.List;
 
+import com.example.app.room.domain.RoomId;
+
 import lombok.Getter;
 
 /**
@@ -11,14 +13,14 @@ import lombok.Getter;
  */
 @Getter
 public class JankenRoundResultRecord {
-    private Integer roomId;
+    private RoomId roomId;
     private Integer orderNo;
     private boolean isDraw;
     private  List<Integer>  winnerPlayerIdsJson;
     private  List<Integer>  loserPlayerIdsJson;
 
     public JankenRoundResultRecord(
-            Integer roomId,
+            RoomId roomId,
             Integer orderNo,
             boolean isDraw,
             List<Integer> winnerPlayerIdsJson,

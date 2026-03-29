@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.game.core.GameKind;
+import com.example.app.game.core.GameMode;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
+import com.example.app.room.domain.RoomId;
 import com.example.app.user.application.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,11 +47,13 @@ public class RoomController {
      */
     @GetMapping("/room/registerRoomForm")
     public String showRoomForm(
-                    @RequestParam(value = "roomId", required = false) Integer roomId,
+                    @RequestParam(value = "roomId", required = false) Integer  roomIdValue,
                     Model model) {
 
+        RoomId roomId = (roomIdValue != null) ? new RoomId(roomIdValue) : null;
+
         RoomForm form;
-        List<String> gameModes;
+        List<? extends GameMode> gameModes;
 
         if (roomId == null) {       // 新規
             form = new RoomForm();
@@ -80,7 +84,7 @@ public class RoomController {
 
         if (bindingResult.hasErrors()) {
             // セレクトボックス再描画用
-            List<String> gameModes = form.getGameKind().modes();
+            List<? extends GameMode> gameModes = form.getGameKind().modes();
             model.addAttribute("gameModes", gameModes);
             return "room/registerRoomForm";
         }

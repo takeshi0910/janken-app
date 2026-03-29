@@ -50,7 +50,7 @@ public enum RoomStatus {
     }
     
     /** 参加カラムのボタン制御 */
-    public String buildUrlOrEmpty(GameKind gameKind, Integer roomId) {
+    public String buildUrlOrEmpty(GameKind gameKind, RoomId roomId) {
         if (!clickable) return "";
         return UrlBuilder.build(gameKind, destination, roomId);
     }
