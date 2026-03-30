@@ -1,4 +1,4 @@
-package com.example.app.room.infrastructure.typehandler;
+/*package com.example.app.room.infrastructure.typehandler;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -39,3 +39,4 @@ public class RoomIdTypeHandler extends BaseTypeHandler<RoomId> {
     }
 
 }
+*/

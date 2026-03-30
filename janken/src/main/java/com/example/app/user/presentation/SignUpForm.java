@@ -1,4 +1,4 @@
-package com.example.app.user.web;
+package com.example.app.user.presentation;
 
 import lombok.Data;
 

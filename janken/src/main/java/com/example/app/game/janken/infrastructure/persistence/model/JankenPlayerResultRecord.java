@@ -1,5 +1,6 @@
 package com.example.app.game.janken.infrastructure.persistence.model;
 
+import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.RoomId;
 
 import lombok.Getter;
@@ -13,14 +14,14 @@ import lombok.Getter;
 public class JankenPlayerResultRecord{
     
     private final RoomId roomId;
-    private final int playerId;
+    private final PlayerId playerId;
     private final int winCount;
     private final int loseCount;
     private final Integer finalRank; // nullable 不参加の人用
 
     public JankenPlayerResultRecord(
             RoomId roomId,
-            int playerId,
+            PlayerId playerId,
             int winCount,
             int loseCount,
             Integer finalRank) {

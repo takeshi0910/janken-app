@@ -1,4 +1,4 @@
-package com.example.app.game.janken.web;
+package com.example.app.game.janken.presentation;
 
 import java.util.ArrayList;
 import java.util.List;

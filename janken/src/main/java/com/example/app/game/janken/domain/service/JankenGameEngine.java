@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.app.game.janken.domain.model.JankenHand;
 import com.example.app.game.janken.domain.model.JankenMode;
-import com.example.app.game.janken.domain.model.round.OrderNo;
-import com.example.app.game.janken.domain.model.round.RoundResult;
+import com.example.app.game.janken.domain.model.OrderNo;
+import com.example.app.game.janken.domain.model.RoundResult;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
+import com.example.app.room.domain.PlayerId;
 
 /**
  * じゃんけんゲームの勝敗判定ロジックを提供するエンジンクラス。
@@ -46,11 +47,11 @@ public class JankenGameEngine {
     public Map<OrderNo, RoundResult> judge(
             JankenMode mode,
             List<JankenChoice> choices,
-            Set<Integer> allPlayers,
+            Set<PlayerId> allPlayers,
             int maxRounds) {
 
         // activePlayers はモードによってはラウンドごとに変化するためコピーを使用
-        Set<Integer> activePlayers = new HashSet<>(allPlayers);
+        Set<PlayerId> activePlayers = new HashSet<>(allPlayers);
 
         return switch (mode) {
             case TOTAL_BATTLE -> judgeTotalBattle(choices, activePlayers, maxRounds);
@@ -69,9 +70,9 @@ public class JankenGameEngine {
      * @param activePlayers 判定対象となるプレイヤーID集合
      * @return ラウンド結果（勝者・敗者・あいこ）
      */
-    public RoundResult judgeRound(List<JankenChoice> choices, Set<Integer> activePlayers) {
+    public RoundResult judgeRound(List<JankenChoice> choices, Set<PlayerId> activePlayers) {
         // 有効プレイヤーだけを対象に、手ごとにプレイヤーIDをグルーピングして Map にしている
-        Map<JankenHand, Set<Integer>> grouped = choices.stream()
+        Map<JankenHand, Set<PlayerId>> grouped = choices.stream()
                 .filter(c -> activePlayers.contains(c.getPlayerId()))
                 .collect(Collectors.groupingBy(
                         JankenChoice::getJankenHand,
@@ -88,10 +89,10 @@ public class JankenGameEngine {
         JankenHand winningHand = JankenHand.findWinner(hands);
 
         // 勝者（勝ち手を出したプレイヤー）
-        Set<Integer> winners = grouped.get(winningHand);
+        Set<PlayerId> winners = grouped.get(winningHand);
 
         // 敗者（勝者以外のプレイヤー）
-        Set<Integer> losers = activePlayers.stream()
+        Set<PlayerId> losers = activePlayers.stream()
                 .filter(p -> !winners.contains(p))
                 .collect(Collectors.toSet());
 
@@ -107,7 +108,7 @@ public class JankenGameEngine {
      */
     public Map<OrderNo, RoundResult> judgeTotalBattle(
             List<JankenChoice> choices,
-            Set<Integer> activePlayers,
+            Set<PlayerId> activePlayers,
             int maxRounds) {
         Map<OrderNo, RoundResult> results = new LinkedHashMap<>();
 
@@ -135,7 +136,7 @@ public class JankenGameEngine {
      * @return 各ラウンドの勝負判定結果
      */
     public Map<OrderNo, RoundResult> judgeWinnerStays(List<JankenChoice> choices,
-            Set<Integer> activePlayers,
+            Set<PlayerId> activePlayers,
             int maxRounds) {
 
         Map<OrderNo, RoundResult> results = new LinkedHashMap<>();
@@ -149,7 +150,7 @@ public class JankenGameEngine {
             results.put(new OrderNo(order), result);
 
             // 勝者だけを次ラウンドに残す
-            Set<Integer> winners = result.getWinners();
+            Set<PlayerId> winners = result.getWinners();
 
             // 引き分け（勝者なし）の場合は全員残す
             if (!winners.isEmpty()) {
@@ -177,7 +178,7 @@ public class JankenGameEngine {
      */
     public Map<OrderNo, RoundResult> judgeLoserStays(
             List<JankenChoice> choices,
-            Set<Integer> activePlayers,
+            Set<PlayerId> activePlayers,
             int maxRounds) {
 
         Map<OrderNo, RoundResult> results = new LinkedHashMap<>();
@@ -191,7 +192,7 @@ public class JankenGameEngine {
             results.put(new OrderNo(order), result);
 
             // 敗者だけを次ラウンドに残す
-            Set<Integer> losers = result.getLosers();
+            Set<PlayerId> losers = result.getLosers();
 
             // 引き分け（勝者なし）の場合は全員残す
             if (!losers.isEmpty()) {

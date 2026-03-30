@@ -1,6 +1,8 @@
-package com.example.app.game.janken.domain.model.round;
+package com.example.app.game.janken.domain.model;
 
 import java.util.Set;
+
+import com.example.app.room.domain.PlayerId;
 
 /**
  * じゃんけんのラウンド毎の勝敗をデータを保持するモデルクラス
@@ -10,10 +12,10 @@ import java.util.Set;
 public class RoundResult {
     
     private final boolean isDraw;
-    private final Set<Integer> winners;
-    private final Set<Integer> losers;
+    private final Set<PlayerId> winners;
+    private final Set<PlayerId> losers;
 
-    private RoundResult(boolean isDraw,  Set<Integer> winners, Set<Integer> losers) {
+    private RoundResult(boolean isDraw,  Set<PlayerId> winners, Set<PlayerId> losers) {
         this.isDraw = isDraw;
         this.winners = winners;
         this.losers = losers;
@@ -25,7 +27,7 @@ public class RoundResult {
     }
 
     // 勝負が決定した場合、勝者も敗者をそれぞれ登録。
-    public static RoundResult decided( Set<Integer> winners, Set<Integer> losers) {
+    public static RoundResult decided( Set<PlayerId> winners, Set<PlayerId> losers) {
         return new RoundResult(false,  winners, losers);
     }
 
@@ -33,11 +35,11 @@ public class RoundResult {
         return isDraw;
     }
 
-    public Set<Integer> getWinners() {
+    public Set<PlayerId> getWinners() {
         return winners;
     }
 
-    public Set<Integer> getLosers() {
+    public Set<PlayerId> getLosers() {
         return losers;
     }
 

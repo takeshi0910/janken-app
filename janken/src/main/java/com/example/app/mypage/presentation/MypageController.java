@@ -1,4 +1,4 @@
-package com.example.app.mypage.web;
+package com.example.app.mypage.presentation;
 
 import java.util.List;
 

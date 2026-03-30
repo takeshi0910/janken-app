@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.data.repository.query.Param;
 
+import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.RoomId;
 import com.example.app.room.roomuser.domain.RoomUser;
 
@@ -21,7 +22,7 @@ public interface RoomUserMapper {
      * @param roomId
      * @return UserIdのリスト
      */
-    Set<Integer> selectUserIdsByRoomId(@Param("roomId") RoomId roomId);
+    Set<PlayerId> selectUserIdsByRoomId(@Param("roomId") RoomId roomId);
 
     /**
      * 指定した roomId に紐づく全ての room_users レコードを削除する。

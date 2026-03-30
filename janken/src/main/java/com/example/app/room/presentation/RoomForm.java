@@ -1,4 +1,4 @@
-package com.example.app.room.web;
+package com.example.app.room.presentation;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

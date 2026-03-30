@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.app.user.domain.UserInfo;
 import com.example.app.user.domain.UserInfoRepository;
-import com.example.app.user.web.SignUpForm;
+import com.example.app.user.presentation.SignUpForm;
 
 import lombok.RequiredArgsConstructor;
 

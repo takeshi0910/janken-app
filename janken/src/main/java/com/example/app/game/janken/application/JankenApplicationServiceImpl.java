@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.game.janken.domain.model.JankenMode;
-import com.example.app.game.janken.domain.model.round.OrderNo;
-import com.example.app.game.janken.domain.model.round.RoundResult;
+import com.example.app.game.janken.domain.model.OrderNo;
+import com.example.app.game.janken.domain.model.RoundResult;
 import com.example.app.game.janken.domain.service.JankenGameEngine;
 import com.example.app.game.janken.infrastructure.mapper.JankenMapper;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
@@ -21,6 +21,7 @@ import com.example.app.game.janken.infrastructure.persistence.model.JankenPlayer
 import com.example.app.game.janken.infrastructure.persistence.model.JankenRoundResultRecord;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
+import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.RoomId;
 import com.example.app.room.roomuser.infrastructure.mapper.RoomUserMapper;
 
@@ -40,7 +41,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     private final RoomService roomService;
     private final JankenGameEngine jankenGameEngine;
     private final RoomUserMapper roomUserMapper;
-
+    
     @Override
     public List<JankenChoice> getJankenChoices(RoomId roomId, Integer playerId) {
         return jankenMapper.selectChoices(roomId, playerId);
@@ -54,9 +55,11 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         Integer currentUserId = auditorAware.getCurrentAuditor()
                 .orElseThrow(() -> new IllegalStateException("ログインユーザーが取得できません"));
 
+        PlayerId playerId = PlayerId.fromUserId(currentUserId);
+
         choices.forEach(c -> {
             c.setRoomId(roomId); // roomIdの整合性をサービス層で保証する
-            c.setPlayerId(currentUserId);
+            c.setPlayerId(playerId);
         });
 
         jankenMapper.deleteChoices(roomId, currentUserId);
@@ -73,7 +76,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         JankenMode mode = (JankenMode) room.getGameMode();
 
         // 3. ルームに登録されている全プレイヤーID
-        Set<Integer> allPlayers = roomUserMapper.selectUserIdsByRoomId(roomId);
+        Set<PlayerId> allPlayers = roomUserMapper.selectUserIdsByRoomId(roomId);
 
         // 4. choices を組み立てる
         List<JankenChoice> choices = jankenMapper.selectChoicesByRoomId(roomId);
@@ -108,11 +111,11 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
      */
     private List<JankenPlayerResultRecord> calculatePlayerResults(
             RoomId roomId, JankenMode mode,
-            Map<OrderNo, RoundResult> results, Set<Integer> allPlayers) {
+            Map<OrderNo, RoundResult> results, Set<PlayerId> allPlayers) {
 
         // --- 1. 勝ち数・負け数の集計 ---
-        Map<Integer, Integer> winCount = new HashMap<>(); // プレイヤーID → 勝利数
-        Map<Integer, Integer> loseCount = new HashMap<>(); // プレイヤーID → 敗北数
+        Map<PlayerId, Integer> winCount = new HashMap<>(); // プレイヤーID → 勝利数
+        Map<PlayerId, Integer> loseCount = new HashMap<>(); // プレイヤーID → 敗北数
         allPlayers.forEach(p -> {
             winCount.put(p, 0);
             loseCount.put(p, 0);
@@ -126,7 +129,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         }
 
         // --- 2. ゲームモーごとのルールでソートする。 ---
-        List<Integer> sortedPlayers = allPlayers.stream()
+        List<PlayerId> sortedPlayers = allPlayers.stream()
                 .sorted((p1, p2) -> {
                     Score s1 = scoreOf(mode, winCount.get(p1), loseCount.get(p1));
                     Score s2 = scoreOf(mode, winCount.get(p2), loseCount.get(p2));
@@ -144,10 +147,10 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
 
         int rank = 1;
         int index = 0;
-        Integer prevPlayer = null;
+        PlayerId prevPlayer = null;
 
         // 同着の判定。同じ戦績（勝利数と敗北数が一致）の場合は、同着とみなす。
-        for (Integer player : sortedPlayers) {
+        for (PlayerId player : sortedPlayers) {
 
             if (prevPlayer != null) {
                 boolean sameRank = scoreOf(mode, winCount.get(player), loseCount.get(player))

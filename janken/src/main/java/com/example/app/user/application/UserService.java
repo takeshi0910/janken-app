@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.app.user.domain.UserInfo;
-import com.example.app.user.web.SignUpForm;
+import com.example.app.user.presentation.SignUpForm;
 
 /**
  * ユーザー情報の参照・登録のサービスインターフェース

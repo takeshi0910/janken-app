@@ -1,4 +1,4 @@
-package com.example.app.game.janken.web;
+package com.example.app.game.janken.presentation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.game.janken.application.JankenApplicationService;
 import com.example.app.game.janken.domain.model.JankenHand;
+import com.example.app.game.janken.domain.model.OrderNo;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomRegisterDto;
@@ -82,7 +83,7 @@ public class JankenPlayController {
                 final int order = i + 1;
 
                 JankenHand hand = choices.stream()
-                        .filter(c -> c.getOrderNo() == order)
+                        .filter(c -> c.getOrderNo().value() == order)
                         .map(JankenChoice::getJankenHand)
                         .findFirst()
                         .orElse(null);
@@ -123,14 +124,14 @@ public class JankenPlayController {
         List<JankenChoice> choices = form.getChoices().stream()
                 .map(row -> new JankenChoice(
                         roomId,
-                        row.getOrderNo(),
+                        new OrderNo(row.getOrderNo()),
                         null, //  playerId はサービス層でセット
                         row.getHand()))
                 .toList();
 
         jankenService.registerJankenChoices(roomId, choices);
 
-        // Room を取得
+        // 結果表示用にRoomの名前を取得
         String roomName = roomService.findById(roomId).getRoomName();
 
         redirectAttributes.addFlashAttribute("jankenHandsRegisterdMessage",

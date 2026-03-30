@@ -8,13 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.application.dto.RoomRegisterDto;
+import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.Room;
 import com.example.app.room.domain.RoomId;
 import com.example.app.room.infrastructure.mapper.RoomMapper;
 import com.example.app.room.infrastructure.repository.RoomRepository;
-import com.example.app.room.roomuser.application.RoomUserService;
+import com.example.app.room.presentation.RoomForm;
+import com.example.app.room.roomuser.application.RoomPlayerService;
 import com.example.app.room.roomuser.domain.RoomUser;
-import com.example.app.room.web.RoomForm;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +30,7 @@ public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
     private final RoomRepository roomRepository;
-    private final RoomUserService roomUserService;
+    private final RoomPlayerService roomUserService;
 
     @Override
     public List<RoomListItemDto> selectRoomsByUserId(int userId) {
@@ -69,7 +70,7 @@ public class RoomServiceImpl implements RoomService {
         Room room = roomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(
                 "Room not found: " + roomId));
 
-        Set<Integer> userIds = roomUserService.findUserIdsByRoomId(roomId);
+        Set<PlayerId> playerIds = roomUserService.findPlayerIdsByRoomId(roomId);
 
         RoomRegisterDto dto = new RoomRegisterDto();
 
@@ -81,7 +82,7 @@ public class RoomServiceImpl implements RoomService {
         dto.setRoomStatus(room.getRoomStatus());
         dto.setStartedDate(room.getStartedDate());
         dto.setEndDate(room.getEndDate());
-        dto.setUserIds(userIds);
+        dto.setPlayerIds(playerIds);
 
         return dto;
     }
@@ -117,7 +118,7 @@ public class RoomServiceImpl implements RoomService {
         Room saved = roomRepository.save(entity);
         RoomId roomId = saved.getRoomId();
 
-        // room_users を洗い替え
+        // room_players を洗い替え
         roomUserService.deleteByRoomId(roomId);
 
         // room_users を再挿入
@@ -125,7 +126,7 @@ public class RoomServiceImpl implements RoomService {
                 .map(userId -> new RoomUser(roomId, userId))
                 .toList();
 
-        roomUserService.insertRoomUsers(list);
+        roomUserService.insertRoomPlayerIds(list);
     }
     
 

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.RoomId;
 import com.example.app.room.roomuser.domain.RoomUser;
 import com.example.app.room.roomuser.infrastructure.mapper.RoomUserMapper;
@@ -18,12 +19,12 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class RoomUserServiceImpl implements  RoomUserService{
+public class RoomPlayerServiceImpl implements  RoomPlayerService{
     
     private final RoomUserMapper roomUserMapper;
     
     @Override
-    public Set<Integer> findUserIdsByRoomId(RoomId roomId) {
+    public Set<PlayerId> findPlayerIdsByRoomId(RoomId roomId) {
         return roomUserMapper.selectUserIdsByRoomId(roomId);
     }
     
@@ -33,7 +34,7 @@ public class RoomUserServiceImpl implements  RoomUserService{
     }
 
     @Override
-    public void insertRoomUsers(List<RoomUser> list) {
+    public void insertRoomPlayerIds(List<RoomUser> list) {
         roomUserMapper.insertRoomUsers(list);
     }
 }

@@ -2,12 +2,14 @@ package com.example.app.room.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.example.app.game.core.GameKind;
 import com.example.app.game.core.GameMode;
+import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.RoomId;
 import com.example.app.room.domain.RoomStatus;
-import com.example.app.room.web.RoomForm;
+import com.example.app.room.presentation.RoomForm;
 
 import lombok.Data;
 
@@ -26,12 +28,18 @@ public class RoomRegisterDto {
     private RoomStatus roomStatus;
     private LocalDateTime startedDate;
     private LocalDateTime endDate;
-    private Set<Integer> userIds;
+    private Set<PlayerId> playerIds;
     
     /**フォーム変換 */
     public RoomForm toForm() {
         
+        // Interface -> String
         String modeLabel = (gameMode != null) ? gameMode.name() : null;
+        
+        // VO -> Integer
+        Set<Integer> playerIdValues = this.playerIds.stream()
+                .map(PlayerId::value)
+                .collect(Collectors.toSet());
 
         return new RoomForm(
             this.roomId.value(),
@@ -42,7 +50,7 @@ public class RoomRegisterDto {
             this.roomStatus,
             this.startedDate,
             this.endDate,
-            this.userIds
+            playerIdValues
         );
     }
 

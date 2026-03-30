@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.room.domain.RoomId;
-import com.example.app.room.web.RoomForm;
+import com.example.app.room.presentation.RoomForm;
 
 /**
  * ROOMに関連するサービスインターフェース
