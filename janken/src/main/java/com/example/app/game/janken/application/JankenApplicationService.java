@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 import com.example.app.room.domain.RoomId;
+import com.example.app.user.domain.vo.UserId;
 
 /**
  * じゃんけんゲームのサービスインターフェース
@@ -18,7 +19,7 @@ public interface JankenApplicationService {
      * @param roomId ルームID
      * @param playerId プレイヤーID
      */
-    public List<JankenChoice> getJankenChoices(RoomId roomId, Integer playerId);
+    public List<JankenChoice> getJankenChoices(RoomId roomId, UserId userId);
 
         
     /**

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.domain.RoomId;
+import com.example.app.user.domain.vo.UserId;
 
 /**
  * ルームに関連するマッパーインターフェース
@@ -18,10 +19,10 @@ public interface RoomMapper {
     /**
      * マイページでの表示するルーム情報を取得
      * 
-     * @param userId
+     * @param userId ログインユーザーID
      * @return 対象者のマイページでの表示するルーム情報のリスト
      */
-    List<RoomListItemDto> selectRoomsByUserId(@Param("userId") int userId);
+    List<RoomListItemDto> selectRoomsByUserId(@Param("userId") UserId userId);
     
     /**
      * ログインユーザーが出し手を登録済みのじゃんけんルームIDを返す。
@@ -31,6 +32,6 @@ public interface RoomMapper {
      * @rerutn　出し手登録済みのじゃんけんルームIDのリスト
      */
     List<RoomId> selectRoomHandRegisteredMap(
-            @Param("userId") int userId,
+            @Param("userId") UserId userId,
             @Param("roomIds") List<RoomId> roomIds);
 }

@@ -7,8 +7,9 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.app.user.domain.UserInfo;
-import com.example.app.user.domain.UserInfoRepository;
+import com.example.app.user.domain.vo.Email;
+import com.example.app.user.infrastructure.entity.UserInfo;
+import com.example.app.user.infrastructure.repository.UserInfoRepository;
 import com.example.app.user.presentation.SignUpForm;
 
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,11 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<UserInfo> searchUserByEmail(String email) {
+    public Optional<UserInfo> searchUserByEmail(String emailValue) {
+
+        // Strimg -> Email VO変換
+        Email email = new Email(emailValue);
+
         return repository.findByEmail(email);
     }
 
@@ -34,7 +39,7 @@ public class UserServiceImpl implements UserService {
     public RegisterResult registerUserInfo(SignUpForm form) {
 
         // メールアドレス重複NG
-        if (repository.findByEmail(form.getEmail()).isPresent()) {
+        if (repository.findByEmail(new Email(form.getEmail())).isPresent()) {
             return new RegisterResult(RegisterError.EMAIL_EXISTS);
         }
 

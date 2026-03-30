@@ -1,4 +1,4 @@
-package com.example.app.room.domain;
+package com.example.app.room.infrastructure.entity;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +14,8 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.app.game.core.GameKind;
+import com.example.app.room.domain.RoomId;
+import com.example.app.room.domain.RoomStatus;
 
 import lombok.Data;
 
@@ -64,5 +66,8 @@ public class Room {
     @CreatedBy // 登録ユーザーの自動反映 INSERTの時だけ動く
     @Column(name = "created_id")
     private Integer createdId;
+    
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
 
 }

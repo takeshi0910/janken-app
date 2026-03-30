@@ -1,6 +1,7 @@
 package com.example.app.user.application;
 
-import com.example.app.user.domain.UserInfo;
+
+import com.example.app.user.infrastructure.entity.UserInfo;
 
 import lombok.Data;
 

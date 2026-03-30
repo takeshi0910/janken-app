@@ -6,6 +6,7 @@ import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.room.domain.RoomId;
 import com.example.app.room.presentation.RoomForm;
+import com.example.app.user.domain.vo.UserId;
 
 /**
  * ROOMに関連するサービスインターフェース
@@ -20,7 +21,7 @@ public interface RoomService {
      * @param userId
      * @return 対象者のマイページでの表示するルーム情報のリスト
      */
-    List<RoomListItemDto> selectRoomsByUserId(int userId);
+    List<RoomListItemDto> selectRoomsByUserId(UserId userId);
     
     /**
      * 登録済みのルーム情報を取得。

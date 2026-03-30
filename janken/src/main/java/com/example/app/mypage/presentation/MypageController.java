@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.app.room.application.RoomService;
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.security.MyUserDetails;
+import com.example.app.user.domain.vo.UserId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +28,7 @@ public class MypageController {
     @GetMapping("/mypage")
     public String showMypage(Model model, @AuthenticationPrincipal MyUserDetails userDetails) {
         // ログイン中ユーザーのIDを渡す
-        int loginUserId = userDetails.getUserId();
+        UserId loginUserId = userDetails.getUserId();
         model.addAttribute("loginUserId", loginUserId);
 
         // 対象ユーザーのルーム情報を渡す

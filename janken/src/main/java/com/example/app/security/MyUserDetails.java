@@ -6,7 +6,11 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.app.user.domain.UserInfo;
+import com.example.app.user.domain.vo.Email;
+import com.example.app.user.domain.vo.UserId;
+import com.example.app.user.domain.vo.UserName;
+import com.example.app.user.infrastructure.entity.UserInfo;
+
 
 /**
  * SpringSecurity認証用
@@ -15,25 +19,25 @@ import com.example.app.user.domain.UserInfo;
  */
 public class MyUserDetails implements UserDetails {
 
-    private final int userId;
-    private final String username; // email
-    private final String password;
-    private final String userName;
+    private final UserId userId;
+    private final Email email;
+    private final UserName userName;
+    private final HashedPassword password;
 
     public MyUserDetails(UserInfo userInfo) {
-        this.userId = userInfo.getUserId();
-        this.username = userInfo.getEmail(); // SpringSecurityのusernameに、Eメールをセット
+        this.userId =  new UserId(userInfo.getUserId());
+        this.email = new Email(userInfo.getEmail()); // SpringSecurityのusernameに、Eメールをセット
         this.password = userInfo.getPasswordHashed();
-        this.userName  = userInfo.getUserName();
+        this.userName  = new UserName(userInfo.getUserName());
     }
 
-    public int getUserId() {
+    public UserId getUserId() {
         return userId;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return email.value();
     }
 
     @Override
@@ -71,7 +75,7 @@ public class MyUserDetails implements UserDetails {
         return true;
     }
     
-    public String userName() {
+    public UserName userName() {
         return userName;
     }
 

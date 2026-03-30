@@ -24,6 +24,7 @@ import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.RoomId;
 import com.example.app.room.roomuser.infrastructure.mapper.RoomUserMapper;
+import com.example.app.user.domain.vo.UserId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,9 +42,12 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     private final RoomService roomService;
     private final JankenGameEngine jankenGameEngine;
     private final RoomUserMapper roomUserMapper;
-    
+
     @Override
-    public List<JankenChoice> getJankenChoices(RoomId roomId, Integer playerId) {
+    public List<JankenChoice> getJankenChoices(RoomId roomId, UserId userId) {
+        
+        PlayerId playerId =  new PlayerId(userId.value());
+        
         return jankenMapper.selectChoices(roomId, playerId);
     }
 
@@ -189,7 +193,8 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
      *   <li>TOTAL_BATTLE：primary = 勝利数（降順）、secondary = -敗北数（昇順）</li>
      * </ul>
      */
-    private record Score(int primary, int secondary) {}
+    private record Score(int primary, int secondary) {
+    }
 
     /**
      * 指定されたゲームモードに基づき、順位付けに使用する Score を生成する。

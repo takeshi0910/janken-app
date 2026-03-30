@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.app.room.application.dto.RoomListItemDto;
 import com.example.app.room.application.dto.RoomRegisterDto;
 import com.example.app.room.domain.PlayerId;
-import com.example.app.room.domain.Room;
 import com.example.app.room.domain.RoomId;
+import com.example.app.room.infrastructure.entity.Room;
 import com.example.app.room.infrastructure.mapper.RoomMapper;
 import com.example.app.room.infrastructure.repository.RoomRepository;
 import com.example.app.room.presentation.RoomForm;
 import com.example.app.room.roomuser.application.RoomPlayerService;
 import com.example.app.room.roomuser.domain.RoomUser;
+import com.example.app.user.domain.vo.UserId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +34,7 @@ public class RoomServiceImpl implements RoomService {
     private final RoomPlayerService roomUserService;
 
     @Override
-    public List<RoomListItemDto> selectRoomsByUserId(int userId) {
+    public List<RoomListItemDto> selectRoomsByUserId(UserId userId) {
         // ① まずルーム一覧を取得（DB 由来）
         List<RoomListItemDto> rooms = roomMapper.selectRoomsByUserId(userId);
 

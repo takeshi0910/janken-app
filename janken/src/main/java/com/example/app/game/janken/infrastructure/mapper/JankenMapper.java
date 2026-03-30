@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenChoice;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenPlayerResultRecord;
 import com.example.app.game.janken.infrastructure.persistence.model.JankenRoundResultRecord;
+import com.example.app.room.domain.PlayerId;
 import com.example.app.room.domain.RoomId;
 
 public interface JankenMapper {
@@ -19,7 +20,7 @@ public interface JankenMapper {
      */
     List<JankenChoice> selectChoices(
                     @Param("roomId") RoomId roomId,
-                    @Param("playerId") Integer playerId);
+                    @Param("playerId") PlayerId playerId);
 
     /**
      * 対象ルームにおける全プレイヤーの出し手一覧を取得
