@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.app.user.domain.vo.Email;
+import com.example.app.user.domain.vo.HashedPassword;
 import com.example.app.user.domain.vo.UserId;
 import com.example.app.user.domain.vo.UserName;
 import com.example.app.user.infrastructure.entity.UserInfo;
@@ -25,10 +26,10 @@ public class MyUserDetails implements UserDetails {
     private final HashedPassword password;
 
     public MyUserDetails(UserInfo userInfo) {
-        this.userId =  new UserId(userInfo.getUserId());
-        this.email = new Email(userInfo.getEmail()); // SpringSecurityのusernameに、Eメールをセット
+        this.userId =  userInfo.getUserId();
+        this.email = userInfo.getEmail(); // SpringSecurityのusernameに、Eメールをセット
         this.password = userInfo.getPasswordHashed();
-        this.userName  = new UserName(userInfo.getUserName());
+        this.userName  =userInfo.getUserName();
     }
 
     public UserId getUserId() {
@@ -42,7 +43,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return password.value();
     }
 
     @Override

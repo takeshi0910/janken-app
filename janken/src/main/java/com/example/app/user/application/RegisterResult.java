@@ -12,10 +12,7 @@ import lombok.Getter;
  */
 @Getter
 public class RegisterResult {
-    /** 
-     * 成功の可否だけ取得するならBoolean型でもよいが、
-     * 今後の拡張（サインアップ後の自動ログインやメール送信等）を視野に入れて、フィールドに保持しておく。
-     */
+    
     private final UserInfo userInfo;
     private final RegisterError error;
 

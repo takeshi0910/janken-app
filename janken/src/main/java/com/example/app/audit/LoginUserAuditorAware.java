@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.example.app.security.MyUserDetails;
+import com.example.app.user.domain.vo.UserId;
 
 /**
  * Spring Security からログイン中のユーザーIDを取得し、
@@ -16,10 +17,10 @@ import com.example.app.security.MyUserDetails;
  * @author takeshi.kashiwagi
  */
 @Component
-public class LoginUserAuditorAware implements AuditorAware<Integer> {
+public class LoginUserAuditorAware implements AuditorAware<UserId> {
 
     @Override
-    public Optional<Integer> getCurrentAuditor() {
+    public Optional<UserId> getCurrentAuditor() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null || !auth.isAuthenticated()) {

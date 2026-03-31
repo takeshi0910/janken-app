@@ -8,6 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.app.user.domain.vo.Email;
+import com.example.app.user.domain.vo.HashedPassword;
+import com.example.app.user.domain.vo.RawPassword;
+import com.example.app.user.domain.vo.UserName;
 import com.example.app.user.infrastructure.entity.UserInfo;
 import com.example.app.user.infrastructure.repository.UserInfoRepository;
 import com.example.app.user.presentation.SignUpForm;
@@ -51,11 +54,12 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = new UserInfo();
 
         // パスワードは、SpringSecurityにより、エンコード（実際はハッシュ化）した値を格納する。
-        String encodedPassword = passwordEncoder.encode(form.getPassword());
+        RawPassword raw = new RawPassword(form.getPassword());
+        HashedPassword hashed = raw.hash(passwordEncoder);
 
-        userInfo.setEmail(form.getEmail());
-        userInfo.setPasswordHashed(encodedPassword);
-        userInfo.setUserName(form.getUserName());
+        userInfo.setEmail(new Email(form.getEmail()));
+        userInfo.setPasswordHashed(hashed);
+        userInfo.setUserName(new UserName(form.getUserName()));
         userInfo.setCreateAt(LocalDateTime.now());
         userInfo.setUpdatedAt(LocalDateTime.now());
 

@@ -7,6 +7,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import com.example.app.user.domain.vo.Email;
+import com.example.app.user.domain.vo.HashedPassword;
+import com.example.app.user.domain.vo.UserId;
+import com.example.app.user.domain.vo.UserName;
+
 import lombok.Data;
 
 /** テーブル users に対応するEntity */
@@ -16,16 +21,16 @@ import lombok.Data;
 public class UserInfo {
     @Id
     @Column(name = "user_id")
-    private int userId;
+    private UserId userId;
     
     @Column(name = "email")
-    private String email;
+    private Email email;
 
     @Column(name = "user_name")
-    private String userName;
+    private UserName userName;
 
     @Column(name = "password_hashed")
-    private String passwordHashed;
+    private HashedPassword passwordHashed;
 
     @Column(name = "created_at")
     private LocalDateTime createAt;

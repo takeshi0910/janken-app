@@ -1,6 +1,8 @@
 package com.example.app.user.application;
 
 
+import com.example.app.user.domain.vo.UserId;
+import com.example.app.user.domain.vo.UserName;
 import com.example.app.user.infrastructure.entity.UserInfo;
 
 import lombok.Data;
@@ -10,8 +12,8 @@ import lombok.Data;
  */
 @Data
 public class UserDto {
-    private int userId;
-    private String userName;
+    private UserId userId;
+    private UserName userName;
 
     public static UserDto from(UserInfo entity) {
         UserDto dto = new UserDto();

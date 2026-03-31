@@ -1,0 +1,134 @@
+package com.example.app.domain.room.application;
+
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.app.domain.room.PlayerId;
+import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.application.dto.RoomListItemDto;
+import com.example.app.domain.room.application.dto.RoomRegisterDto;
+import com.example.app.domain.roomuser.service.RoomPlayerService;
+import com.example.app.infrastructure.room.entity.Room;
+import com.example.app.infrastructure.room.mapper.RoomMapper;
+import com.example.app.infrastructure.room.repository.RoomRepository;
+import com.example.app.infrastructure.roomplayer.entity.RoomUser;
+import com.example.app.presentation.room.RoomForm;
+import com.example.app.user.domain.vo.UserId;
+
+import lombok.RequiredArgsConstructor;
+
+/** 
+ * ROOMに関連するサービス実装クラス
+ * 
+ * @author takeshi.kashiwagi
+ */
+@Service
+@RequiredArgsConstructor
+public class RoomServiceImpl implements RoomService {
+
+    private final RoomMapper roomMapper;
+    private final RoomRepository roomRepository;
+    private final RoomPlayerService roomUserService;
+
+    @Override
+    public List<RoomListItemDto> selectRoomsByUserId(UserId userId) {
+        // ① まずルーム一覧を取得（DB 由来）
+        List<RoomListItemDto> rooms = roomMapper.selectRoomsByUserId(userId);
+
+        if (rooms.isEmpty()) {
+            return rooms;
+        }
+
+        // ② ルームID一覧を抽出
+        List<RoomId> roomIds = rooms.stream()
+                .map(RoomListItemDto::getRoomId)
+                .toList();
+
+        // ③ じゃんけんルームについて、自分の登録済みのルームを取得
+        List<RoomId> registeredRoomIds = roomMapper.selectRoomHandRegisteredMap(userId,
+                roomIds);
+
+        // ④ じゃんけんルームの出し手情報の登録状況　3 値（true / false / null ※じゃんけん以外）をセット。
+        rooms.forEach(room -> {
+            Boolean registered = null;
+
+            // じゃんけんだけ登録状況を判定する
+            if ("じゃんけん".equals(room.getGameKind())) {
+                registered = registeredRoomIds.contains(room.getRoomId());
+            }
+
+            room.setIsHandRegistered(registered);
+        });
+
+        return rooms;
+    }
+
+    @Override
+    public RoomRegisterDto findById(RoomId roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(
+                "Room not found: " + roomId));
+
+        Set<PlayerId> playerIds = roomUserService.findPlayerIdsByRoomId(roomId);
+
+        RoomRegisterDto dto = new RoomRegisterDto();
+
+        dto.setRoomId(room.getRoomId());
+        dto.setRoomName(room.getRoomName());
+        dto.setGameKind(room.getGameKind());
+        dto.setGameMode(room.getGameKind().toMode(room.getGameMode()));
+        dto.setRoundCount(room.getRoundCount());
+        dto.setRoomStatus(room.getRoomStatus());
+        dto.setStartedDate(room.getStartedDate());
+        dto.setEndDate(room.getEndDate());
+        dto.setPlayerIds(playerIds);
+
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public void save(RoomForm form) {
+
+        Room entity;
+
+        if (form.getRoomId() == null) {
+            // 新規
+            entity = new Room();
+            entity.setRoomId(null); // DB が採番するなら null のまま
+        } else {
+            // 編集
+            RoomId id = new RoomId(form.getRoomId());
+            entity = roomRepository.findById(id)
+                    .orElseThrow();
+
+        }
+        
+     // 新規・編集共通の上書き処理
+        entity.setRoomName(form.getRoomName());
+        entity.setGameKind(form.getGameKind());
+        entity.setGameMode(form.getGameMode());
+        entity.setRoundCount(form.getRoundCount());
+        entity.setRoomStatus(form.getRoomStatus());
+        entity.setStartedDate(form.getStartedDate());
+        entity.setEndDate(form.getEndDate());
+
+        // Room を保存して ID を確定
+        Room saved = roomRepository.save(entity);
+        RoomId roomId = saved.getRoomId();
+
+        // room_players を洗い替え
+        roomUserService.deleteByRoomId(roomId);
+
+        // room_users を再挿入
+        List<RoomUser> list = form.getUserIds().stream()
+                .map(userId -> new RoomUser(roomId, userId))
+                .toList();
+
+        roomUserService.insertRoomPlayerIds(list);
+    }
+    
+
+}
