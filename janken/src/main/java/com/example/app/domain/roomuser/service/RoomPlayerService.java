@@ -3,8 +3,8 @@ package com.example.app.domain.roomuser.service;
 import java.util.List;
 import java.util.Set;
 
-import com.example.app.domain.room.PlayerId;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.PlayerId;
+import com.example.app.domain.room.vo.RoomId;
 import com.example.app.infrastructure.roomplayer.entity.RoomUser;
 
 /**

@@ -2,7 +2,7 @@ package com.example.app.domain.janken.model;
 
 import java.util.Set;
 
-import com.example.app.domain.room.PlayerId;
+import com.example.app.domain.room.vo.PlayerId;
 
 /**
  * じゃんけんのラウンド毎の勝敗をデータを保持するモデルクラス

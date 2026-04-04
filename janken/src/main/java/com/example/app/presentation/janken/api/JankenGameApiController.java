@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.app.application.janken.JankenApplicationService;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.RoomId;
 
 import lombok.RequiredArgsConstructor;
 

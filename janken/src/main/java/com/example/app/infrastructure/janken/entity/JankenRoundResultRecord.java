@@ -2,8 +2,8 @@ package com.example.app.infrastructure.janken.entity;
 
 import java.util.List;
 
-import com.example.app.domain.room.PlayerId;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.PlayerId;
+import com.example.app.domain.room.vo.RoomId;
 
 import lombok.Getter;
 

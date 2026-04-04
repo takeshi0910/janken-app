@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import com.example.app.domain.game.core.GameKind;
 import com.example.app.domain.game.core.GameMode;
-import com.example.app.domain.room.PlayerId;
-import com.example.app.domain.room.RoomId;
 import com.example.app.domain.room.RoomStatus;
+import com.example.app.domain.room.vo.PlayerId;
+import com.example.app.domain.room.vo.RoomId;
 import com.example.app.presentation.room.RoomForm;
 
 import lombok.Data;

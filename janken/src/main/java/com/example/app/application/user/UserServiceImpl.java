@@ -7,10 +7,10 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.app.domain.user.Email;
-import com.example.app.domain.user.HashedPassword;
-import com.example.app.domain.user.RawPassword;
-import com.example.app.domain.user.UserName;
+import com.example.app.domain.user.vo.Email;
+import com.example.app.domain.user.vo.HashedPassword;
+import com.example.app.domain.user.vo.RawPassword;
+import com.example.app.domain.user.vo.UserName;
 import com.example.app.infrastructure.user.entity.UserInfo;
 import com.example.app.infrastructure.user.repository.UserInfoRepository;
 import com.example.app.presentation.auth.SignUpForm;

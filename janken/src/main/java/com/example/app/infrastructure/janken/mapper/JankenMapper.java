@@ -1,11 +1,11 @@
-package com.example.app.infrastructure.janken;
+package com.example.app.infrastructure.janken.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.example.app.domain.room.PlayerId;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.PlayerId;
+import com.example.app.domain.room.vo.RoomId;
 import com.example.app.infrastructure.janken.entity.JankenChoice;
 import com.example.app.infrastructure.janken.entity.JankenPlayerResultRecord;
 import com.example.app.infrastructure.janken.entity.JankenRoundResultRecord;

@@ -18,8 +18,8 @@ import com.example.app.application.room.RoomService;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.application.security.MyUserDetails;
 import com.example.app.domain.janken.model.JankenHand;
-import com.example.app.domain.janken.model.OrderNo;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.janken.vo.OrderNo;
+import com.example.app.domain.room.vo.RoomId;
 import com.example.app.infrastructure.janken.entity.JankenChoice;
 
 import lombok.RequiredArgsConstructor;

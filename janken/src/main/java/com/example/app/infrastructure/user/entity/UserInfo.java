@@ -1,5 +1,6 @@
 package com.example.app.infrastructure.user.entity;
 
+import java.sql.Types;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -7,10 +8,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import com.example.app.domain.user.Email;
-import com.example.app.domain.user.HashedPassword;
-import com.example.app.domain.user.UserId;
-import com.example.app.domain.user.UserName;
+import org.hibernate.annotations.JdbcTypeCode;
+
+import com.example.app.domain.user.vo.Email;
+import com.example.app.domain.user.vo.HashedPassword;
+import com.example.app.domain.user.vo.UserId;
+import com.example.app.domain.user.vo.UserName;
 
 import lombok.Data;
 
@@ -21,6 +24,7 @@ import lombok.Data;
 public class UserInfo {
     @Id
     @Column(name = "user_id")
+    @JdbcTypeCode(Types.INTEGER) //PKには必要
     private UserId userId;
     
     @Column(name = "email")

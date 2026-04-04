@@ -1,21 +1,23 @@
 package com.example.app.infrastructure.room.entity;
 
+import java.sql.Types;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import org.hibernate.annotations.JdbcTypeCode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.app.domain.game.core.GameKind;
-import com.example.app.domain.room.RoomId;
 import com.example.app.domain.room.RoomStatus;
+import com.example.app.domain.room.vo.RoomId;
 
 import lombok.Data;
 
@@ -30,7 +32,9 @@ import lombok.Data;
 @EntityListeners(AuditingEntityListener.class)
 public class Room {
 
-    @EmbeddedId
+    @Id
+    @Column(name = "room_id")
+    @JdbcTypeCode(Types.INTEGER)
     private RoomId roomId;
 
     @Column(name = "room_name", nullable = false, length = 100)

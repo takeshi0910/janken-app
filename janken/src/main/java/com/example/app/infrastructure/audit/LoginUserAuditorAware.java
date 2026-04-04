@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.example.app.application.security.MyUserDetails;
-import com.example.app.domain.user.UserId;
+import com.example.app.domain.user.vo.UserId;
 
 /**
  * Spring Security からログイン中のユーザーIDを取得し、

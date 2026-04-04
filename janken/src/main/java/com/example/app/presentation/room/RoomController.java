@@ -18,7 +18,7 @@ import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.application.user.UserService;
 import com.example.app.domain.game.core.GameKind;
 import com.example.app.domain.game.core.GameMode;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.RoomId;
 
 import lombok.RequiredArgsConstructor;
 

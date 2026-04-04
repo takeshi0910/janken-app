@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 
 import com.example.app.application.room.dto.RoomListItemDto;
-import com.example.app.domain.room.RoomId;
-import com.example.app.domain.user.UserId;
+import com.example.app.domain.room.vo.RoomId;
+import com.example.app.domain.user.vo.UserId;
 
 /**
  * ルームに関連するマッパーインターフェース

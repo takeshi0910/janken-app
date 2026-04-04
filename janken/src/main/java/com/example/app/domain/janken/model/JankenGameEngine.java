@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.app.domain.room.PlayerId;
+import com.example.app.domain.janken.vo.OrderNo;
+import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.infrastructure.janken.entity.JankenChoice;
 
 /**

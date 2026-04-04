@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
-import com.example.app.domain.room.PlayerId;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.PlayerId;
+import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.roomuser.service.RoomPlayerService;
-import com.example.app.domain.user.UserId;
+import com.example.app.domain.user.vo.UserId;
 import com.example.app.infrastructure.room.entity.Room;
 import com.example.app.infrastructure.room.mapper.RoomMapper;
 import com.example.app.infrastructure.room.repository.RoomRepository;

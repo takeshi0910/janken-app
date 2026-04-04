@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.example.app.domain.room.PlayerId;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.PlayerId;
+import com.example.app.domain.room.vo.RoomId;
 import com.example.app.infrastructure.roomplayer.entity.RoomUser;
 import com.example.app.infrastructure.roomplayer.mapper.RoomUserMapper;
 

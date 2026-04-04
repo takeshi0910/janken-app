@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.app.domain.user.Email;
+import com.example.app.domain.user.vo.Email;
 import com.example.app.infrastructure.user.entity.UserInfo;
 import com.example.app.infrastructure.user.repository.UserInfoRepository;
 

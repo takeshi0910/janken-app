@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.app.application.room.RoomService;
 import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.security.MyUserDetails;
-import com.example.app.domain.user.UserId;
+import com.example.app.domain.user.vo.UserId;
 
 import lombok.RequiredArgsConstructor;
 

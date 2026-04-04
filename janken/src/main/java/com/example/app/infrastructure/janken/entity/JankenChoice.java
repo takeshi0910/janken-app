@@ -3,9 +3,9 @@ package com.example.app.infrastructure.janken.entity;
 import java.time.LocalDateTime;
 
 import com.example.app.domain.janken.model.JankenHand;
-import com.example.app.domain.janken.model.OrderNo;
-import com.example.app.domain.room.PlayerId;
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.janken.vo.OrderNo;
+import com.example.app.domain.room.vo.PlayerId;
+import com.example.app.domain.room.vo.RoomId;
 
 import lombok.Getter;
 import lombok.Setter;

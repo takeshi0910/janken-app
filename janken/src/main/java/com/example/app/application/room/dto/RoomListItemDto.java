@@ -2,8 +2,8 @@ package com.example.app.application.room.dto;
 
 import java.time.LocalDateTime;
 
-import com.example.app.domain.room.RoomId;
 import com.example.app.domain.room.RoomStatus;
+import com.example.app.domain.room.vo.RoomId;
 
 import lombok.Data;
 

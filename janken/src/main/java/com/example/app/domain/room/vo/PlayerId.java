@@ -1,7 +1,12 @@
-package com.example.app.domain.room;
+package com.example.app.domain.room.vo;
+
+import jakarta.persistence.Embeddable;
+
+import com.example.app.domain.common.IntegerValueObject;
 
 /** PlayerId VO*/
-public record PlayerId(Integer value) {
+@Embeddable
+public record PlayerId(Integer value) implements IntegerValueObject {
     
     public PlayerId {
         if (value == null || value <= 0) {

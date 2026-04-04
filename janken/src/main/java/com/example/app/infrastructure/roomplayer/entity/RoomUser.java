@@ -1,6 +1,6 @@
 package com.example.app.infrastructure.roomplayer.entity;
 
-import com.example.app.domain.room.RoomId;
+import com.example.app.domain.room.vo.RoomId;
 
 import lombok.Getter;
 import lombok.Setter;

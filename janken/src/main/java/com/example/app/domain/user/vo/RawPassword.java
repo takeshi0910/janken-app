@@ -1,11 +1,12 @@
-package com.example.app.domain.user;
+package com.example.app.domain.user.vo;
 
 import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * 生パスワードを表すVO
+import com.example.app.domain.common.StringValueObject;
+
+/** 生パスワードを表すVO
  *
  * ・生パスワードはこの型にしか存在しない
  * ・バリデーションをここで完結させる
@@ -13,11 +14,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * 
  * @author takeshi.kashiwagi
  */
-public record RawPassword(String value) {
+public final class RawPassword implements StringValueObject {
 
     private static final int MIN_LENGTH = 8;
+    private final String value;
 
-    public RawPassword {
+    public RawPassword(String value) {
         Objects.requireNonNull(value, "raw password must not be null");
 
         if (value.isBlank()) {
@@ -27,13 +29,20 @@ public record RawPassword(String value) {
         if (value.length() < MIN_LENGTH) {
             throw new IllegalArgumentException("password must be at least " + MIN_LENGTH + " characters");
         }
+
+        this.value = value;
     }
 
-    /**
-     * パスワードをハッシュ化して HashedPassword を生成する
-     */
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public String value() {
+        return value;
+    }
+
     public HashedPassword hash(PasswordEncoder encoder) {
-        String hashed = encoder.encode(value);
-        return new HashedPassword(hashed);
+        return new HashedPassword(encoder.encode(value));
     }
 }
