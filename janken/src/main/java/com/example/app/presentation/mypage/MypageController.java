@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.app.domain.room.application.RoomService;
-import com.example.app.domain.room.application.dto.RoomListItemDto;
-import com.example.app.security.MyUserDetails;
-import com.example.app.user.domain.vo.UserId;
+import com.example.app.application.room.RoomService;
+import com.example.app.application.room.dto.RoomListItemDto;
+import com.example.app.application.security.MyUserDetails;
+import com.example.app.domain.user.UserId;
 
 import lombok.RequiredArgsConstructor;
 

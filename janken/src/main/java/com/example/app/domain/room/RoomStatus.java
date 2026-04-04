@@ -1,8 +1,8 @@
 package com.example.app.domain.room;
 
+import com.example.app.application.room.Destination;
+import com.example.app.application.room.UrlBuilder;
 import com.example.app.domain.game.core.GameKind;
-import com.example.app.domain.room.application.Destination;
-import com.example.app.domain.room.application.UrlBuilder;
 
 /** 
  * ルームの進行状況を表す列挙型

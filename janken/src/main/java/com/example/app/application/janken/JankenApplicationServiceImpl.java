@@ -11,20 +11,20 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.app.application.room.RoomService;
+import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.domain.janken.model.JankenGameEngine;
 import com.example.app.domain.janken.model.JankenMode;
 import com.example.app.domain.janken.model.OrderNo;
 import com.example.app.domain.janken.model.RoundResult;
 import com.example.app.domain.room.PlayerId;
 import com.example.app.domain.room.RoomId;
-import com.example.app.domain.room.application.RoomService;
-import com.example.app.domain.room.application.dto.RoomRegisterDto;
+import com.example.app.domain.user.UserId;
 import com.example.app.infrastructure.janken.JankenMapper;
 import com.example.app.infrastructure.janken.entity.JankenChoice;
 import com.example.app.infrastructure.janken.entity.JankenPlayerResultRecord;
 import com.example.app.infrastructure.janken.entity.JankenRoundResultRecord;
 import com.example.app.infrastructure.roomplayer.mapper.RoomUserMapper;
-import com.example.app.user.domain.vo.UserId;
 
 import lombok.RequiredArgsConstructor;
 

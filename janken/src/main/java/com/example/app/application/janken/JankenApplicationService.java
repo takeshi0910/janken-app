@@ -3,8 +3,8 @@ package com.example.app.application.janken;
 import java.util.List;
 
 import com.example.app.domain.room.RoomId;
+import com.example.app.domain.user.UserId;
 import com.example.app.infrastructure.janken.entity.JankenChoice;
-import com.example.app.user.domain.vo.UserId;
 
 /**
  * じゃんけんゲームのサービスインターフェース

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.app.application.room.RoomService;
+import com.example.app.application.room.dto.RoomRegisterDto;
+import com.example.app.application.user.UserService;
 import com.example.app.domain.game.core.GameKind;
 import com.example.app.domain.game.core.GameMode;
 import com.example.app.domain.room.RoomId;
-import com.example.app.domain.room.application.RoomService;
-import com.example.app.domain.room.application.dto.RoomRegisterDto;
-import com.example.app.user.application.UserService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.application.janken.JankenApplicationService;
+import com.example.app.application.room.RoomService;
+import com.example.app.application.room.dto.RoomRegisterDto;
+import com.example.app.application.security.MyUserDetails;
 import com.example.app.domain.janken.model.JankenHand;
 import com.example.app.domain.janken.model.OrderNo;
 import com.example.app.domain.room.RoomId;
-import com.example.app.domain.room.application.RoomService;
-import com.example.app.domain.room.application.dto.RoomRegisterDto;
 import com.example.app.infrastructure.janken.entity.JankenChoice;
-import com.example.app.security.MyUserDetails;
 
 import lombok.RequiredArgsConstructor;
 
