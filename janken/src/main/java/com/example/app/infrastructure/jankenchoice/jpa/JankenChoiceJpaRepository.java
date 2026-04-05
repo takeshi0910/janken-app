@@ -11,7 +11,7 @@ import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
  * 
  * @author takeshi.kashiwagi
  */
-public interface JpaJankenChoiceRepository extends JpaRepository<JankenChoiceEntity, Integer> {
+public interface JankenChoiceJpaRepository extends JpaRepository<JankenChoiceEntity, Integer> {
 
     /**
      * 対象ルームにおける全プレイヤーの出し手一覧を取得

@@ -10,7 +10,7 @@ import com.example.app.domain.janken.vo.OrderNo;
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
-import com.example.app.infrastructure.jankenchoice.jpa.JpaJankenChoiceRepository;
+import com.example.app.infrastructure.jankenchoice.jpa.JankenChoiceJpaRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JankenChoiceRepositoryImpl implements JankenChoiceRepository {
 
-    private final JpaJankenChoiceRepository jpa;
+    private final JankenChoiceJpaRepository jpa;
 
     @Override
     public List<JankenChoiceRecord> findByRoomId(RoomId roomId) {
