@@ -3,7 +3,7 @@ package com.example.app.application.user;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.app.infrastructure.user.entity.UserInfo;
+import com.example.app.infrastructure.user.entity.UserEntity;
 import com.example.app.presentation.auth.SignUpForm;
 
 /**
@@ -19,7 +19,7 @@ public interface UserService {
      * @param email
      * @return ユーザー情報
      */
-    public Optional<UserInfo> searchUserByEmail(String emailValue);
+    public Optional<UserEntity> searchUserByEmail(String emailValue);
 
     /** 
      * ユーザー登録処理

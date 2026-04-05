@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.app.domain.janken.vo.OrderNo;
 import com.example.app.domain.room.vo.PlayerId;
-import com.example.app.infrastructure.janken.entity.JankenChoice;
 
 /**
  * じゃんけんゲームの勝敗判定ロジックを提供するエンジンクラス。
@@ -43,7 +42,7 @@ public class JankenGameEngine {
      */
     public Map<OrderNo, RoundResult> judge(
             JankenMode mode,
-            List<JankenChoice> choices,
+            List<JankenChoiceRecord> choices,
             Set<PlayerId> allPlayers,
             int maxRounds) {
 
@@ -67,13 +66,13 @@ public class JankenGameEngine {
      * @param activePlayers 判定対象となるプレイヤーID集合
      * @return ラウンド結果（勝者・敗者・あいこ）
      */
-    public RoundResult judgeRound(List<JankenChoice> choices, Set<PlayerId> activePlayers) {
+    public RoundResult judgeRound(List<JankenChoiceRecord> choices, Set<PlayerId> activePlayers) {
         // 有効プレイヤーだけを対象に、手ごとにプレイヤーIDをグルーピングして Map にしている
         Map<JankenHand, Set<PlayerId>> grouped = choices.stream()
-                .filter(c -> activePlayers.contains(c.getPlayerId()))
+                .filter(c -> activePlayers.contains(c.playerId()))
                 .collect(Collectors.groupingBy(
-                        JankenChoice::getJankenHand,
-                        Collectors.mapping(JankenChoice::getPlayerId, Collectors.toSet())));
+                        JankenChoiceRecord::jankenHand,
+                        Collectors.mapping(JankenChoiceRecord::playerId, Collectors.toSet())));
 
         Set<JankenHand> hands = grouped.keySet();
 
@@ -104,7 +103,7 @@ public class JankenGameEngine {
      * @return 各ラウンドの勝負判定結果
      */
     public Map<OrderNo, RoundResult> judgeTotalBattle(
-            List<JankenChoice> choices,
+            List<JankenChoiceRecord> choices,
             Set<PlayerId> activePlayers,
             int maxRounds) {
         Map<OrderNo, RoundResult> results = new LinkedHashMap<>();
@@ -132,7 +131,7 @@ public class JankenGameEngine {
      * @param maxRounds 最大ラウンド数
      * @return 各ラウンドの勝負判定結果
      */
-    public Map<OrderNo, RoundResult> judgeWinnerStays(List<JankenChoice> choices,
+    public Map<OrderNo, RoundResult> judgeWinnerStays(List<JankenChoiceRecord> choices,
             Set<PlayerId> activePlayers,
             int maxRounds) {
 
@@ -174,7 +173,7 @@ public class JankenGameEngine {
      * @return 各ラウンドの勝負判定結果
      */
     public Map<OrderNo, RoundResult> judgeLoserStays(
-            List<JankenChoice> choices,
+            List<JankenChoiceRecord> choices,
             Set<PlayerId> activePlayers,
             int maxRounds) {
 

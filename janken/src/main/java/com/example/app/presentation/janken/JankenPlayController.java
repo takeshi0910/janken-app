@@ -18,9 +18,8 @@ import com.example.app.application.room.RoomService;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.application.security.MyUserDetails;
 import com.example.app.domain.janken.model.JankenHand;
-import com.example.app.domain.janken.vo.OrderNo;
 import com.example.app.domain.room.vo.RoomId;
-import com.example.app.infrastructure.janken.entity.JankenChoice;
+import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -53,7 +52,7 @@ public class JankenPlayController {
         RoomRegisterDto room = roomService.findById(roomId);
 
         // --- ① 既存の選択肢を取得（編集モード対応） ---
-        List<JankenChoice> choices = jankenService.getJankenChoices(roomId,
+        List<JankenChoiceEntity> choices = jankenService.getJankenChoices(roomId,
                 loginUser.getUserId());
 
         choices.forEach(c -> System.out.println("orderNo=" + c.getOrderNo()));
@@ -83,8 +82,8 @@ public class JankenPlayController {
                 final int order = i + 1;
 
                 JankenHand hand = choices.stream()
-                        .filter(c -> c.getOrderNo().value() == order)
-                        .map(JankenChoice::getJankenHand)
+                        .filter(c -> c.getOrderNo() == order)
+                        .map(JankenChoiceEntity::getJankenHand)
                         .findFirst()
                         .orElse(null);
 
@@ -121,15 +120,7 @@ public class JankenPlayController {
 
         RoomId roomId = new RoomId(roomIdValue);
 
-        List<JankenChoice> choices = form.getChoices().stream()
-                .map(row -> new JankenChoice(
-                        roomId,
-                        new OrderNo(row.getOrderNo()),
-                        null, //  playerId はサービス層でセット
-                        row.getHand()))
-                .toList();
-
-        jankenService.registerJankenChoices(roomId, choices);
+        jankenService.registerJankenChoices(roomId, form);
 
         // 結果表示用にRoomの名前を取得
         String roomName = roomService.findById(roomId).getRoomName();

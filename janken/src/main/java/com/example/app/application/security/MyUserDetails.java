@@ -10,8 +10,7 @@ import com.example.app.domain.user.vo.Email;
 import com.example.app.domain.user.vo.HashedPassword;
 import com.example.app.domain.user.vo.UserId;
 import com.example.app.domain.user.vo.UserName;
-import com.example.app.infrastructure.user.entity.UserInfo;
-
+import com.example.app.infrastructure.user.entity.UserEntity;
 
 /**
  * SpringSecurity認証用
@@ -25,11 +24,11 @@ public class MyUserDetails implements UserDetails {
     private final UserName userName;
     private final HashedPassword password;
 
-    public MyUserDetails(UserInfo userInfo) {
-        this.userId =  userInfo.getUserId();
-        this.email = userInfo.getEmail(); // SpringSecurityのusernameに、Eメールをセット
-        this.password = userInfo.getPasswordHashed();
-        this.userName  =userInfo.getUserName();
+    public MyUserDetails(UserEntity userEntity) {
+        this.userId = UserId.from(userEntity.getUserId());
+        this.email = Email.from(userEntity.getEmail());
+        this.userName = UserName.from(userEntity.getUserName());
+        this.password = HashedPassword.from(userEntity.getPasswordHashed());
     }
 
     public UserId getUserId() {

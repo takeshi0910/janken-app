@@ -3,9 +3,8 @@ package com.example.app.infrastructure.room.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.app.domain.room.vo.RoomId;
-import com.example.app.infrastructure.room.entity.Room;
+import com.example.app.infrastructure.room.entity.RoomEntity;
 
 @Repository
-public interface RoomRepository  extends JpaRepository<Room, RoomId> {
+public interface RoomJpaRepository  extends JpaRepository<RoomEntity, Integer> {
 }

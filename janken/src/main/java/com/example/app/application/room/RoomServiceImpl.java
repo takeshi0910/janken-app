@@ -10,12 +10,11 @@ import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
-import com.example.app.domain.roomuser.service.RoomPlayerService;
+import com.example.app.domain.roomplayer.service.RoomPlayerService;
 import com.example.app.domain.user.vo.UserId;
-import com.example.app.infrastructure.room.entity.Room;
 import com.example.app.infrastructure.room.mapper.RoomMapper;
-import com.example.app.infrastructure.room.repository.RoomRepository;
-import com.example.app.infrastructure.roomplayer.entity.RoomUser;
+import com.example.app.infrastructure.room.repository.RoomJpaRepository;
+import com.example.app.infrastructure.roomplayer.entity.RoomPlayer;
 import com.example.app.presentation.room.RoomForm;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
-    private final RoomRepository roomRepository;
+    private final RoomJpaRepository roomRepository;
     private final RoomPlayerService roomUserService;
 
     @Override
@@ -103,10 +102,9 @@ public class RoomServiceImpl implements RoomService {
             RoomId id = new RoomId(form.getRoomId());
             entity = roomRepository.findById(id)
                     .orElseThrow();
-
         }
-        
-     // 新規・編集共通の上書き処理
+
+        // 新規・編集共通の上書き処理
         entity.setRoomName(form.getRoomName());
         entity.setGameKind(form.getGameKind());
         entity.setGameMode(form.getGameMode());
@@ -122,13 +120,12 @@ public class RoomServiceImpl implements RoomService {
         // room_players を洗い替え
         roomUserService.deleteByRoomId(roomId);
 
-        // room_users を再挿入
-        List<RoomUser> list = form.getUserIds().stream()
-                .map(userId -> new RoomUser(roomId, userId))
+        // room_players を再挿入
+        List<RoomPlayer> list = form.getUserIds().stream()
+                .map(userId -> new RoomPlayer(roomId, new PlayerId(userId)))
                 .toList();
 
-        roomUserService.insertRoomPlayerIds(list);
+        roomUserService.saveAll(list);
     }
-    
 
 }

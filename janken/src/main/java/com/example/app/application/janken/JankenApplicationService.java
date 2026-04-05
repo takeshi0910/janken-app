@@ -2,9 +2,10 @@ package com.example.app.application.janken;
 
 import java.util.List;
 
+import com.example.app.domain.janken.model.JankenChoiceRecord;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
-import com.example.app.infrastructure.janken.entity.JankenChoice;
+import com.example.app.presentation.janken.JankenChoiceForm;
 
 /**
  * じゃんけんゲームのサービスインターフェース
@@ -19,16 +20,16 @@ public interface JankenApplicationService {
      * @param roomId ルームID
      * @param playerId プレイヤーID
      */
-    public List<JankenChoice> getJankenChoices(RoomId roomId, UserId userId);
+    public List<JankenChoiceRecord> getJankenChoices(RoomId roomId, UserId userId);
 
         
     /**
      * プレイヤーの手の登録（洗い替え）
      * 
      * @param roomId ルームID
-     * @param choices プレイヤーの出し手情報
+     * @param form プレイヤーの出し手情報(画面入力値）
      */
-    public void registerJankenChoices(RoomId roomId, List<JankenChoice> choices);
+    public void registerJankenChoices(RoomId roomId, JankenChoiceForm form);
 
 
     /**

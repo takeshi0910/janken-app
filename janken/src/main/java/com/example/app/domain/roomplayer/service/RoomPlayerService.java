@@ -1,14 +1,14 @@
-package com.example.app.domain.roomuser.service;
+package com.example.app.domain.roomplayer.service;
 
 import java.util.List;
 import java.util.Set;
 
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
-import com.example.app.infrastructure.roomplayer.entity.RoomUser;
+import com.example.app.infrastructure.roomplayer.entity.RoomPlayer;
 
 /**
- * ルームユーザーに関連するサービスインターフェース
+ * ルームプレイヤーに関連するサービスインターフェース
  * 
  * @author takeshi.kashiwagi
  */
@@ -34,6 +34,6 @@ public interface RoomPlayerService {
      * 
      * @param list RoomPlayer登録用POJOのリスト
      */
-    public void insertRoomPlayerIds(List<RoomUser> list);
+    public void saveAll(List<RoomPlayer> roomPlayers);
 
 }

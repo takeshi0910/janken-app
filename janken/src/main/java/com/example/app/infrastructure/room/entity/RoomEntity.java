@@ -1,6 +1,5 @@
 package com.example.app.infrastructure.room.entity;
 
-import java.sql.Types;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -11,18 +10,16 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import org.hibernate.annotations.JdbcTypeCode;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.app.domain.game.core.GameKind;
 import com.example.app.domain.room.RoomStatus;
-import com.example.app.domain.room.vo.RoomId;
 
 import lombok.Data;
 
 /**
- * roomテーブルに対応したエンティティ
+ * roomテーブル entity
  * 
  * <p>作成者しかルームを編集できないため、updated_idは不要
  */
@@ -30,12 +27,11 @@ import lombok.Data;
 @Table(name = "room")
 @Data
 @EntityListeners(AuditingEntityListener.class)
-public class Room {
+public class RoomEntity {
 
     @Id
     @Column(name = "room_id")
-    @JdbcTypeCode(Types.INTEGER)
-    private RoomId roomId;
+    private Integer roomId;
 
     @Column(name = "room_name", nullable = false, length = 100)
     private String roomName;
@@ -67,11 +63,11 @@ public class Room {
     @Column(name = "updated_at", insertable = false, updatable = false)
     private LocalDateTime updatedAt;
     
-    @CreatedBy // 登録ユーザーの自動反映 INSERTの時だけ動く
+    @CreatedBy
     @Column(name = "created_id")
     private Integer createdId;
     
     @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
+    private boolean isDeleted = false;
 
 }

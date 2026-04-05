@@ -1,26 +1,20 @@
 package com.example.app.domain.room.vo;
 
-import jakarta.persistence.Embeddable;
-
-import com.example.app.domain.common.IntegerValueObject;
-
 /** PlayerId VO*/
-@Embeddable
-public record PlayerId(Integer value) implements IntegerValueObject {
-    
+public record PlayerId(Integer value) {
+
     public PlayerId {
         if (value == null || value <= 0) {
-            throw new IllegalArgumentException("PlayerId must be positive");
+            throw new IllegalArgumentException("PlayerId must be positive.");
         }
     }
-
-    public PlayerId(String value) {
-        this(Integer.valueOf(value));
-    }
     
-    public static PlayerId fromUserId(Integer userId) {
-        return new PlayerId(userId);
+    public static PlayerId from(Integer value) {
+        return new PlayerId(value);
     }
 
+    public static PlayerId from(String value) {
+        return new PlayerId(Integer.valueOf(value));
+    }
 }
 

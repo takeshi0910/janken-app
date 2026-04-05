@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.app.domain.user.vo.Email;
-import com.example.app.infrastructure.user.entity.UserInfo;
+import com.example.app.infrastructure.user.entity.UserEntity;
 import com.example.app.infrastructure.user.repository.UserInfoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,8 +28,8 @@ public class MyUserDetailsService implements UserDetailsService {
         // Strimg -> Email VO変換
         Email email = new Email(emailValue);
 
-        UserInfo userInfo = userRepository.findByEmail(email)
+        UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが見つかりません"));
-        return new MyUserDetails(userInfo);
+        return new MyUserDetails(userEntity);
     }
 }

@@ -30,7 +30,7 @@ public class LoginUserAuditorAware implements AuditorAware<UserId> {
         Object principal = auth.getPrincipal();
 
         if (principal instanceof MyUserDetails user) {
-            return Optional.of(user.getUserId()); // ← 数値の userId
+            return Optional.of(user.getUserId());
         }
         return Optional.empty();
     }

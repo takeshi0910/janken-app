@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.app.room.infrastructure.mapper.RoomMapper">
+<mapper namespace="com.example.app.infrastructure.room.mapper.RoomMapper">
 
     <!-- マイページでの表示するルーム情報を取得 -->
-    <select id="selectRoomsByUserId" resultType="com.example.app.room.application.dto.RoomListItemDto">
+    <select id="selectRoomsByUserId" resultType="com.example.app.application.room.dto.RoomListItemDto">
         SELECT
             r.room_id AS roomId,
             r.room_name AS roomName,

@@ -1,7 +1,7 @@
 package com.example.app.application.user;
 
 
-import com.example.app.infrastructure.user.entity.UserInfo;
+import com.example.app.infrastructure.user.entity.UserEntity;
 
 import lombok.Getter;
 
@@ -13,10 +13,10 @@ import lombok.Getter;
 @Getter
 public class RegisterResult {
     
-    private final UserInfo userInfo;
+    private final UserEntity userInfo;
     private final RegisterError error;
 
-    public RegisterResult(UserInfo userInfo) {
+    public RegisterResult(UserEntity userInfo) {
         this.userInfo = userInfo;
         this.error = null;
     }
