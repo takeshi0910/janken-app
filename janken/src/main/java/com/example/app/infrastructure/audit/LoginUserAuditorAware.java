@@ -8,7 +8,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.example.app.application.security.MyUserDetails;
-import com.example.app.domain.user.vo.UserId;
 
 /**
  * Spring Security からログイン中のユーザーIDを取得し、
@@ -17,10 +16,10 @@ import com.example.app.domain.user.vo.UserId;
  * @author takeshi.kashiwagi
  */
 @Component
-public class LoginUserAuditorAware implements AuditorAware<UserId> {
+public class LoginUserAuditorAware implements AuditorAware<Integer> {
 
     @Override
-    public Optional<UserId> getCurrentAuditor() {
+    public Optional<Integer> getCurrentAuditor() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null || !auth.isAuthenticated()) {
@@ -30,7 +29,7 @@ public class LoginUserAuditorAware implements AuditorAware<UserId> {
         Object principal = auth.getPrincipal();
 
         if (principal instanceof MyUserDetails user) {
-            return Optional.of(user.getUserId());
+            return Optional.of(user.getUserId().value());
         }
         return Optional.empty();
     }

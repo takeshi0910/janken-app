@@ -17,9 +17,9 @@ import com.example.app.application.janken.JankenApplicationService;
 import com.example.app.application.room.RoomService;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.application.security.MyUserDetails;
+import com.example.app.domain.janken.model.JankenChoiceRecord;
 import com.example.app.domain.janken.model.JankenHand;
 import com.example.app.domain.room.vo.RoomId;
-import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,10 +52,10 @@ public class JankenPlayController {
         RoomRegisterDto room = roomService.findById(roomId);
 
         // --- ① 既存の選択肢を取得（編集モード対応） ---
-        List<JankenChoiceEntity> choices = jankenService.getJankenChoices(roomId,
+        List<JankenChoiceRecord> choices = jankenService.getJankenChoices(roomId,
                 loginUser.getUserId());
 
-        choices.forEach(c -> System.out.println("orderNo=" + c.getOrderNo()));
+        choices.forEach(c -> System.out.println("orderNo=" + c.orderNo()));
 
         // --- ② フォームを作成 ---
         JankenChoiceForm form = new JankenChoiceForm();
@@ -82,8 +82,8 @@ public class JankenPlayController {
                 final int order = i + 1;
 
                 JankenHand hand = choices.stream()
-                        .filter(c -> c.getOrderNo() == order)
-                        .map(JankenChoiceEntity::getJankenHand)
+                        .filter(c -> c.orderNo().value() == order)
+                        .map(JankenChoiceRecord::jankenHand)
                         .findFirst()
                         .orElse(null);
 

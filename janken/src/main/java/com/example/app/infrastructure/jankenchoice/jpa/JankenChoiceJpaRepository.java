@@ -3,6 +3,9 @@ package com.example.app.infrastructure.jankenchoice.jpa;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
 
@@ -34,13 +37,14 @@ public interface JankenChoiceJpaRepository extends JpaRepository<JankenChoiceEnt
      * 対象ルームにおける対象プレイヤーの出し手レコードを一括削除
      *
      * @param roomId   ルームID
+     * @param playerId プレイヤーID
      */
-    void deleteByRoomIdAndPlayerId(Integer roomId, Integer playerId);
+    @Modifying(clearAutomatically = true)
+    @Query("""
+        DELETE FROM JankenChoiceEntity e
+        WHERE e.roomId = :roomId AND e.playerId = :playerId
+    """)
+    void deleteByRoomIdAndPlayerId(@Param("roomId") Integer roomId,
+            @Param("playerId") Integer playerId);
 
-    /**
-     * 対象ルームの出し手レコードを一括削除
-     *
-     * @param roomId   ルームID
-     */
-    void deleteByRoomId(Integer roomId);
 }

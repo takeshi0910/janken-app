@@ -56,7 +56,7 @@
 					<td th:text="${#temporals.format(room.endDate, 'yyyy/MM/dd HH:mm')}"></td>
 					<td>
 					    <a th:if="${room.isPlayer}"
-					       th:href="${room.roomStatus.buildUrlOrEmpty(room.gameKind, room.roomId.value)}"
+					       th:href="${room.roomStatus.buildUrlOrEmpty(room.gameKind, room.roomId)}"
 						   class="btn btn-sm smallBtn"
 						   th:classappend="${room.roomStatus.buttonClass} + (!${room.roomStatus.clickable} ? ' disabled' : '')"
 						   th:text="${room.roomStatus.buttonLabel}">参加/準備中/結果
@@ -64,7 +64,7 @@
 					</td>
 					<td>
 					    <a th:if="${room.isRoomMaster}"
-					       th:href="@{/room/registerRoomForm?roomId={id}(id=${room.roomId.value})}"
+					       th:href="@{/room/registerRoomForm?roomId={id}(id=${room.roomId})}"
 					       class="btn btn-sm btn-warning smallBtn">
 					        編集
 					    </a>

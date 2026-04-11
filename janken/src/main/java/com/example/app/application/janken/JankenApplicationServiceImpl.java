@@ -1,11 +1,11 @@
 package com.example.app.application.janken;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
@@ -17,16 +17,18 @@ import com.example.app.domain.janken.model.JankenChoiceRecord;
 import com.example.app.domain.janken.model.JankenGameEngine;
 import com.example.app.domain.janken.model.JankenMode;
 import com.example.app.domain.janken.model.JankenPlayerResultRecord;
-import com.example.app.domain.janken.model.JankenRoundResultRecord;
 import com.example.app.domain.janken.model.RoundResult;
-import com.example.app.domain.janken.repository.JankenChoiceRepository;
-import com.example.app.domain.janken.repository.JankenPlayerResultRepository;
-import com.example.app.domain.janken.repository.JankenRoundResultRepository;
 import com.example.app.domain.janken.vo.OrderNo;
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
-import com.example.app.infrastructure.roomplayer.repository.RoomPlayerRepository;
+import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
+import com.example.app.infrastructure.jankenchoice.jpa.JankenChoiceJpaRepository;
+import com.example.app.infrastructure.jankenplayerresult.entity.JankenPlayerResultEntity;
+import com.example.app.infrastructure.jankenplayerresult.jpa.JankenPlayerResultJpaRepository;
+import com.example.app.infrastructure.jankenroundresult.entity.JankenRoundResultEntity;
+import com.example.app.infrastructure.jankenroundresult.jpa.JankenRoundResultJpaRepository;
+import com.example.app.infrastructure.roomplayer.repository.RoomPlayerJpaRepository;
 import com.example.app.presentation.janken.JankenChoiceForm;
 
 import lombok.RequiredArgsConstructor;
@@ -40,20 +42,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JankenApplicationServiceImpl implements JankenApplicationService {
 
-    private final AuditorAware<UserId> auditorAware;
+    private final AuditorAware<Integer> auditorAware;
     private final RoomService roomService;
     private final JankenGameEngine jankenGameEngine;
-    private final RoomPlayerRepository roomPlayerRepository;
-    private final JankenChoiceRepository jankenChoiceRepository;
-    private final JankenRoundResultRepository jankenRoundResultRepository;
-    private final JankenPlayerResultRepository jankenPlayerResultRepository;
+    private final RoomPlayerJpaRepository roomPlayerJpaRepository;
+    private final JankenRoundResultJpaRepository jankenRoundResultJpaRepository;
+    private final JankenPlayerResultJpaRepository jankenPlayerResultJpaRepository;
+    private final JankenChoiceJpaRepository jankenChoiceJpaRepository;
 
     @Override
     public List<JankenChoiceRecord> getJankenChoices(RoomId roomId, UserId userId) {
 
-        PlayerId playerId = new PlayerId(userId.value());
-
-        return jankenChoiceRepository.findByRoomIdAndPlayerId(roomId, playerId);
+        List<JankenChoiceEntity> entities = jankenChoiceJpaRepository
+                .findByRoomIdAndPlayerId(roomId.value(), userId.value());
+        return entities.stream()
+                .map(e -> new JankenChoiceRecord(
+                        new RoomId(e.getRoomId()),
+                        new OrderNo(e.getOrderNo()),
+                        new PlayerId(e.getPlayerId()),
+                        e.getJankenHand()))
+                .toList();
     }
 
     @Override
@@ -61,23 +69,22 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     public void registerJankenChoices(RoomId roomId, JankenChoiceForm form) {
 
         // ログインユーザー は AuditorAware で取得 
-        UserId currentUserId = auditorAware.getCurrentAuditor()
+        Integer currentUserId = auditorAware.getCurrentAuditor()
                 .orElseThrow(() -> new IllegalStateException("ログインユーザーが取得できません"));
 
-        PlayerId playerId = new PlayerId(currentUserId.value());
+        // プレイヤーの出し手を洗い替え
+        jankenChoiceJpaRepository.deleteByRoomIdAndPlayerId(roomId.value(), currentUserId);
 
         // form -> Entity を生成
-        List<JankenChoiceRecord> choices = form.getChoices().stream()
-                .map(row -> new JankenChoiceRecord(
-                        roomId,
-                        new OrderNo(row.getOrderNo()),
-                        playerId,
+        List<JankenChoiceEntity> choices = form.getChoices().stream()
+                .map(row -> new JankenChoiceEntity(
+                        roomId.value(),
+                        currentUserId,
+                        row.getOrderNo(),
                         row.getHand()))
                 .toList();
 
-        // プレイヤーの出し手を洗い替え
-        jankenChoiceRepository.deleteByRoomIdAndPlayerId(roomId, playerId);
-        jankenChoiceRepository.saveAll(choices);
+        jankenChoiceJpaRepository.saveAll(choices);
 
     }
 
@@ -90,10 +97,20 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         JankenMode mode = (JankenMode) room.getGameMode();
 
         // 3. ルームに登録されている全プレイヤーID
-        Set<PlayerId> allPlayers = roomPlayerRepository.findPlayerIdsByRoomId(roomId);
+        Set<PlayerId> allPlayers = roomPlayerJpaRepository.findPlayerIdByRoomId(roomId.value())
+                .stream()
+                .map(PlayerId::new)
+                .collect(Collectors.toSet());
 
-        // 4. choices を組み立てる
-        List<JankenChoiceRecord> choices = jankenChoiceRepository.findByRoomId(roomId);
+        // 4. 全プレイヤーの出し手情報
+        List<JankenChoiceRecord> choices = jankenChoiceJpaRepository.findByRoomId(roomId.value())
+                .stream()
+                .map(e -> new JankenChoiceRecord(
+                        new RoomId(e.getRoomId()),
+                        new OrderNo(e.getOrderNo()),
+                        new PlayerId(e.getPlayerId()),
+                        e.getJankenHand()))
+                .toList();
 
         // 5. maxRounds を取得
         int maxRounds = room.getRoundCount();
@@ -231,67 +248,84 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
      * janken_round_resultテーブルの洗替
      */
     private void saveRoundResults(RoomId roomId, Map<OrderNo, RoundResult> results) {
-        // 1. まず洗い替えのために削除
-        jankenRoundResultRepository.deleteByRoomId(roomId);
+        // 1. 洗い替えのため削除
+        jankenRoundResultJpaRepository.deleteByRoomId(roomId.value());
 
-        // 2. Domain → Entity 変換
-        List<JankenRoundResultRecord> records = results.entrySet().stream()
+        // 2. RoundResult → Entity へ直接変換
+        List<JankenRoundResultEntity> entities = results.entrySet().stream()
                 .map(entry -> {
                     OrderNo orderNo = entry.getKey();
                     RoundResult round = entry.getValue();
 
-                    return new JankenRoundResultRecord(
-                            roomId,
-                            orderNo,
+                    List<Integer> winnerIds = round.getWinners().stream()
+                            .map(PlayerId::value)
+                            .toList();
+
+                    List<Integer> loserIds = round.getLosers().stream()
+                            .map(PlayerId::value)
+                            .toList();
+
+                    return new JankenRoundResultEntity(
+                            roomId.value(),
+                            orderNo.value(),
                             round.isDraw(),
-                            round.getWinners().stream().toList(), // PlayerId のまま
-                            round.getLosers().stream().toList() // PlayerId のまま
-                    );
+                            winnerIds,
+                            loserIds);
                 })
                 .toList();
 
         // 3. 一括保存
-        jankenRoundResultRepository.saveAll(records);
+        jankenRoundResultJpaRepository.saveAll(entities);
 
     }
-
     /** 
-     * ラウンドごとの対戦結果からRoundResultRecordを生成する
-     * 
-     * @param roomId
-     * @param results
-     * @return round_result_recordテーブル エンティティ
-     */
-    private List<JankenRoundResultRecord> convertRoundResults(
-            RoomId roomId,
-            Map<OrderNo, RoundResult> results) {
-
-        return results.entrySet().stream()
-                .map(entry -> {
-                    OrderNo orderNo = entry.getKey();
-                    RoundResult roundResult = entry.getValue();
-
-                    return new JankenRoundResultRecord(
-                            roomId,
-                            orderNo,
-                            roundResult.isDraw(),
-                            roundResult.getWinners().stream().toList(), // PlayerId のまま
-                            roundResult.getLosers().stream().toList() // PlayerId のまま
-                    );
-                })
-                .sorted(Comparator.comparing(r -> r.orderNo().value()))
-                .toList();
-    }
+       * ラウンドごとの対戦結果からRoundResultRecordを生成する
+       * 
+       * @param roomId
+       * @param results
+       * @return round_result_recordテーブル エンティティ
+       *//*
+          private List<JankenRoundResultRecord> convertRoundResults(
+               RoomId roomId,
+               Map<OrderNo, RoundResult> results) {
+          
+           return results.entrySet().stream()
+                   .map(entry -> {
+                       OrderNo orderNo = entry.getKey();
+                       RoundResult roundResult = entry.getValue();
+          
+                       return new JankenRoundResultRecord(
+                               roomId,
+                               orderNo,
+                               roundResult.isDraw(),
+                               roundResult.getWinners().stream().toList(), // PlayerId のまま
+                               roundResult.getLosers().stream().toList() // PlayerId のまま
+                       );
+                   })
+                   .sorted(Comparator.comparing(r -> r.orderNo().value()))
+                   .toList();
+          }*/
 
     /**
      * janken_player_resultテーブルの洗替
      */
     private void savePlayerResults(RoomId roomId, List<JankenPlayerResultRecord> playerResults) {
         // 1. 洗い替えのため削除
-        jankenPlayerResultRepository.deleteByRoomId(roomId);
+        jankenPlayerResultJpaRepository.deleteByRoomId(roomId.value());
 
-        // 2. 一括保存
-        jankenPlayerResultRepository.saveAll(playerResults);
+        // 2. Record → Entity 変換
+        List<JankenPlayerResultEntity> entities = playerResults.stream()
+                .map(r -> new JankenPlayerResultEntity(
+                        r.roomId().value(),
+                        r.playerId().value(),
+                        r.winCount(),
+                        r.loseCount(),
+                        r.finalRank()))
+                .toList();
+
+        // 3. 一括保存
+        jankenPlayerResultJpaRepository.saveAll(entities);
+
     }
 
 }

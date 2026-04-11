@@ -2,6 +2,7 @@ package com.example.app.application.room;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,11 +11,12 @@ import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
-import com.example.app.domain.roomplayer.service.RoomPlayerService;
 import com.example.app.domain.user.vo.UserId;
+import com.example.app.infrastructure.room.entity.RoomEntity;
 import com.example.app.infrastructure.room.mapper.RoomMapper;
 import com.example.app.infrastructure.room.repository.RoomJpaRepository;
-import com.example.app.infrastructure.roomplayer.entity.RoomPlayer;
+import com.example.app.infrastructure.roomplayer.entity.RoomPlayerEntity;
+import com.example.app.infrastructure.roomplayer.repository.RoomPlayerJpaRepository;
 import com.example.app.presentation.room.RoomForm;
 
 import lombok.RequiredArgsConstructor;
@@ -29,25 +31,25 @@ import lombok.RequiredArgsConstructor;
 public class RoomServiceImpl implements RoomService {
 
     private final RoomMapper roomMapper;
-    private final RoomJpaRepository roomRepository;
-    private final RoomPlayerService roomUserService;
+    private final RoomJpaRepository roomJpaRepository;
+    private final RoomPlayerJpaRepository roomPlayerJpaRepository;
 
     @Override
     public List<RoomListItemDto> selectRoomsByUserId(UserId userId) {
         // ① まずルーム一覧を取得（DB 由来）
-        List<RoomListItemDto> rooms = roomMapper.selectRoomsByUserId(userId);
+        List<RoomListItemDto> rooms = roomMapper.selectRoomsByUserId(userId.value());
 
         if (rooms.isEmpty()) {
             return rooms;
         }
 
         // ② ルームID一覧を抽出
-        List<RoomId> roomIds = rooms.stream()
-                .map(RoomListItemDto::getRoomId)
+        List<Integer> roomIds = rooms.stream()
+                .map(room -> room.getRoomId())
                 .toList();
 
         // ③ じゃんけんルームについて、自分の登録済みのルームを取得
-        List<RoomId> registeredRoomIds = roomMapper.selectRoomHandRegisteredMap(userId,
+        List<Integer> registeredRoomIds = roomMapper.selectRoomHandRegisteredMap(userId.value(),
                 roomIds);
 
         // ④ じゃんけんルームの出し手情報の登録状況　3 値（true / false / null ※じゃんけん以外）をセット。
@@ -67,14 +69,18 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomRegisterDto findById(RoomId roomId) {
-        Room room = roomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException(
-                "Room not found: " + roomId));
+        RoomEntity room = roomJpaRepository.findById(roomId.value())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Room not found: " + roomId));
 
-        Set<PlayerId> playerIds = roomUserService.findPlayerIdsByRoomId(roomId);
+        Set<PlayerId> playerIds = roomPlayerJpaRepository.findPlayerIdByRoomId(roomId.value())
+                .stream()
+                .map(PlayerId::new)
+                .collect(Collectors.toSet());
 
         RoomRegisterDto dto = new RoomRegisterDto();
 
-        dto.setRoomId(room.getRoomId());
+        dto.setRoomId(roomId);
         dto.setRoomName(room.getRoomName());
         dto.setGameKind(room.getGameKind());
         dto.setGameMode(room.getGameKind().toMode(room.getGameMode()));
@@ -91,16 +97,15 @@ public class RoomServiceImpl implements RoomService {
     @Transactional
     public void save(RoomForm form) {
 
-        Room entity;
+        RoomEntity entity;
 
         if (form.getRoomId() == null) {
             // 新規
-            entity = new Room();
+            entity = new RoomEntity();
             entity.setRoomId(null); // DB が採番するなら null のまま
         } else {
             // 編集
-            RoomId id = new RoomId(form.getRoomId());
-            entity = roomRepository.findById(id)
+            entity = roomJpaRepository.findById(form.getRoomId())
                     .orElseThrow();
         }
 
@@ -114,18 +119,18 @@ public class RoomServiceImpl implements RoomService {
         entity.setEndDate(form.getEndDate());
 
         // Room を保存して ID を確定
-        Room saved = roomRepository.save(entity);
-        RoomId roomId = saved.getRoomId();
+        RoomEntity saved = roomJpaRepository.save(entity);
+        RoomId roomId = new RoomId(saved.getRoomId());
 
         // room_players を洗い替え
-        roomUserService.deleteByRoomId(roomId);
-
+        roomPlayerJpaRepository.deleteByRoomId(roomId.value());
+        
         // room_players を再挿入
-        List<RoomPlayer> list = form.getUserIds().stream()
-                .map(userId -> new RoomPlayer(roomId, new PlayerId(userId)))
+        List<RoomPlayerEntity> list = form.getUserIds().stream()
+                .map(userId -> new RoomPlayerEntity(roomId.value(), userId))
                 .toList();
 
-        roomUserService.saveAll(list);
+        roomPlayerJpaRepository.saveAll(list);
     }
 
 }

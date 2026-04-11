@@ -16,14 +16,14 @@
             r.started_date AS startedDate,
             r.end_date AS endDate,
             CASE WHEN r.created_id = #{userId} THEN TRUE ELSE FALSE END AS isRoomMaster,
-			CASE WHEN ru.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS isPlayer
+			CASE WHEN ru.player_id IS NOT NULL THEN TRUE ELSE FALSE END AS isPlayer
         FROM room r
         <!--  「自分が参加している部屋」または「自分が主催している部屋」を取得 -->
-        LEFT JOIN room_users ru
+        LEFT JOIN room_players ru
             ON r.room_id = ru.room_id
-            AND ru.user_id = #{userId}
+            AND ru.player_id = #{userId}
         WHERE
-            ru.user_id IS NOT NULL
+            ru.player_id IS NOT NULL
             OR r.created_id = #{userId}
         ORDER BY r.started_date, r.end_date
     </select>

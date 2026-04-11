@@ -5,30 +5,26 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.app.domain.user.vo.Email;
 import com.example.app.infrastructure.user.entity.UserEntity;
-import com.example.app.infrastructure.user.repository.UserInfoRepository;
+import com.example.app.infrastructure.user.jpa.UserJpaRepository;
 
 import lombok.RequiredArgsConstructor;
 
 /**
  * SpringSecurity認証用サービス
  * 
- * @author 柏木 健
+ * @author takeshi.kashiwagi
  */
 @Service
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
 
-    private final UserInfoRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
 
     @Override
     public UserDetails loadUserByUsername(String emailValue) throws UsernameNotFoundException {
 
-        // Strimg -> Email VO変換
-        Email email = new Email(emailValue);
-
-        UserEntity userEntity = userRepository.findByEmail(email)
+        UserEntity userEntity = userJpaRepository.findByEmail(emailValue)
                 .orElseThrow(() -> new UsernameNotFoundException("ユーザーが見つかりません"));
         return new MyUserDetails(userEntity);
     }

@@ -19,7 +19,7 @@
 
 			<div>
 				<!-- ログイン中のユーザー名 -->
-				<strong sec:authentication="principal.userName">ユーザー名</strong> さん
+				<strong sec:authentication="principal.userName.value">ユーザー名</strong> さん
 
 				<a th:href="@{/mypage}" class="btn btn-light btn-sm ms-3">マイページ</a>
 

@@ -6,8 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.data.repository.query.Param;
 
 import com.example.app.application.room.dto.RoomListItemDto;
-import com.example.app.domain.room.vo.RoomId;
-import com.example.app.domain.user.vo.UserId;
 
 /**
  * ルームに関連するマッパーインターフェース
@@ -22,7 +20,7 @@ public interface RoomMapper {
      * @param userId ログインユーザーID
      * @return 対象者のマイページでの表示するルーム情報のリスト
      */
-    List<RoomListItemDto> selectRoomsByUserId(@Param("userId") UserId userId);
+    List<RoomListItemDto> selectRoomsByUserId(@Param("userId") Integer userId);
     
     /**
      * ログインユーザーが出し手を登録済みのじゃんけんルームIDを返す。
@@ -31,7 +29,7 @@ public interface RoomMapper {
      * @param roomIds　プレイヤーの参加しているじゃんけんルームIDのリスト
      * @rerutn　出し手登録済みのじゃんけんルームIDのリスト
      */
-    List<RoomId> selectRoomHandRegisteredMap(
-            @Param("userId") UserId userId,
-            @Param("roomIds") List<RoomId> roomIds);
+    List<Integer> selectRoomHandRegisteredMap(
+            @Param("userId") Integer userId,
+            @Param("roomIds") List<Integer> roomIds);
 }
