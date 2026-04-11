@@ -38,12 +38,20 @@
 					<th>開始日時</th>
 					<th>終了日時</th>
 					<th>参加</th>
-					<th>編集</th>
+					<th>対戦</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="room : ${rooms}">
-					<td th:text="${room.roomName}"></td>
+					<td>
+					    <a th:if="${room.isRoomMaster}"
+					       th:href="@{/room/registerRoomForm?roomId={id}(id=${room.roomId})}"
+					       th:text="${room.roomName}">
+					    </a>
+					    <span th:if="${!room.isRoomMaster}"
+					          th:text="${room.roomName}">
+					    </span>
+					</td>
 					<td>
 					    <span th:text="${room.gameKind}"></span>
 					    <span th:if="${room.isHandRegistered != null}"
@@ -63,16 +71,54 @@
 						</a>
 					</td>
 					<td>
-					    <a th:if="${room.isRoomMaster}"
-					       th:href="@{/room/registerRoomForm?roomId={id}(id=${room.roomId})}"
-					       class="btn btn-sm btn-warning smallBtn">
-					        編集
-					    </a>
+					    <a class="btn btn-sm btn-danger smallBtn"
+						   data-bs-toggle="modal"
+						   data-bs-target="#battleModal_${room.roomId}">
+						   対戦
+						</a>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 
+//モーダルはここから
+		<div class="modal fade" id="battleModal_${room.roomId}" tabindex="-1">
+			<div class="modal-dialog">
+		  		<div class="modal-content">
+		
+					 <div class="modal-header">
+					   <h5 class="modal-title">出し手登録状況</h5>
+					   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+					 </div>
+		
+				      <div class="modal-body">
+				        <table class="table">
+				          <tr th:each="player : ${room.players}">
+				            <td th:text="${player.name}"></td>
+				            <td th:text="${player.handLabel != null ? player.handLabel : '—'}"></td>
+				            <td>
+				              <span th:if="${player.handRegistered}" class="text-success">✔ 登録済み</span>
+				              <span th:if="${!player.handRegistered}" class="text-danger">✖ 未登録</span>
+				            </td>
+				          </tr>
+				        </table>
+		
+				        <div th:if="${!allRegistered}" class="text-danger">
+				          未登録のプレイヤーがいます。
+				        </div>
+			     	 </div>
+		
+				      <div class="modal-footer">
+				        <a th:href="@{/battle/execute(roomId=${room.roomId})}"
+				           class="btn btn-primary"
+				           th:classappend="${!allRegistered || !room.isRoomMaster} ? ' disabled' : ''">
+				           対戦開始
+				        </a>
+				      </div>
+				
+				    </div>
+				  </div>
+				</div>
 	</section>
 	
 </html>

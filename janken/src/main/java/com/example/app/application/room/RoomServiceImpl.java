@@ -124,7 +124,7 @@ public class RoomServiceImpl implements RoomService {
 
         // room_players を洗い替え
         roomPlayerJpaRepository.deleteByRoomId(roomId.value());
-        
+
         // room_players を再挿入
         List<RoomPlayerEntity> list = form.getUserIds().stream()
                 .map(userId -> new RoomPlayerEntity(roomId.value(), userId))

@@ -90,19 +90,19 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
 
     @Override
     public void battle(RoomId roomId) {
-        // 1. ルーム情報を取得
+        // ルーム情報を取得
         RoomRegisterDto room = roomService.findById(roomId);
 
-        // 2. JankenMode を取得
+        // JankenMode を取得
         JankenMode mode = (JankenMode) room.getGameMode();
 
-        // 3. ルームに登録されている全プレイヤーID
+        // ルームに登録されている全プレイヤーID取得
         Set<PlayerId> allPlayers = roomPlayerJpaRepository.findPlayerIdByRoomId(roomId.value())
                 .stream()
                 .map(PlayerId::new)
                 .collect(Collectors.toSet());
 
-        // 4. 全プレイヤーの出し手情報
+        // 全プレイヤーの出し手情報取得
         List<JankenChoiceRecord> choices = jankenChoiceJpaRepository.findByRoomId(roomId.value())
                 .stream()
                 .map(e -> new JankenChoiceRecord(
@@ -112,23 +112,24 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
                         e.getJankenHand()))
                 .toList();
 
-        // 5. maxRounds を取得
+        // maxRounds を取得
         int maxRounds = room.getRoundCount();
 
-        // 6. 判定処理はJankenGameEngine に任せる
+        // 判定処理はJankenGameEngine に任せる
         Map<OrderNo, RoundResult> results = jankenGameEngine.judge(
                 mode,
                 choices,
                 allPlayers,
                 maxRounds);
 
-        // 7. ラウンドごとの判定結果をDB保存
+        // ラウンドごとの判定結果をDB保存
         saveRoundResults(roomId, results);
 
-        // 8. プレイヤーの成績を集計.
+        // プレイヤーの成績を集計
         List<JankenPlayerResultRecord> playerResults = calculatePlayerResults(roomId, mode, results,
                 allPlayers);
 
+        // プレイヤーの成績を保存
         savePlayerResults(roomId, playerResults);
     }
 
@@ -278,33 +279,6 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         jankenRoundResultJpaRepository.saveAll(entities);
 
     }
-    /** 
-       * ラウンドごとの対戦結果からRoundResultRecordを生成する
-       * 
-       * @param roomId
-       * @param results
-       * @return round_result_recordテーブル エンティティ
-       *//*
-          private List<JankenRoundResultRecord> convertRoundResults(
-               RoomId roomId,
-               Map<OrderNo, RoundResult> results) {
-          
-           return results.entrySet().stream()
-                   .map(entry -> {
-                       OrderNo orderNo = entry.getKey();
-                       RoundResult roundResult = entry.getValue();
-          
-                       return new JankenRoundResultRecord(
-                               roomId,
-                               orderNo,
-                               roundResult.isDraw(),
-                               roundResult.getWinners().stream().toList(), // PlayerId のまま
-                               roundResult.getLosers().stream().toList() // PlayerId のまま
-                       );
-                   })
-                   .sorted(Comparator.comparing(r -> r.orderNo().value()))
-                   .toList();
-          }*/
 
     /**
      * janken_player_resultテーブルの洗替
