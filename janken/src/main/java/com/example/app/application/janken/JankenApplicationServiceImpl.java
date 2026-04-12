@@ -11,6 +11,8 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.app.application.janken.dto.JankenRegisteredStatusDto;
+import com.example.app.application.janken.dto.PlayerStatusDto;
 import com.example.app.application.room.RoomService;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.domain.janken.model.JankenChoiceRecord;
@@ -22,6 +24,7 @@ import com.example.app.domain.janken.vo.OrderNo;
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
+import com.example.app.domain.user.vo.UserName;
 import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
 import com.example.app.infrastructure.jankenchoice.jpa.JankenChoiceJpaRepository;
 import com.example.app.infrastructure.jankenplayerresult.entity.JankenPlayerResultEntity;
@@ -29,6 +32,7 @@ import com.example.app.infrastructure.jankenplayerresult.jpa.JankenPlayerResultJ
 import com.example.app.infrastructure.jankenroundresult.entity.JankenRoundResultEntity;
 import com.example.app.infrastructure.jankenroundresult.jpa.JankenRoundResultJpaRepository;
 import com.example.app.infrastructure.roomplayer.repository.RoomPlayerJpaRepository;
+import com.example.app.infrastructure.user.jpa.UserJpaRepository;
 import com.example.app.presentation.janken.JankenChoiceForm;
 
 import lombok.RequiredArgsConstructor;
@@ -49,6 +53,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
     private final JankenRoundResultJpaRepository jankenRoundResultJpaRepository;
     private final JankenPlayerResultJpaRepository jankenPlayerResultJpaRepository;
     private final JankenChoiceJpaRepository jankenChoiceJpaRepository;
+    private final UserJpaRepository userJpaRepository;
 
     @Override
     public List<JankenChoiceRecord> getJankenChoices(RoomId roomId, UserId userId) {
@@ -300,6 +305,53 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         // 3. 一括保存
         jankenPlayerResultJpaRepository.saveAll(entities);
 
+    }
+
+    @Override
+    public JankenRegisteredStatusDto getJankenRegisterdStatus(Integer roomId) {
+        // ルーム内のプレイヤー一覧
+        Set<Integer> roomPlayers = roomPlayerJpaRepository.findPlayerIdByRoomId(roomId);
+
+        // 出し手一覧
+        List<JankenChoiceEntity> hands = jankenChoiceJpaRepository.findByRoomId(roomId);
+
+        // 出し手を登録したプレイヤーIDの集合（キー存在で判定）
+        Set<Integer> handSet = hands.stream()
+                .map(JankenChoiceEntity::getPlayerId)
+                .collect(Collectors.toSet());
+
+
+        // プレイヤーID → UserName(VO) 
+        Map<Integer, UserName> userNameMap = roomPlayers.stream()
+                .collect(Collectors.toMap(
+                        pid -> pid,
+                        pid -> new UserName(
+                                userJpaRepository.findByUserId(pid)
+                                        .orElseThrow()
+                                        .getUserName() // ← String
+                        )));
+
+        // 描画用DTO　playerStatusList 作成
+        List<PlayerStatusDto> playerStatusList = roomPlayers.stream()
+                .map(pid -> new PlayerStatusDto(
+                        new PlayerId(pid), // ← ここで VO にする
+                        userNameMap.get(pid), // 名前
+                        handSet.contains(pid) // 登録済み判定
+                ))
+                .toList();
+
+        // 全員登録済みかどうか
+        boolean allRegistered = playerStatusList.stream()
+                .allMatch(PlayerStatusDto::handRegistered);
+
+        // ログインユーザーがルームマスターかどうか
+        boolean isRoomMaster = roomService.isRoomMaster(new RoomId(roomId));
+
+        // 描画用DTO　JankenRegisteredStatusDto にまとめて返す
+        return new JankenRegisteredStatusDto(
+                playerStatusList,
+                allRegistered,
+                isRoomMaster);
     }
 
 }

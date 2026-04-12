@@ -2,6 +2,7 @@ package com.example.app.application.janken;
 
 import java.util.List;
 
+import com.example.app.application.janken.dto.JankenRegisteredStatusDto;
 import com.example.app.domain.janken.model.JankenChoiceRecord;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
@@ -38,4 +39,12 @@ public interface JankenApplicationService {
      * @param roomId ルームID
      */
     public void battle(RoomId roomId);
+
+    /**
+     * 全プレイヤーの出し手の登録状況（登録済みor未登録）の情報取得
+     * 
+     * @param roomId ルームID
+     * @param playerId プレイヤーID
+     */
+    public JankenRegisteredStatusDto getJankenRegisterdStatus(Integer roomId);
 }

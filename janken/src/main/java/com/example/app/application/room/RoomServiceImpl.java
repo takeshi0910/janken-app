@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
+import com.example.app.application.security.LoginUserProvider;
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
@@ -33,6 +34,7 @@ public class RoomServiceImpl implements RoomService {
     private final RoomMapper roomMapper;
     private final RoomJpaRepository roomJpaRepository;
     private final RoomPlayerJpaRepository roomPlayerJpaRepository;
+    private final LoginUserProvider loginUserProvider;
 
     @Override
     public List<RoomListItemDto> selectRoomsByUserId(UserId userId) {
@@ -131,6 +133,16 @@ public class RoomServiceImpl implements RoomService {
                 .toList();
 
         roomPlayerJpaRepository.saveAll(list);
+    }
+
+    @Override
+    public boolean isRoomMaster(RoomId roomId) {
+        Integer loginUserId = loginUserProvider.getUserId();
+        RoomEntity room = roomJpaRepository.findById(roomId.value())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Room not found: " + roomId));
+
+        return room.getCreatedId().equals(loginUserId);
     }
 
 }

@@ -71,9 +71,10 @@
 						</a>
 					</td>
 					<td>
-					    <a class="btn btn-sm btn-danger smallBtn"
-						   data-bs-toggle="modal"
-						   data-bs-target="#battleModal_${room.roomId}">
+					    <a class="btn btn-sm btn-danger smallBtn battle-btn"
+								th:data-room-id="${room.roomId}"
+								data-bs-toggle="modal"
+								data-bs-target="#battleModal">
 						   対戦
 						</a>
 					</td>
@@ -81,44 +82,37 @@
 			</tbody>
 		</table>
 
-//モーダルはここから
-		<div class="modal fade" id="battleModal_${room.roomId}" tabindex="-1">
+		<div class="modal fade" id="battleModal" tabindex="-1">
 			<div class="modal-dialog">
-		  		<div class="modal-content">
-		
-					 <div class="modal-header">
-					   <h5 class="modal-title">出し手登録状況</h5>
-					   <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-					 </div>
-		
-				      <div class="modal-body">
-				        <table class="table">
-				          <tr th:each="player : ${room.players}">
-				            <td th:text="${player.name}"></td>
-				            <td th:text="${player.handLabel != null ? player.handLabel : '—'}"></td>
-				            <td>
-				              <span th:if="${player.handRegistered}" class="text-success">✔ 登録済み</span>
-				              <span th:if="${!player.handRegistered}" class="text-danger">✖ 未登録</span>
-				            </td>
-				          </tr>
-				        </table>
-		
-				        <div th:if="${!allRegistered}" class="text-danger">
-				          未登録のプレイヤーがいます。
-				        </div>
-			     	 </div>
-		
-				      <div class="modal-footer">
-				        <a th:href="@{/battle/execute(roomId=${room.roomId})}"
-				           class="btn btn-primary"
-				           th:classappend="${!allRegistered || !room.isRoomMaster} ? ' disabled' : ''">
-				           対戦開始
-				        </a>
-				      </div>
-				
-				    </div>
-				  </div>
+				<div class="modal-content" id="battleModalContent">
+			    	<!-- Ajax でここに読み込む -->
 				</div>
+			</div>
+		</div>
+	<!-- 
+	<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#testModal">
+  テストモーダル
+</button>
+
+<div class="modal fade" id="testModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">テスト</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        モーダルは動いています！
+      </div>
+    </div>
+  </div>
+</div>
+	 -->
+	
 	</section>
 	
+<div layout:fragment="scripts">
+	<script th:src="@{/js/mypage.js}"></script>
+</div>
+
 </html>

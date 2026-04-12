@@ -35,7 +35,7 @@ public class MypageController {
         List<RoomListItemDto> rooms = roomService.selectRoomsByUserId(loginUserId);
         model.addAttribute("rooms", rooms);
         
-        return "mypage";
+        return "mypage/mypage";
     }
     
 }

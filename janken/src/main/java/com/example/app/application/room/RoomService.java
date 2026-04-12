@@ -24,7 +24,7 @@ public interface RoomService {
     List<RoomListItemDto> selectRoomsByUserId(UserId userId);
     
     /**
-     * 登録済みのルーム情報を取得。
+     * ルームの編集画面用に反映させる、登録済みのルーム情報を取得。
      * 
      * @param roomId
      * @return 登録済みのルーム情報
@@ -37,5 +37,12 @@ public interface RoomService {
      * @param room ルーム情報
      */
     public void save(RoomForm form);
+
+    /**
+     * 指定のルームに対して、ログインユーザーがルームマスターか否かを判定する。
+     * 
+     * @param roomId ルーム情報
+     */
+    boolean isRoomMaster(RoomId roomId);
 
 }

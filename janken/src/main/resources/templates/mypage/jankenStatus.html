@@ -1,0 +1,40 @@
+<!-- templates/mypage/jankenStatus.html -->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="content">
+  <div class="modal-header">
+    <h5 class="modal-title">出し手登録状況</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+
+  <div class="modal-body">
+    <table class="table">
+      <tr th:each="player : ${jankenRegisterdStatus.players}">
+        <td th:text="${player.name.value}"></td>
+        <td>
+          <span th:if="${player.handRegistered}" class="text-success">✔ 登録済み</span>
+          <span th:if="${!player.handRegistered}" class="text-danger">✖ 未登録</span>
+        </td>
+      </tr>
+    </table>
+
+    <div th:if="${!jankenRegisterdStatus.allRegistered}" class="text-danger">
+      未登録のプレイヤーがいます。
+    </div>
+  </div>
+
+  <div class="modal-footer">
+	  
+	  <!-- 主催者でない場合の警告メッセージ -->
+	  <div th:if="${!jankenRegisterdStatus.isRoomMaster}"
+	       class="text-danger me-auto">
+	      対戦開始は主催者のみ実行できます
+	  </div>
+	  
+    <a th:href="@{/battle/execute(roomId=${roomId})}"
+       class="btn btn-danger"
+       th:classappend="${!jankenRegisterdStatus.isRoomMaster} ? ' disabled' : ''">
+       対戦開始
+    </a>
+  </div>
+</div>
