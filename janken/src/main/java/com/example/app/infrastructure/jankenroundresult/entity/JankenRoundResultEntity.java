@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
+import com.example.app.infrastructure.jpa.IntegerListJsonConverter;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,9 +49,11 @@ public class JankenRoundResultEntity {
     @Column(name = "is_draw", nullable = false)
     private boolean isDraw;
 
+    @Convert(converter = IntegerListJsonConverter.class)
     @Column(name = "winner_player_ids", nullable = false, columnDefinition = "json")
     private List<Integer> winnerPlayerIds;
 
+    @Convert(converter = IntegerListJsonConverter.class)
     @Column(name = "loser_player_ids", nullable = false, columnDefinition = "json")
     private List<Integer> loserPlayerIds;
 

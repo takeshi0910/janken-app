@@ -2,7 +2,6 @@ package com.example.app.application.room;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.application.security.LoginUserProvider;
-import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
 import com.example.app.infrastructure.room.entity.RoomEntity;
@@ -75,14 +73,11 @@ public class RoomServiceImpl implements RoomService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Room not found: " + roomId));
 
-        Set<PlayerId> playerIds = roomPlayerJpaRepository.findPlayerIdByRoomId(roomId.value())
-                .stream()
-                .map(PlayerId::new)
-                .collect(Collectors.toSet());
+        Set<Integer> playerIds = roomPlayerJpaRepository.findPlayerIdByRoomId(roomId.value());
 
         RoomRegisterDto dto = new RoomRegisterDto();
 
-        dto.setRoomId(roomId);
+        dto.setRoomId(roomId.value());
         dto.setRoomName(room.getRoomName());
         dto.setGameKind(room.getGameKind());
         dto.setGameMode(room.getGameKind().toMode(room.getGameMode()));

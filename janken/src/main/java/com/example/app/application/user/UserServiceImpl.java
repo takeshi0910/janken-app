@@ -93,4 +93,11 @@ public class UserServiceImpl implements UserService {
         System.out.println("DEBUG users = " + list);
         return list;
     }
+    
+    @Override
+    public Optional<String> findUserNameById(Integer userIdValue) {
+        return userJpaRepository.findById(userIdValue)
+                .map(UserEntity::getUserName);
+    }
+
 }

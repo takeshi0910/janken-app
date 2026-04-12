@@ -1,15 +1,12 @@
 package com.example.app.application.janken.dto;
 
-import com.example.app.domain.room.vo.PlayerId;
-import com.example.app.domain.user.vo.UserName;
-
 /**
- * じゃんけんゲームのプレイヤーの出し手の登録状況 
+ * じゃんけんゲームのプレイヤーの出し手の登録状況 (登録済or未登録）
  * 
  * @author takeshi.kashiwagi
  */
 public record PlayerStatusDto(
-        PlayerId playerId,
-        UserName name,
+        Integer playerId,
+        String playerName,
         boolean handRegistered) {
 }

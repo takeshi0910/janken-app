@@ -10,7 +10,7 @@
   <div class="modal-body">
     <table class="table">
       <tr th:each="player : ${jankenRegisterdStatus.players}">
-        <td th:text="${player.name.value}"></td>
+        <td th:text="${player.playerName}"></td>
         <td>
           <span th:if="${player.handRegistered}" class="text-success">✔ 登録済み</span>
           <span th:if="${!player.handRegistered}" class="text-danger">✖ 未登録</span>

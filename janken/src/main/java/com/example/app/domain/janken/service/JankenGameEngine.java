@@ -1,4 +1,4 @@
-package com.example.app.domain.janken.model;
+package com.example.app.domain.janken.service;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-
+import com.example.app.domain.janken.model.JankenChoiceRecord;
+import com.example.app.domain.janken.model.JankenHand;
+import com.example.app.domain.janken.model.JankenMode;
+import com.example.app.domain.janken.model.RoundResult;
 import com.example.app.domain.janken.vo.OrderNo;
 import com.example.app.domain.room.vo.PlayerId;
 
@@ -29,7 +31,6 @@ import com.example.app.domain.room.vo.PlayerId;
  * 
  * @author takeshi.kashiwagi
  */
-@Service
 public class JankenGameEngine {
 
     /**

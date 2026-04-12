@@ -3,7 +3,6 @@ package com.example.app.presentation.janken;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.app.application.janken.JankenApplicationService;
 import com.example.app.application.room.RoomService;
 import com.example.app.application.room.dto.RoomRegisterDto;
-import com.example.app.application.security.MyUserDetails;
+import com.example.app.application.security.LoginUserProvider;
 import com.example.app.domain.janken.model.JankenChoiceRecord;
 import com.example.app.domain.janken.model.JankenHand;
 import com.example.app.domain.room.vo.RoomId;
@@ -34,6 +33,7 @@ public class JankenRegisterController {
 
     private final RoomService roomService;
     private final JankenApplicationService jankenService;
+    private final LoginUserProvider loginUserProvider;
 
     /** 
      * じゃんけんのプレイ画面を表示する。
@@ -43,8 +43,7 @@ public class JankenRegisterController {
     @GetMapping("/room/janken/play")
     public String show(
             @RequestParam(value = "roomId") Integer roomIdValue,
-            Model model,
-            @AuthenticationPrincipal MyUserDetails loginUser) {
+            Model model) {
 
         RoomId roomId = new RoomId(roomIdValue);
 
@@ -52,8 +51,8 @@ public class JankenRegisterController {
         RoomRegisterDto room = roomService.findById(roomId);
 
         // --- ① 既存の選択肢を取得（編集モード対応） ---
-        List<JankenChoiceRecord> choices = jankenService.getJankenChoices(roomId,
-                loginUser.getUserId());
+        List<JankenChoiceRecord> choices = jankenService.getJankenChoices(roomIdValue,
+                loginUserProvider.getUserId());
 
         choices.forEach(c -> System.out.println("orderNo=" + c.orderNo()));
 
@@ -120,7 +119,7 @@ public class JankenRegisterController {
 
         RoomId roomId = new RoomId(roomIdValue);
 
-        jankenService.registerJankenChoices(roomId, form);
+        jankenService.registerJankenChoices(roomIdValue, form);
 
         // 結果表示用にRoomの名前を取得
         String roomName = roomService.findById(roomId).getRoomName();

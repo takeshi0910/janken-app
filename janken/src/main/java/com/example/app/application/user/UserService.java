@@ -35,4 +35,12 @@ public interface UserService {
      * @return ユーザー情報のリスト
      */
     public List<UserDto> findAll();
+    
+    /**
+     * ユーザーIDからユーザー名を取得
+     *
+     * @param userIdValue
+     * @return ユーザー名（存在しない場合は Optional.empty()）
+     */
+    Optional<String> findUserNameById(Integer userIdValue);
 }

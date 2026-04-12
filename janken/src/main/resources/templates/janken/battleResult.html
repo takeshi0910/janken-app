@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/layout}">
+	
+<head>
+    <title>対戦結果</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+	<h1 th:text="${result.room.roomName} + ' の対戦結果'"></h1>
+	
+	<h2>最終成績</h2>
+	<table border="1">
+	    <tr>
+	        <th>順位</th>
+	        <th>プレイヤー名</th>
+	        <th>勝ち</th>
+	        <th>負け</th>
+	    </tr>
+	    <tr th:each="p : ${result.results}">
+	        <td th:text="${p.finalRank}"></td>
+	        <td th:text="${p.playerName}"></td>
+	        <td th:text="${p.winCount}"></td>
+	        <td th:text="${p.loseCount}"></td>
+	    </tr>
+	</table>
+	
+	<h2>ラウンドごとの勝敗</h2>
+	<table border="1">
+	    <tr>
+	        <th>ラウンド</th>
+	        <th>勝者</th>
+	        <th>敗者</th>
+	        <th>引き分け</th>
+	    </tr>
+	    <tr th:each="r : ${result.rounds}">
+	        <td th:text="${r.orderNo}"></td>
+	        <td th:text="${#strings.listJoin(r.winnerPlayerIds, ', ')}"></td>
+	        <td th:text="${#strings.listJoin(r.loserPlayerIds, ', ')}"></td>
+	        <td th:text="${r.isDraw} ? '○' : '-'"></td>
+	    </tr>
+	</table>
+
+</div>
+</body>
+</html>
