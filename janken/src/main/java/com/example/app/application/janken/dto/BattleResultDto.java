@@ -1,6 +1,7 @@
 package com.example.app.application.janken.dto;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.app.application.room.dto.RoomRegisterDto;
 
@@ -11,6 +12,7 @@ import com.example.app.application.room.dto.RoomRegisterDto;
  */
 public record BattleResultDto(
         RoomRegisterDto room,
-        List<PlayerResultView> results,
-        List<RoundResultView> rounds) {
-}
+        List<PlayerResultView> ranking,
+        Map<Integer, RoundResultView> roundResults,
+        Map<Integer, List<RoundHandView>> roundHands
+) {}

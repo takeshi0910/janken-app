@@ -1,5 +1,8 @@
 package com.example.app.application.janken;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +16,7 @@ import com.example.app.application.janken.dto.BattleResultDto;
 import com.example.app.application.janken.dto.JankenRegisteredStatusDto;
 import com.example.app.application.janken.dto.PlayerResultView;
 import com.example.app.application.janken.dto.PlayerStatusDto;
+import com.example.app.application.janken.dto.RoundHandView;
 import com.example.app.application.janken.dto.RoundResultView;
 import com.example.app.application.room.RoomService;
 import com.example.app.application.room.dto.RoomRegisterDto;
@@ -114,7 +118,8 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
                 .collect(Collectors.toSet());
 
         // 全プレイヤーの出し手情報取得
-        List<JankenChoiceRecord> choices = jankenChoiceJpaRepository.findByRoomId(roomIdvalue)
+        List<JankenChoiceRecord> choices = jankenChoiceJpaRepository
+                .findByRoomIdOrderByOrderNoAsc(roomIdvalue)
                 .stream()
                 .map(e -> new JankenChoiceRecord(
                         new RoomId(e.getRoomId()),
@@ -208,7 +213,8 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         Set<Integer> roomPlayers = roomPlayerJpaRepository.findPlayerIdByRoomId(roomId);
 
         // 出し手一覧
-        List<JankenChoiceEntity> hands = jankenChoiceJpaRepository.findByRoomId(roomId);
+        List<JankenChoiceEntity> hands = jankenChoiceJpaRepository
+                .findByRoomIdOrderByOrderNoAsc(roomId);
 
         // 出し手を登録したプレイヤーIDの集合（キー存在で判定）
         Set<Integer> handSet = hands.stream()
@@ -221,8 +227,7 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
                         pid -> pid,
                         pid -> userJpaRepository.findByUserId(pid)
                                 .orElseThrow()
-                                .getUserName()
-                ));
+                                .getUserName()));
 
         // 描画用DTO　playerStatusList 作成
         List<PlayerStatusDto> playerStatusList = roomPlayers.stream()
@@ -253,6 +258,9 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
         RoomId roomId = new RoomId(roomIdValue);
         RoomRegisterDto room = roomService.findById(roomId);
 
+        // -------------------------
+        // 1. プレイヤー成績（ランキング）
+        // -------------------------
         List<PlayerResultView> playerResultViews = jankenPlayerResultJpaRepository
                 .findByRoomId(roomIdValue)
                 .stream()
@@ -266,21 +274,94 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
                             e.getLoseCount(),
                             e.getFinalRank());
                 })
+                .sorted(Comparator.comparing(PlayerResultView::finalRank)) // ランク順にソート
                 .toList();
 
-        // ラウンド結果
+        // -------------------------
+        // 2. ラウンド結果（勝敗）
+        // -------------------------
         List<JankenRoundResultEntity> roundEntities = jankenRoundResultJpaRepository
                 .findByRoomId(roomIdValue);
 
-        List<RoundResultView> roundResultViews = roundEntities.stream()
+        Map<Integer, RoundResultView> roundResults = roundEntities.stream()
                 .map(e -> new RoundResultView(
                         e.getOrderNo(),
                         e.isDraw(),
                         e.getWinnerPlayerIds(),
                         e.getLoserPlayerIds()))
-                .toList();
+                .collect(Collectors.toMap(
+                        RoundResultView::orderNo,
+                        v -> v,
+                        (a, b) -> a,
+                        LinkedHashMap::new // ラウンド順を保持
+                ));
 
-        return new BattleResultDto(room, playerResultViews, roundResultViews);
+        // -------------------------
+        // 3. ラウンドごとの手（誰が何を出したか）
+        // -------------------------
+        JankenMode mode = (JankenMode) room.getGameMode();
+
+        List<JankenChoiceEntity> choiceEntities = jankenChoiceJpaRepository
+                .findByRoomIdOrderByOrderNoAsc(roomIdValue);
+
+        // 全手を orderNo ごとに groupBy
+        Map<Integer, List<JankenChoiceEntity>> allHands = choiceEntities.stream()
+                .collect(Collectors.groupingBy(
+                        JankenChoiceEntity::getOrderNo,
+                        LinkedHashMap::new,
+                        Collectors.toList()));
+
+        Map<Integer, List<RoundHandView>> roundHands = new LinkedHashMap<>();
+
+        // 初期 activePlayers（全員）
+        Set<Integer> activePlayers = new HashSet<>(
+                playerResultViews.stream()
+                        .map(PlayerResultView::playerId)
+                        .toList());
+
+        // プレイヤーID → 名前 の Map を作る
+        Map<Integer, String> playerNameMap = playerResultViews.stream()
+                .collect(Collectors.toMap(
+                        PlayerResultView::playerId,
+                        PlayerResultView::playerName));
+
+        // ラウンド順に処理
+        for (var entry : roundResults.entrySet()) {
+            int orderNo = entry.getKey();
+            RoundResultView result = entry.getValue();
+
+            // このラウンドで戦ったプレイヤーだけを抽出
+            List<RoundHandView> filtered = allHands.get(orderNo).stream()
+                    .filter(e -> activePlayers.contains(e.getPlayerId()))
+                    .map(e -> new RoundHandView(
+                            e.getOrderNo(),
+                            e.getPlayerId(),
+                            playerNameMap.get(e.getPlayerId()),
+                            e.getJankenHand()))
+                    .sorted(Comparator.comparing(RoundHandView::hand))
+                    .toList();
+
+            roundHands.put(orderNo, filtered);
+
+            // 次ラウンドの activePlayers を更新
+            if (!result.isDraw()) {
+                switch (mode) {
+                    case WINNER_STAYS -> activePlayers.retainAll(result.winnerPlayerIds());
+                    case LOSER_STAYS -> activePlayers.retainAll(result.loserPlayerIds());
+                    case TOTAL_BATTLE -> {
+                    } // 変化なし
+                }
+            }
+        }
+
+        // -------------------------
+        // 4. DTO に詰めて返却
+        // -------------------------
+        return new BattleResultDto(
+                room,
+                playerResultViews,
+                roundResults,
+                roundHands);
     }
 
 }

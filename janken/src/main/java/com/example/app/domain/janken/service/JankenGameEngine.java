@@ -56,7 +56,7 @@ public class JankenGameEngine {
             case LOSER_STAYS -> judgeLoserStays(choices, activePlayers, maxRounds);
         };
     }
-    
+
     /**
      * 1回分の勝敗判定を行う。
      * 
@@ -68,6 +68,7 @@ public class JankenGameEngine {
      * @return ラウンド結果（勝者・敗者・あいこ）
      */
     public RoundResult judgeRound(List<JankenChoiceRecord> choices, Set<PlayerId> activePlayers) {
+
         // 有効プレイヤーだけを対象に、手ごとにプレイヤーIDをグルーピングして Map にしている
         Map<JankenHand, Set<PlayerId>> grouped = choices.stream()
                 .filter(c -> activePlayers.contains(c.playerId()))
@@ -107,12 +108,19 @@ public class JankenGameEngine {
             List<JankenChoiceRecord> choices,
             Set<PlayerId> activePlayers,
             int maxRounds) {
+
         Map<OrderNo, RoundResult> results = new LinkedHashMap<>();
 
         for (int order = 1; order <= maxRounds; order++) {
 
+            final int round = order;
+
+            List<JankenChoiceRecord> roundChoices = choices.stream()
+                    .filter(c -> c.orderNo().value().equals(round))
+                    .toList();
+
             // 1ラウンドの勝敗判定
-            RoundResult result = judgeRound(choices, activePlayers);
+            RoundResult result = judgeRound(roundChoices, activePlayers);
 
             // order_no を付与して保存
             results.put(new OrderNo(order), result);
@@ -140,8 +148,14 @@ public class JankenGameEngine {
 
         for (int order = 1; order <= maxRounds; order++) {
 
+            final int round = order;
+
+            List<JankenChoiceRecord> roundChoices = choices.stream()
+                    .filter(c -> c.orderNo().value().equals(round))
+                    .toList();
+            
             // 1ラウンドの勝敗判定
-            RoundResult result = judgeRound(choices, activePlayers);
+            RoundResult result = judgeRound(roundChoices, activePlayers);
 
             // 結果を保存
             results.put(new OrderNo(order), result);
@@ -182,8 +196,14 @@ public class JankenGameEngine {
 
         for (int order = 1; order <= maxRounds; order++) {
 
+            final int round = order;
+
+            List<JankenChoiceRecord> roundChoices = choices.stream()
+                    .filter(c -> c.orderNo().value().equals(round))
+                    .toList();
+
             // 1ラウンドの勝敗判定
-            RoundResult result = judgeRound(choices, activePlayers);
+            RoundResult result = judgeRound(roundChoices, activePlayers);
 
             // 結果を保存
             results.put(new OrderNo(order), result);

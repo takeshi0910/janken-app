@@ -17,12 +17,12 @@ import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
 public interface JankenChoiceJpaRepository extends JpaRepository<JankenChoiceEntity, Integer> {
 
     /**
-     * 対象ルームにおける全プレイヤーの出し手一覧を取得
+     * 対象ルームにおける全プレイヤーの出し手一覧をOrderNoでソートして取得
      *
      * @param roomId   ルームID
      * @return 対象ルームにおける全プレイヤーの出し手情報
      */
-    List<JankenChoiceEntity> findByRoomId(Integer roomId);
+    List<JankenChoiceEntity> findByRoomIdOrderByOrderNoAsc(Integer roomId);
 
     /**
      * 対象ルームにおける対象プレイヤーの登録済みの出し手一覧を取得
