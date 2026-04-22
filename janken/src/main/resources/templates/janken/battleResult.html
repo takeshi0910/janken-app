@@ -55,6 +55,42 @@
 		    font-weight: bold;
 		}
 		
+		/* ルーム詳細 */
+		.room-info-card {
+		    background: linear-gradient(135deg, #ffffff 0%, #f7f7f7 100%);
+		    border: 1px solid #ddd;
+		    border-radius: 12px;
+		    padding: 20px 24px;
+		    margin-bottom: 24px;
+		    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+		    display: flex;
+		    flex-direction: column;
+		    gap: 8px;
+		}
+		
+		.room-info-card h2 {
+		    margin: 0;
+		    font-size: 22px;
+		    font-weight: bold;
+		    color: #333;
+		}
+		
+		.room-meta {
+		    display: flex;
+		    gap: 20px;
+		    flex-wrap: wrap;
+		    font-size: 15px;
+		    color: #555;
+		}
+		
+		.room-meta span {
+		    background: #f0f0f0;
+		    padding: 6px 12px;
+		    border-radius: 6px;
+		    border: 1px solid #e0e0e0;
+		}
+				
+		
 		/* 最終成績カード */
 		.ranking-container {
 		    display: flex;
@@ -102,12 +138,9 @@
     <h1 th:text="${result.room.roomName} + ' の対戦結果'"></h1>
 
 	<div class="room-info-card">
-	    <h2 th:text="${result.room.roomName}"></h2>
-	
 	    <div class="room-meta">
-	        <span>モード：<span th:text="${result.room.gameMode}"></span></span>
-	        <span>ラウンド数：<span th:text="${result.room.roundCount}"></span></span>
-	        <span>開始：<span th:text="${result.room.startedDate}"></span></span>
+	        <span>モード：[[${result.room.gameMode.label}]]</span>
+			<span>最大ラウンド数：[[${result.room.roundCount}]]</span>
 	    </div>
 	</div>
 
@@ -133,7 +166,7 @@
 	    </div>
 	</div>
 
-    <h2>ラウンドごとの詳細</h2>
+    <h2 class="mt-5">ラウンドごとの詳細</h2>
 	
 	<div class="round-container" th:each="roundNo : ${result.roundResults().keySet()}">
 	
