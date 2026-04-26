@@ -24,6 +24,11 @@ public enum JankenMode  implements GameMode{
     
     /** 文字列からEnumを返す */
     public static JankenMode fromString(String value) {
+        
+        if (value == null || value.isEmpty()) {
+            return null;
+        }
+        
         for (JankenMode mode : values()) {
             if (mode.name().equalsIgnoreCase(value) ||
                 mode.label.equals(value)) {

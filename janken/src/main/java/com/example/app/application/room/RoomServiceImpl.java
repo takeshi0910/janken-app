@@ -3,8 +3,12 @@ package com.example.app.application.room;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
@@ -34,6 +38,9 @@ public class RoomServiceImpl implements RoomService {
     private final RoomJpaRepository roomJpaRepository;
     private final RoomPlayerJpaRepository roomPlayerJpaRepository;
     private final LoginUserProvider loginUserProvider;
+    
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<RoomListItemDto> selectRoomsByUserId(UserId userId) {
@@ -106,7 +113,7 @@ public class RoomServiceImpl implements RoomService {
             entity = roomJpaRepository.findById(form.getRoomId())
                     .orElseThrow();
         }
-
+        
         // 新規・編集共通の上書き処理
         entity.setRoomName(form.getRoomName());
         entity.setGameKind(form.getGameKind());
@@ -118,6 +125,7 @@ public class RoomServiceImpl implements RoomService {
 
         // Room を保存して ID を確定
         RoomEntity saved = roomJpaRepository.save(entity);
+        entityManager.flush(); // JPAのロック競合回避
         RoomId roomId = new RoomId(saved.getRoomId());
 
         // room_players を洗い替え
