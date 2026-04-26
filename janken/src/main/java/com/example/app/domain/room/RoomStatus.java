@@ -13,7 +13,7 @@ import com.example.app.domain.room.vo.RoomId;
 public enum RoomStatus {
     PREPARING("準備中", "準備中", "btn-secondary", false, Destination.NONE),
     OPEN("開催中", "参加", "btn-primary", true, Destination.PLAY),
-    CLOSED("完了", "結果", "btn-danger", true, Destination.RESULT);
+    CLOSED("完了", "結果", "btn-success", true, Destination.RESULT);
     
     private final String statusLabel; // 状態の日本語（開催中など）
     private final String buttonLabel; // ボタンに表示する文字（参加など）
@@ -48,6 +48,10 @@ public enum RoomStatus {
 
     public Destination getDestination() {
         return destination;
+    }
+    
+    public boolean isClosed() {
+        return this == CLOSED;
     }
     
     /** 参加カラムのボタン制御 */

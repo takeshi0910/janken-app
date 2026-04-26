@@ -66,12 +66,14 @@
 					    <a th:if="${room.isPlayer}"
 					       th:href="${room.roomStatus.buildUrlOrEmpty(room.gameKind, room.roomId)}"
 						   class="btn btn-sm smallBtn"
+						   onclick="showLoading()"
 						   th:classappend="${room.roomStatus.buttonClass} + (!${room.roomStatus.clickable} ? ' disabled' : '')"
 						   th:text="${room.roomStatus.buttonLabel}">参加/準備中/結果
 						</a>
 					</td>
 					<td>
-					    <a class="btn btn-sm btn-danger smallBtn battle-btn"
+					    <a th:if="${!room.roomStatus.closed}"
+							    class="btn btn-sm btn-danger smallBtn battle-btn"
 								th:data-room-id="${room.roomId}"
 								data-bs-toggle="modal"
 								data-bs-target="#battleModal">
@@ -82,18 +84,33 @@
 			</tbody>
 		</table>
 
+		<!-- 対戦ボタン押下時に表示する、対戦者の出し手登録状況モーダル -->
 		<div class="modal fade" id="battleModal" tabindex="-1">
 			<div class="modal-dialog">
 				<div class="modal-content" id="battleModalContent">
-			    	<!-- Ajax でここに読み込む -->
+					<div class="d-flex justify-content-center my-5">
+						<div class="spinner-border text-primary" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- ローディング用 -->
+		<div id="loading" class="position-fixed top-0 start-0 w-100 h-100 d-none"
+				style="background: rgba(0,0,0,.5); z-index: 2000;">
+			<div class="position-absolute top-50 start-50 translate-middle text-center">
+				<div class="spinner-border text-light" role="status">
+					<span class="visually-hidden">Loading...</span>
 				</div>
 			</div>
 		</div>
 	
 	</section>
 	
-<div layout:fragment="scripts">
-	<script th:src="@{/js/mypage.js}"></script>
-</div>
+	<div layout:fragment="scripts">
+		<script th:src="@{/js/mypage.js}"></script>
+	</div>
 
 </html>

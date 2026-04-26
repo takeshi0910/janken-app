@@ -10,12 +10,16 @@ import com.example.app.application.janken.dto.BattleResultDto;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * じゃんけんの対戦処理に関連するコントローラー
+ */
 @Controller
 @RequiredArgsConstructor
 public class JankenBattleController {
 
     private final JankenApplicationService service;
-
+    
+    /** 対戦実行 ⇒ 対戦結果画面へ*/
     @GetMapping("/battle/execute")
     public String executeBattle(@RequestParam Integer roomId, Model model) {
 
@@ -32,7 +36,8 @@ public class JankenBattleController {
         return "janken/battleResult";
     }
     
-    @GetMapping("/battle/result")
+    /** 対戦結果画面表示 */
+    @GetMapping("/room/janken/result")
     public String showBattleResult(@RequestParam Integer roomId, Model model) {
 
         BattleResultDto result = service.getBattleResult(roomId);
@@ -44,4 +49,5 @@ public class JankenBattleController {
         // 結果画面へ遷移
         return "janken/battleResult";
     }
+    
 }

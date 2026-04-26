@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Controller
 @RequiredArgsConstructor
-public class JankenRegisterController {
+public class JankenRegisterChoiceController {
 
     private final RoomService roomService;
     private final JankenApplicationService jankenService;

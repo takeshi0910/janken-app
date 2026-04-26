@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
 import com.example.app.application.security.LoginUserProvider;
+import com.example.app.domain.room.RoomStatus;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
 import com.example.app.infrastructure.room.entity.RoomEntity;
@@ -138,6 +139,12 @@ public class RoomServiceImpl implements RoomService {
                         "Room not found: " + roomId));
 
         return room.getCreatedId().equals(loginUserId);
+    }
+    
+    @Override
+    @Transactional
+    public void updateStatus(RoomId roomId, RoomStatus status) {
+        roomJpaRepository.updateStatus(roomId.value(), status);
     }
 
 }

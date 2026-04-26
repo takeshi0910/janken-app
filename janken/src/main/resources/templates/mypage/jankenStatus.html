@@ -33,6 +33,7 @@
 	  
     <a th:href="@{/battle/execute(roomId=${roomId})}"
        class="btn btn-danger"
+       onclick="showLoading()"
        th:classappend="${!jankenRegisterdStatus.isRoomMaster} ? ' disabled' : ''">
        対戦開始
     </a>

@@ -28,6 +28,7 @@ import com.example.app.domain.janken.model.RoundResult;
 import com.example.app.domain.janken.service.JankenGameEngine;
 import com.example.app.domain.janken.service.JankenResultService;
 import com.example.app.domain.janken.vo.OrderNo;
+import com.example.app.domain.room.RoomStatus;
 import com.example.app.domain.room.vo.PlayerId;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.infrastructure.jankenchoice.entity.JankenChoiceEntity;
@@ -148,6 +149,9 @@ public class JankenApplicationServiceImpl implements JankenApplicationService {
 
         // プレイヤーの成績を保存
         savePlayerResults(roomId, playerResults);
+        
+        // ルームの状態を終了にして保存
+        roomService.updateStatus(roomId, RoomStatus.CLOSED);
     }
 
     /**

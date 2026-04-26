@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.app.application.room.dto.RoomListItemDto;
 import com.example.app.application.room.dto.RoomRegisterDto;
+import com.example.app.domain.room.RoomStatus;
 import com.example.app.domain.room.vo.RoomId;
 import com.example.app.domain.user.vo.UserId;
 import com.example.app.presentation.room.RoomForm;
@@ -37,6 +38,14 @@ public interface RoomService {
      * @param room ルーム情報
      */
     public void save(RoomForm form);
+    
+    /**
+     * ルームステータスの更新
+     * 
+     * @param roomId ルームID
+     * @param status ルームステータス
+     */
+    public void updateStatus(RoomId roomId, RoomStatus status);
 
     /**
      * 指定のルームに対して、ログインユーザーがルームマスターか否かを判定する。
