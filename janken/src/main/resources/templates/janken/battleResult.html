@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/layout}">
+	
+<head>
+    <title>対戦結果</title>
+    <style>
+	    .hand-option {
+		    width: 60px;
+		    height: 80px;
+		    object-fit: contain;
+		    border: 3px solid transparent;
+		    border-radius: 8px;
+		    transition: 0.2s;
+		}
+		
+		.round-container {
+		    margin-bottom: 20px;
+		}
+		
+		.round-card {
+		    background: #fafafa;
+		    border: 1px solid #ddd;
+		    border-radius: 10px;
+		    padding: 15px 20px;
+		    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+		}
+		
+		.player-row {
+		    display: flex;
+		    align-items: center;
+		    padding: 8px 0;
+		    border-bottom: 1px solid #eee;
+		}
+		
+		.player-row:last-child {
+		    border-bottom: none;
+		}
+		
+		.player-name {
+		    width: 120px;
+		    font-weight: bold;
+		}
+		
+		.player-hand img {
+		    width: 60px;
+		    height: 80px;
+		}
+		
+		.player-result {
+		    margin-left: 20px;
+		    font-size: 1.1em;
+		    font-weight: bold;
+		}
+		
+		/* ルーム詳細 */
+		.room-info-card {
+		    background: linear-gradient(135deg, #ffffff 0%, #f7f7f7 100%);
+		    border: 1px solid #ddd;
+		    border-radius: 12px;
+		    padding: 20px 24px;
+		    margin-bottom: 24px;
+		    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+		    display: flex;
+		    flex-direction: column;
+		    gap: 8px;
+		}
+		
+		.room-info-card h2 {
+		    margin: 0;
+		    font-size: 22px;
+		    font-weight: bold;
+		    color: #333;
+		}
+		
+		.room-meta {
+		    display: flex;
+		    gap: 20px;
+		    flex-wrap: wrap;
+		    font-size: 15px;
+		    color: #555;
+		}
+		
+		.room-meta span {
+		    background: #f0f0f0;
+		    padding: 6px 12px;
+		    border-radius: 6px;
+		    border: 1px solid #e0e0e0;
+		}
+				
+		
+		/* 最終成績カード */
+		.ranking-container {
+		    display: flex;
+		    flex-direction: column;
+		    gap: 16px;
+		    margin-top: 20px;
+		}
+		
+		.player-card {
+		    display: flex;
+		    align-items: center;
+		    background: #fafafa; /* round-card と統一 */
+		    border: 1px solid #ddd;
+		    border-radius: 10px;
+		    padding: 15px 20px;
+		    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* round-card と統一 */
+		}
+		
+		.rank-badge {
+		    font-size: 24px;
+		    font-weight: bold;
+		    background: #ffe066;
+		    padding: 12px 20px;
+		    border-radius: 8px;
+		    margin-right: 20px;
+		}
+		
+		.player-info h3 {
+		    margin: 0;
+		    font-size: 20px;
+		}
+		
+		.score span {
+		    margin-right: 16px;
+		    color: #444;
+		}
+				
+				
+	</style>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <h1 th:text="${result.room.roomName} + ' の対戦結果'"></h1>
+
+	<div class="room-info-card">
+	    <div class="room-meta">
+	        <span>モード：[[${result.room.gameMode.label}]]</span>
+			<span>最大ラウンド数：[[${result.room.roundCount}]]</span>
+	    </div>
+	</div>
+
+    <!-- 最終成績 -->
+    <h2>最終成績</h2>
+
+	<div class="ranking-container">
+	    <div class="player-card" th:each="p : ${result.ranking}">
+	        
+	        <div class="rank-badge">
+	            <span th:text="${p.finalRank}"></span>位
+	        </div>
+	
+	        <div class="player-info">
+	            <h3 th:text="${p.playerName}"></h3>
+	
+	            <div class="score">
+	                <span>勝ち：<span th:text="${p.winCount}"></span></span>
+	                <span>負け：<span th:text="${p.loseCount}"></span></span>
+	            </div>
+	        </div>
+	
+	    </div>
+	</div>
+
+    <h2 class="mt-5">ラウンドごとの詳細</h2>
+	
+	<div class="round-container" th:each="roundNo : ${result.roundResults().keySet()}">
+	
+	    <div class="round-card">
+	        <h3>ラウンド [[${roundNo}]]</h3>
+	
+	        <div class="player-row" th:each="hand : ${result.roundHands().get(roundNo)}">
+	            <div class="player-name" th:text="${hand.playerName}"></div>
+	
+	            <div class="player-hand">
+	                <img th:src="${hand.imagePath()}" class="hand-option"/>
+	            </div>
+	
+	            <div class="player-result">
+	                <span th:if="${result.roundResults().get(roundNo).isDraw()}">あいこ</span>
+	                <span th:if="${result.roundResults().get(roundNo).winnerPlayerIds.contains(hand.playerId)}">勝ち</span>
+	                <span th:if="${result.roundResults().get(roundNo).loserPlayerIds.contains(hand.playerId)}">負け</span>
+	            </div>
+	        </div>
+	    </div><!-- round-card -->
+	</div><!-- round-container -->
+
+</div>
+
+</body>
+</html>

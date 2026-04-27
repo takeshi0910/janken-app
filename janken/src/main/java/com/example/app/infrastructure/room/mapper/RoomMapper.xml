@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.app.infrastructure.room.mapper.RoomMapper">
+
+    <!-- マイページでの表示するルーム情報を取得 -->
+    <select id="selectRoomsByUserId" resultType="com.example.app.application.room.dto.RoomListItemDto">
+        SELECT
+            r.room_id AS roomId,
+            r.room_name AS roomName,
+            r.game_kind AS gameKind,
+            r.game_mode AS gameMode,
+            r.round_count AS roundCount,
+            r.room_status AS roomStatus,
+            r.started_date AS startedDate,
+            r.end_date AS endDate,
+            CASE WHEN r.created_id = #{userId} THEN TRUE ELSE FALSE END AS isRoomMaster,
+			CASE WHEN ru.player_id IS NOT NULL THEN TRUE ELSE FALSE END AS isPlayer
+        FROM room r
+        <!--  「自分が参加している部屋」または「自分が主催している部屋」を取得 -->
+        LEFT JOIN room_players ru
+            ON r.room_id = ru.room_id
+            AND ru.player_id = #{userId}
+        WHERE
+            ru.player_id IS NOT NULL
+            OR r.created_id = #{userId}
+        ORDER BY r.started_date, r.end_date
+    </select>
+    
+    <!-- ログインユーザーのじゃんけんの手の登録状況のリストを取得 -->
+    <select id="selectRoomHandRegisteredMap" resultType="Integer">
+       SELECT
+         jc.room_id  AS roomId
+       FROM janken_choice jc
+       JOIN room r ON r.room_id = jc.room_id
+       WHERE jc.player_id = #{userId}
+         AND r.game_kind = 'じゃんけん'
+         AND jc.room_id IN
+           <foreach item="id" collection="roomIds" open="(" separator="," close=")">
+             #{id}
+           </foreach>
+       GROUP BY jc.room_id
+    </select>
+
+</mapper>
