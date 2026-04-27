@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{layout/layout}">
+
+<head>
+<title>ルーム登録・編集</title>
+</head>
+
+<section layout:fragment="content">
+
+	<div class="container mt-4">
+
+		<h2 class="mb-4">ルーム登録・編集</h2>
+
+		<form th:action="@{/room/save}" th:object="${roomForm}" method="post">
+
+			<!-- hidden: roomId -->
+			<input type="hidden" th:field="*{roomId}" />
+
+			<!-- gameKind -->
+			<div class="mb-3">
+				<label class="form-label">
+					ゲーム種別<span class="text-danger">*</span>
+				</label>
+				<select th:field="*{gameKind}" class="form-control" required
+						th:disabled="*{roomId != null}" >
+					<option value="">-- 選択してください --</option>
+					<option th:each="kind : ${gameKinds}"
+				        th:value="${kind.name}"
+				        th:text="${kind.name}"
+				        th:data-path="${kind.path}">
+					</option>
+				</select>
+				<!-- 編集時は hidden で値を送信 -->
+				<input type="hidden" th:if="*{roomId != null}" th:field="*{gameKind}" />
+				<div class="text-danger" th:errors="*{gameKind}"></div>
+			</div>
+			
+			<!-- GameMode（編集時 or Ajax で Kind 選択後） -->
+			<div id="gameModeContainer"  class="mb-3"
+			     th:style="${#lists.isEmpty(gameModes)} ? 'display:none;' : 'display:block;'">
+			    <label class="form-label">ゲームモード</label>
+			    <select th:field="*{gameMode}" class="form-control" required>
+			        <option value="">-- 選択してください --</option>
+			        <option th:each="mode : ${gameModes}"
+			                th:value="${mode.name()}"
+			                th:text="${mode.label}">
+			        </option>
+			    </select>
+			    <div th:if="${#fields.hasErrors('gameModeValid')}" class="text-danger" 
+				     th:errors="*{gameModeValid}">
+				</div>
+			</div>
+
+			<!-- roomName -->
+			<div class="mb-3">
+				<label class="form-label">
+					ルーム名<span class="text-danger">*</span>
+				</label>
+				<input type="text" th:field="*{roomName}" class="form-control" placeholder="ルーム名を入力" required>
+				<div class="text-danger" th:errors="*{roomName}"></div>
+			</div>
+
+			<!-- roomUsers -->
+			<div class="mb-3">
+				<label class="form-label">参加ユーザー</label>
+				<label class="form-check-label ms-5" for="toggleAll">
+					<input class="form-check-input" type="checkbox" id="toggleAll">全員参加
+				</label>
+				<select th:field="*{userIds}" class="form-select" multiple required th:attr="size=${users.size()}">
+					<option
+					    th:each="u : ${users}"
+					    th:value="${u.userId.value}"
+					    th:text="${u.userName.value}">
+					</option>
+
+				</select>
+			</div>
+
+			<!-- roundCount -->
+			<div class="mb-3">
+				<label class="form-label">ラウンド数 <span class="text-danger">*</span></label>
+				<select th:field="*{roundCount}" class="form-select" required>
+					<option value="" disabled selected>選択してください</option>
+					<option 
+						th:each="i : ${#numbers.sequence(1, 10)}" th:value="${i}" th:text="${i} + ' 回'"></option>
+				</select>
+			</div>
+
+			<!-- roomStatus -->
+			<div class="mb-3">
+				<label class="form-label"> 進行ステータス<span class="text-danger">*</span>
+				</label>
+				<select th:field="*{roomStatus}" class="form-select" required>
+					<option value="">選択してください</option>
+					<option
+						th:each="s : ${T(com.example.app.domain.room.RoomStatus).values()}"
+						th:value="${s}" th:text="${s.statusLabel}"></option>
+				</select>
+				<div class="text-danger" th:errors="*{roomStatus}"></div>
+			</div>
+
+			<!-- startedDate -->
+			<div class="mb-3">
+				<label class="form-label">開始日時</label>
+				<span class="text-muted">(任意)</span>
+				<input type="datetime-local" th:field="*{startedDate}" class="form-control" />
+				<div class="text-danger" th:errors="*{startedDate}"></div>
+			</div>
+
+			<!-- endDate -->
+			<div class="mb-3">
+				<label class="form-label">終了日時</label>
+				<span class="text-muted">(任意)</span>
+				<input type="datetime-local" th:field="*{endDate}" class="form-control" />
+				<div class="text-danger" th:errors="*{endDate}"></div>
+			</div>
+
+			<!-- buttons -->
+			<div class="mt-4">
+				<button type="submit" class="btn btn-primary">保存</button>
+			</div>
+		</form>
+	</div>
+
+</section>
+
+<div layout:fragment="scripts">
+	<script th:src="@{/js/registerRoomForm.js}"></script>
+</div>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<title layout:title-pattern="$CONTENT_TITLE - 福岡GTD">MyApp</title>
+	<link rel="stylesheet" th:href="@{/css/common.css}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- axios CDN（全ページ共通） -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+	<header class="p-3 bg-dark text-white">
+		<div class="container d-flex justify-content-between">
+			<h2>福岡GTD Appication</h2>
+
+			<div>
+				<!-- ログイン中のユーザー名 -->
+				<strong sec:authentication="principal.userName.value">ユーザー名</strong> さん
+
+				<a th:href="@{/mypage}" class="btn btn-light btn-sm ms-3">マイページ</a>
+
+				<!-- ログアウト -->
+				<form th:action="@{/logout}" method="post" class="d-inline">
+					<button type="submit" class="btn btn-secondary btn-sm ms-3">ログアウト</button>
+				</form>
+			</div>
+		</div>
+	</header>
+
+	<main class="container mt-4" layout:fragment="content">
+		<!-- 各ページの　section layout:fragment="content"　を挿入 -->
+	</main>
+	
+	<div layout:fragment="scripts">
+		<!-- 各ページの　section layout:fragment="scripts"　を挿入 -->
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
