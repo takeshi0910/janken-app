@@ -85,7 +85,7 @@
 				<select th:field="*{roundCount}" class="form-select" required>
 					<option value="" disabled selected>選択してください</option>
 					<option 
-						th:each="i : ${#numbers.sequence(1, 10)}" th:value="${i}" th:text="${i} + ' 回'"></option>
+						th:each="i : ${#numbers.sequence(1, 100)}" th:value="${i}" th:text="${i} + ' 回'"></option>
 				</select>
 			</div>
 
